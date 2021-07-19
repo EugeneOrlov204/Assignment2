@@ -1,15 +1,24 @@
 <resources>
     <string name="app_name"></string>
     <string name="element_text" />
-
-    <string name="affirmation1">I am strong.</string>
-    <string name="affirmation2">I believe in myself.</string>
-    <string name="affirmation3">Each day is a new opportunity to grow and be a better version of myself.</string>
-    <string name="affirmation4">Every challenge in my life is an opportunity to learn from.</string>
-    <string name="affirmation5">I have so much to be grateful for.</string>
-    <string name="affirmation6">Good things are always coming into my life.</string>
-    <string name="affirmation7">New opportunities await me at every turn.</string>
-    <string name="affirmation8">I have the courage to follow my heart.</string>
-    <string name="affirmation9">Things will unfold at precisely the right time.</string>
-    <string name="affirmation10">I will be present in all the moments that this day brings.</string>
+    <string name="name1">Darcy Benn.</string>
+    <string name="name2">Tatiana Matthewson</string>
+    <string name="name3">Zandra Bailey</string>
+    <string name="name4">Eliot Stevenson</string>
+    <string name="name5">Mina Derrickson</string>
+    <string name="name6">Gyles Breckinridge</string>
+    <string name="name7">Sharlene Horsfall</string>
+    <string name="name8">Milton Bryson</string>
+    <string name="name9">Allissa Tindall</string>
+    <string name="name10">Frannie Morriss</string>
+    <string name="profession1">Community worker</string>
+    <string name="profession2">Estate agent</string>
+    <string name="profession3">Pilot</string>
+    <string name="profession4">Dentist</string>
+    <string name="profession5">Clockmaker</string>
+    <string name="profession6">Barrister</string>
+    <string name="profession7">Auctioneer</string>
+    <string name="profession8">Printer</string>
+    <string name="profession9">Comedian</string>
+    <string name="profession10">Car dealer</string>
 </resources>

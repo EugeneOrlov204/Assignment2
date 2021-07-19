@@ -2,9 +2,6 @@ package com.shpp.eorlov.assignment2
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.shpp.eorlov.assignment2.adapter.ItemAdapter
 import com.shpp.eorlov.assignment2.data.Datasource
 import com.shpp.eorlov.assignment2.databinding.ActivityMainBinding
@@ -18,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         // Initialize data.
-        val myDataset = Datasource().loadAffirmations()
+        val myDataset = Datasource().loadPersonData()
 
         val recyclerView = binding.recyclerView
         recyclerView.adapter = ItemAdapter(this, myDataset)
