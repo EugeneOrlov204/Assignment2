@@ -56,7 +56,11 @@ class ItemAdapter(
             return HeaderViewHolder(binding)
         }
 
-        throw  RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
+        throw  RuntimeException(
+            "there is no type that matches the type "
+                    + viewType +
+                    " + make sure your using types correctly"
+        )
     }
 
     /**
