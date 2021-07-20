@@ -2,9 +2,13 @@ package com.shpp.eorlov.assignment2
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.widget.AppCompatImageView
+import com.bumptech.glide.Glide
+//import com.bumptech.glide.Glide
 import com.shpp.eorlov.assignment2.adapter.ItemAdapter
 import com.shpp.eorlov.assignment2.data.Datasource
 import com.shpp.eorlov.assignment2.databinding.ActivityMainBinding
+import com.shpp.eorlov.assignment2.databinding.ListItemBinding
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,6 +17,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+
 
         // Initialize data.
         val myDataset = Datasource().loadPersonData()

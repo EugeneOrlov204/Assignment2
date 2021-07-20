@@ -2,4 +2,19 @@
 <resources>
     <dimen name="list_item_height" />
     <dimen name="margin_medium" />
+    <dimen name="header_height_contacts">95dp</dimen>
+    <dimen name="header_margin">36dp</dimen>
+    <dimen name="header_title_text_size">18sp</dimen>
+    <dimen name="header_title_margin">30dp</dimen>
+    <dimen name="margin_exit_button">18dp</dimen>
+    <dimen name="margin_search_button">20dp</dimen>
+    <dimen name="margin_recycler_view_item">16dp</dimen>
+    <dimen name="image_size">50dp</dimen>
+    <dimen name="image_margin">16dp</dimen>
+    <dimen name="name_margin">16dp</dimen>
+    <dimen name="name_text_size">18sp</dimen>
+    <dimen name="profession_text_size">12sp</dimen>
+    <dimen name="clear_button_margin">16dp</dimen>
+    <dimen name="line_height">1dp</dimen>
+    <dimen name="line_margin">8dp</dimen>
 </resources>

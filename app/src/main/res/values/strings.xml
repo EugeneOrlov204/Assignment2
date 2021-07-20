@@ -21,4 +21,6 @@
     <string name="profession8">Printer</string>
     <string name="profession9">Comedian</string>
     <string name="profession10">Car dealer</string>
+    <string name="contacts">Contacts</string>
+    <string name="exit_from_this_activity">button to exit this activity</string>
 </resources>

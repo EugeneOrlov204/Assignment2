@@ -10,6 +10,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.model.PersonData
+import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingGlide
+import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingPicasso
+
 
 /**
  * Adapter for the [RecyclerView] in [MainActivity]. Displays [PersonData] data object.
@@ -29,15 +32,15 @@ class ItemAdapter(
     // you provide access to all the views for a data item in a view holder.
     // Each data item is just an Affirmation object.
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val personNameTextView: AppCompatTextView = view.findViewById(R.id.person_name_text_view)
+        val personNameTextView: AppCompatTextView = view.findViewById(R.id.name_text_view)
         val personProfessionTextView: AppCompatTextView =
-            view.findViewById(R.id.person_profession_text_view)
+            view.findViewById(R.id.profession_text_view)
         val personImage: AppCompatImageView =
-            view.findViewById(R.id.person_image_contacts_image_view)
+            view.findViewById(R.id.image_contacts_image_view)
     }
 
     class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val header: ConstraintLayout = view.findViewById(R.id.header)
+        val header: ConstraintLayout = view.findViewById(R.id.header_constraint_layout)
     }
 
     /**
@@ -67,7 +70,8 @@ class ItemAdapter(
             holder.personNameTextView.text = context.resources.getString(item.nameResourceId)
             holder.personProfessionTextView.text =
                 context.resources.getString(item.professionResourceId)
-            holder.personImage.setImageResource(item.imageResourceId)
+
+            holder.personImage.loadImageUsingPicasso("https://source.unsplash.com/random")
         }
     }
 

@@ -3,7 +3,6 @@ package com.shpp.eorlov.assignment2.model
 data class PersonData(
     val nameResourceId: Int,
     val professionResourceId: Int,
-    val imageResourceId: Int,
     val residenceAddressId: Int,
     val birthDateId: Int,
     val phoneNumberId: Int,

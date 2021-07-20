@@ -3,59 +3,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp">
+    android:layout_marginBottom="@dimen/margin_recycler_view_item">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/person_image_contacts_image_view"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
+        android:id="@+id/image_contacts_image_view"
+        android:layout_width="@dimen/image_size"
+        android:layout_height="@dimen/image_size"
+        android:layout_marginStart="@dimen/image_margin"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/person_image_example"
         tools:src="@tools:sample/avatars" />
 
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/person_name_text_view"
+        android:id="@+id/name_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/name_margin"
         android:fontFamily="@font/open_sans"
         android:textColor="@color/woodsmoke"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toRightOf="@id/person_image_contacts_image_view"
-        app:layout_constraintTop_toTopOf="@id/person_image_contacts_image_view"
-        app:layout_constraintBottom_toTopOf="@+id/person_profession_text_view"
+        android:textSize="@dimen/name_text_size"
+        app:layout_constraintLeft_toRightOf="@id/image_contacts_image_view"
+        app:layout_constraintTop_toTopOf="@id/image_contacts_image_view"
+        app:layout_constraintBottom_toTopOf="@+id/profession_text_view"
         tools:text="Ava Smith" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/person_profession_text_view"
+        android:id="@+id/profession_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/open_sans"
         android:textColor="@color/gray"
-        android:textSize="12sp"
-        app:layout_constraintLeft_toLeftOf="@id/person_name_text_view"
-        app:layout_constraintBottom_toBottomOf="@+id/person_image_contacts_image_view"
+        android:textSize="@dimen/profession_text_size"
+        app:layout_constraintLeft_toLeftOf="@id/name_text_view"
+        app:layout_constraintBottom_toBottomOf="@+id/image_contacts_image_view"
         tools:text="Photograph" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/trash_bin_image_view"
+        android:id="@+id/clear_button_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/clear_button_margin"
         android:src="@drawable/trash_bin"
-        app:layout_constraintBottom_toBottomOf="@+id/person_profession_text_view"
+        app:layout_constraintBottom_toBottomOf="@+id/profession_text_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/person_name_text_view" />
+        app:layout_constraintTop_toTopOf="@+id/name_text_view" />
 
     <View
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/line_height"
         android:background="@color/silver"
-        app:layout_constraintEnd_toEndOf="@+id/trash_bin_image_view"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@id/person_image_contacts_image_view"
-        app:layout_constraintTop_toBottomOf="@+id/person_image_contacts_image_view" />
+        app:layout_constraintEnd_toEndOf="@+id/clear_button_image_view"
+        android:layout_marginTop="@dimen/line_margin"
+        app:layout_constraintStart_toStartOf="@id/image_contacts_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/image_contacts_image_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
