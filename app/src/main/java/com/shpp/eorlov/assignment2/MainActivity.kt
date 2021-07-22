@@ -36,6 +36,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+
+
+
     val callback = object : ActionMode.Callback {
 
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {

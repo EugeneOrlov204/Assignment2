@@ -6,8 +6,8 @@ import com.shpp.eorlov.assignment2.model.PersonData
 
 class Datasource {
 
-    fun loadPersonData(): List<PersonData> {
-        return listOf<PersonData>(
+    fun loadPersonData(): MutableList<PersonData> {
+        return mutableListOf<PersonData>(
             PersonData(R.string.name1, R.string.profession1, 0,0,0,0,0),
             PersonData(R.string.name2, R.string.profession2, 0,0,0,0,0),
             PersonData(R.string.name3, R.string.profession3, 0,0,0,0,0),

@@ -6,11 +6,9 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.shpp.eorlov.assignment2.databinding.ListItemBinding
 import com.shpp.eorlov.assignment2.model.PersonData
 import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingGlide
-import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingPicasso
 
 
 /**
@@ -19,7 +17,7 @@ import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingPicasso
 
 class ItemAdapter(
     private val context: Context,
-    private val dataset: List<PersonData>
+    private val dataset: MutableList<PersonData>
 
 ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
@@ -32,8 +30,11 @@ class ItemAdapter(
         val personNameTextView: AppCompatTextView = binding.nameTextView
         val personProfessionTextView: AppCompatTextView =
             binding.professionTextView
-        val personImage: AppCompatImageView =
+        val personImageImageView: AppCompatImageView =
             binding.imageContactsImageView
+
+        val clearButtonImageView : AppCompatImageView =
+            binding.clearButtonImageView
     }
 
     /**
@@ -43,6 +44,7 @@ class ItemAdapter(
 
         val binding = ListItemBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
+
         return ItemViewHolder(binding)
     }
 
@@ -59,7 +61,14 @@ class ItemAdapter(
 
         val url = "https://i.pravatar.cc/"
         val sizeOfImage = 300
-        holder.personImage.loadImageUsingGlide(url + (sizeOfImage + position))
+        holder.personImageImageView.loadImageUsingGlide(url + (sizeOfImage + position))
+
+        // remove the item from recycler view
+        holder.clearButtonImageView.setOnClickListener {
+            dataset.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, dataset.size)
+        }
     }
 
 
