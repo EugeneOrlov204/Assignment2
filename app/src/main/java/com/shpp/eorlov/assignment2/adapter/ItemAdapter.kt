@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.shpp.eorlov.assignment2.databinding.ListItemBinding
 import com.shpp.eorlov.assignment2.model.PersonData
+import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingGlide
 import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingPicasso
 
 
@@ -45,7 +46,6 @@ class ItemAdapter(
         return ItemViewHolder(binding)
     }
 
-    private var url: String = "https://i.pravatar.cc/";
 
     /**
      * Replace the contents of a view (invoked by the layout manager)
@@ -57,9 +57,9 @@ class ItemAdapter(
         holder.personProfessionTextView.text =
             context.resources.getString(item.professionResourceId)
 
-
-        holder.personImage.loadImageUsingPicasso(url + (300 + position))
-
+        val url = "https://i.pravatar.cc/"
+        val sizeOfImage = 300
+        holder.personImage.loadImageUsingGlide(url + (sizeOfImage + position))
     }
 
 
