@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.shpp.eorlov.assignment2.databinding.ListItemBinding
 import com.shpp.eorlov.assignment2.model.PersonData
 import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingPicasso
@@ -44,6 +45,8 @@ class ItemAdapter(
         return ItemViewHolder(binding)
     }
 
+    private var url: String = "https://i.pravatar.cc/";
+
     /**
      * Replace the contents of a view (invoked by the layout manager)
      */
@@ -54,7 +57,8 @@ class ItemAdapter(
         holder.personProfessionTextView.text =
             context.resources.getString(item.professionResourceId)
 
-        holder.personImage.loadImageUsingPicasso("https://source.unsplash.com/random")
+
+        holder.personImage.loadImageUsingPicasso(url + (300 + position))
 
     }
 
