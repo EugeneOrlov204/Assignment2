@@ -23,4 +23,5 @@
     <string name="profession10">Car dealer</string>
     <string name="contacts">Contacts</string>
     <string name="exit_from_this_activity">button to exit this activity</string>
+    <string name="search_button">search button</string>
 </resources>

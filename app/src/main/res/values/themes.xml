@@ -13,4 +13,14 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Header">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/header_height_contacts</item>
+        <item name="android:background">@color/steel_gray</item>
+        <item name="fontFamily">@font/open_sans</item>
+        <item name="android:textSize">@dimen/header_title_text_size</item>
+        <item name="titleTextColor">@color/alabaster</item>
+    </style>
+
 </resources>
