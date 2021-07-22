@@ -1,8 +1,11 @@
 package com.shpp.eorlov.assignment2.adapter
 
+import android.R
 import android.content.Context
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +36,7 @@ class ItemAdapter(
         val personImageImageView: AppCompatImageView =
             binding.imageContactsImageView
 
-        val clearButtonImageView : AppCompatImageView =
+        val clearButtonImageView: AppCompatImageView =
             binding.clearButtonImageView
     }
 
@@ -44,14 +47,14 @@ class ItemAdapter(
 
         val binding = ListItemBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
-
         return ItemViewHolder(binding)
     }
-
 
     /**
      * Replace the contents of a view (invoked by the layout manager)
      */
+    //FIXME error when to remove items fast
+    //FIXME images bind to the position, not to the item
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
 
         val item = dataset[position]
@@ -63,12 +66,20 @@ class ItemAdapter(
         val sizeOfImage = 300
         holder.personImageImageView.loadImageUsingGlide(url + (sizeOfImage + position))
 
+
         // remove the item from recycler view
         holder.clearButtonImageView.setOnClickListener {
+
             dataset.removeAt(position)
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, dataset.size)
+
+            val toast: Toast =
+                Toast.makeText(context, "Contact has been removed", Toast.LENGTH_LONG)
+            toast.show()
+
         }
+
     }
 
 
