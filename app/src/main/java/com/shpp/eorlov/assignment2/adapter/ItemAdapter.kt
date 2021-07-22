@@ -1,8 +1,6 @@
 package com.shpp.eorlov.assignment2.adapter
 
-import android.R
 import android.content.Context
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -53,7 +51,6 @@ class ItemAdapter(
     /**
      * Replace the contents of a view (invoked by the layout manager)
      */
-    //FIXME error when to remove items fast
     //FIXME images bind to the position, not to the item
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
 

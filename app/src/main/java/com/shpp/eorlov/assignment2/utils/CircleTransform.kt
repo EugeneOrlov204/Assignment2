@@ -1,49 +1,45 @@
-package com.shpp.eorlov.assignment2.utils;
+package com.shpp.eorlov.assignment2.utils
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Shader;
-
-import com.squareup.picasso.Transformation;
+import android.graphics.*
+import com.squareup.picasso.Transformation
 
 /**
  * This class is to circle image with Picasso
  * -------------------------------------------------------------------------------------------
  * I've taken code from here: https://stackoverflow.com/questions/26112150/android-create-circular-image-with-picasso
  */
-public class CircleTransform implements Transformation {
-    @Override
-    public Bitmap transform(Bitmap source) {
-        int size = Math.min(source.getWidth(), source.getHeight());
+class CircleTransform : Transformation {
 
-        int x = (source.getWidth() - size) / 2;
-        int y = (source.getHeight() - size) / 2;
+    override fun transform(source: Bitmap): Bitmap {
 
-        Bitmap squaredBitmap = Bitmap.createBitmap(source, x, y, size, size);
+        val size = Math.min(source.width, source.height)
+        val x = (source.width - size) / 2
+        val y = (source.height - size) / 2
+
+        val squaredBitmap = Bitmap.createBitmap(source, x, y, size, size)
+
         if (squaredBitmap != source) {
-            source.recycle();
+            source.recycle()
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(size, size, source.getConfig());
+        val bitmap = Bitmap.createBitmap(size, size, source.config)
+        val canvas = Canvas(bitmap)
+        val paint = Paint()
 
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint();
-        BitmapShader shader = new BitmapShader(squaredBitmap,
-                Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-        paint.setShader(shader);
-        paint.setAntiAlias(true);
+        val shader = BitmapShader(
+            squaredBitmap,
+            Shader.TileMode.CLAMP, Shader.TileMode.CLAMP
+        )
 
-        float r = size / 2f;
-        canvas.drawCircle(r, r, r, paint);
-
-        squaredBitmap.recycle();
-        return bitmap;
+        paint.shader = shader
+        paint.isAntiAlias = true
+        val r = size / 2f
+        canvas.drawCircle(r, r, r, paint)
+        squaredBitmap.recycle()
+        return bitmap
     }
 
-    @Override
-    public String key() {
-        return "circle";
+    override fun key(): String {
+        return "circle"
     }
 }
