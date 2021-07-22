@@ -67,6 +67,7 @@ class ItemAdapter(
         holder.personImageImageView.loadImageUsingGlide(url + (sizeOfImage + position))
 
 
+        holder.clearButtonImageView.isEnabled = true
         // remove the item from recycler view
         holder.clearButtonImageView.setOnClickListener {
 
@@ -77,7 +78,7 @@ class ItemAdapter(
             val toast: Toast =
                 Toast.makeText(context, "Contact has been removed", Toast.LENGTH_LONG)
             toast.show()
-
+            holder.clearButtonImageView.isEnabled = false
         }
 
     }
