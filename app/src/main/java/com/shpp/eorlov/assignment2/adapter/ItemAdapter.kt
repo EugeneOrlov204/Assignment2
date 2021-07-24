@@ -1,6 +1,11 @@
 package com.shpp.eorlov.assignment2.adapter
 
+import android.content.ContentResolver
+import android.content.ContentValues.TAG
 import android.content.Context
+import android.database.Cursor
+import android.provider.ContactsContract
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -38,6 +43,48 @@ class ItemAdapter(
             binding.clearButtonImageView
     }
 
+    private fun getContactList() {
+        val cr: ContentResolver = context.contentResolver
+        val cur: Cursor? = cr.query(
+            ContactsContract.Contacts.CONTENT_URI,
+            null, null, null, null
+        )
+        if ((cur?.count ?: 0) > 0) {
+            while (cur != null && cur.moveToNext()) {
+                val id: String = cur.getString(
+                    cur.getColumnIndex(ContactsContract.Contacts._ID)
+                )
+                val name: String = cur.getString(
+                    cur.getColumnIndex(
+                        ContactsContract.Contacts.DISPLAY_NAME
+                    )
+                )
+                if (cur.getInt(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
+                    val pCur: Cursor? = cr.query(
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                        arrayOf(id),
+                        null
+                    )
+                    while (pCur?.moveToNext() ?: return) {
+                        val phoneNo: String = pCur.getString(
+                            pCur.getColumnIndex(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER
+                            )
+                        )
+                        Log.i(TAG, "Name: $name")
+                        Log.i(TAG, "Phone Number: $phoneNo")
+                    }
+                    pCur.close()
+                }
+            }
+        }
+        if (cur != null) {
+            cur.close()
+        }
+    }
+
     /**
      * Create new views (invoked by the layout manager)
      */
@@ -51,7 +98,6 @@ class ItemAdapter(
     /**
      * Replace the contents of a view (invoked by the layout manager)
      */
-    //FIXME images bind to the position, not to the item
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
 
         val item = dataset[position]

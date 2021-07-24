@@ -1,7 +1,6 @@
 package com.shpp.eorlov.assignment2
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -10,14 +9,15 @@ import com.shpp.eorlov.assignment2.adapter.ItemAdapter
 import com.shpp.eorlov.assignment2.data.Datasource
 import com.shpp.eorlov.assignment2.databinding.ActivityMainBinding
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-
 
 
         // Initialize data.
@@ -34,9 +34,8 @@ class MainActivity : AppCompatActivity() {
 //        actionMode?.title = "1 selected"
 
         setContentView(binding.root)
+
     }
-
-
 
 
     val callback = object : ActionMode.Callback {
