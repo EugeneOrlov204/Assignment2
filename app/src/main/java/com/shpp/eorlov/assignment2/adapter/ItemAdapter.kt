@@ -55,9 +55,9 @@ class ItemAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
 
         val item = dataset[position]
-        holder.personNameTextView.text = context.resources.getString(item.nameResourceId)
+        holder.personNameTextView.text = context.resources.getString(item.userNameId)
         holder.personProfessionTextView.text =
-            context.resources.getString(item.professionResourceId)
+            context.resources.getString(item.careerId)
 
         holder.personImageImageView.loadImageUsingGlide(context.resources.getString(item.photoId))
 
