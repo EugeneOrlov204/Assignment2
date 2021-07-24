@@ -21,6 +21,16 @@
     <string name="profession8">Printer</string>
     <string name="profession9">Comedian</string>
     <string name="profession10">Car dealer</string>
+    <string name="photo1">"https://i.pravatar.cc/300"</string>
+    <string name="photo2">"https://i.pravatar.cc/301"</string>
+    <string name="photo3">"https://i.pravatar.cc/302"</string>
+    <string name="photo4">"https://i.pravatar.cc/303"</string>
+    <string name="photo5">"https://i.pravatar.cc/304"</string>
+    <string name="photo6">"https://i.pravatar.cc/305"</string>
+    <string name="photo7">"https://i.pravatar.cc/306"</string>
+    <string name="photo8">"https://i.pravatar.cc/307"</string>
+    <string name="photo9">"https://i.pravatar.cc/308"</string>
+    <string name="photo10">"https://i.pravatar.cc/309"</string>
     <string name="contacts">Contacts</string>
     <string name="exit_from_this_activity">button to exit this activity</string>
     <string name="search_button">search button</string>

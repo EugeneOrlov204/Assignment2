@@ -59,9 +59,7 @@ class ItemAdapter(
         holder.personProfessionTextView.text =
             context.resources.getString(item.professionResourceId)
 
-        val url = "https://i.pravatar.cc/"
-        val sizeOfImage = 300
-        holder.personImageImageView.loadImageUsingGlide(url + (sizeOfImage + position))
+        holder.personImageImageView.loadImageUsingGlide(context.resources.getString(item.photoId))
 
 
         holder.clearButtonImageView.isEnabled = true
