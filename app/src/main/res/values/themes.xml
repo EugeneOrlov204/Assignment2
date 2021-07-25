@@ -14,13 +14,17 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Header">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/header_height_contacts</item>
-        <item name="android:background">@color/steel_gray</item>
+    <style name="header_image_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="header_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/alabaster</item>
         <item name="fontFamily">@font/open_sans</item>
-        <item name="android:textSize">@dimen/header_title_text_size</item>
-        <item name="titleTextColor">@color/alabaster</item>
     </style>
 
 </resources>
