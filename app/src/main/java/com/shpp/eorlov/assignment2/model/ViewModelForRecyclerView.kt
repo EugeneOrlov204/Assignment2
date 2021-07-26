@@ -1,13 +1,21 @@
-package com.shpp.eorlov.assignment2.data
+package com.shpp.eorlov.assignment2.model
 
+import androidx.lifecycle.ViewModel
 import com.shpp.eorlov.assignment2.R
-import com.shpp.eorlov.assignment2.model.PersonData
+import com.shpp.eorlov.assignment2.data.PersonData
 
+class ViewModelForRecyclerView : ViewModel() {
+    private var personData: MutableList<PersonData>? = null
+    fun getValue(): MutableList<PersonData> {
+        if (personData == null) {
+            personData = loadPersonData()
+        }
 
-class Datasource {
+        return personData as MutableList<PersonData>
+    }
 
-    fun loadPersonData(): MutableList<PersonData> {
-        return mutableListOf<PersonData>(
+    private fun loadPersonData(): MutableList<PersonData> {
+        return mutableListOf(
             PersonData(R.string.name1, R.string.profession1, R.string.photo1, 0, 0, 0, 0),
             PersonData(R.string.name2, R.string.profession2, R.string.photo2, 0, 0, 0, 0),
             PersonData(R.string.name3, R.string.profession3, R.string.photo3, 0, 0, 0, 0),
@@ -20,5 +28,5 @@ class Datasource {
             PersonData(R.string.name10, R.string.profession10, R.string.photo10, 0, 0, 0, 0)
         )
     }
-}
 
+}

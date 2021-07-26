@@ -1,12 +1,13 @@
 package com.shpp.eorlov.assignment2.adapter
 
+import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.databinding.ListItemBinding
 import com.shpp.eorlov.assignment2.data.PersonData
 import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingGlide
@@ -54,34 +55,36 @@ class ItemAdapter(
 
         holder.personImageImageView.loadImageUsingGlide(context.resources.getString(item.photoId))
 
-        blockButton(holder.clearButtonImageView)
-
         holder.clearButtonImageView.setOnClickListener {
             removeItem(position)
         }
-
-        unBlockButton(holder.clearButtonImageView)
     }
 
-    private fun unBlockButton(button: AppCompatImageView) {
-        button.isEnabled = false
-    }
-
-    private fun blockButton(button: AppCompatImageView) {
-        button.isEnabled = true
-    }
 
     /**
      *  Removes item by clicking to button
      */
     private fun removeItem(position: Int) {
+        val removedItem = dataset[position]
         dataset.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, dataset.size)
+        adapter.notifyItemRemoved(position)
+        val snackbar = Snackbar.make(
+            (context as Activity).findViewById(R.id.main_activity),
+            "Contact has been removed",
+            5000
+        )
 
-        val toast: Toast =
-            Toast.makeText(context, "Contact has been removed", Toast.LENGTH_LONG)
-        toast.show()
+        snackbar.setAction("Cancel") {
+            addItem(position, removedItem)
+        }
+
+        snackbar.show()
+        notifyDataSetChanged()
+    }
+
+    private fun addItem(position: Int, removedItem: PersonData) {
+        dataset.add(position, removedItem)
+        notifyItemInserted(position);
     }
 
 
@@ -96,19 +99,16 @@ class ItemAdapter(
             ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
         ) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                dataset.removeAt(viewHolder.absoluteAdapterPosition)
-                adapter.notifyDataSetChanged()
-
-                val toast: Toast =
-                    Toast.makeText(context, "Contact has been removed", Toast.LENGTH_LONG)
-                toast.show()
+                removeItem(viewHolder.absoluteAdapterPosition)
             }
 
-            override fun onMove(recyclerView: RecyclerView,
+            override fun onMove(
+                recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
                 return false
             }
         }
+
 }
