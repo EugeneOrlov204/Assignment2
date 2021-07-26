@@ -1,4 +1,4 @@
-package com.shpp.eorlov.assignment2.model
+package com.shpp.eorlov.assignment2.data
 
 data class PersonData(
     val userNameId: Int,

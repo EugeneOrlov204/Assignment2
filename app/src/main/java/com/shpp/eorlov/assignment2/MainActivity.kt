@@ -1,65 +1,37 @@
 package com.shpp.eorlov.assignment2
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.ActionMode
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.shpp.eorlov.assignment2.adapter.ItemAdapter
-import com.shpp.eorlov.assignment2.data.Datasource
 import com.shpp.eorlov.assignment2.databinding.ActivityMainBinding
+import com.shpp.eorlov.assignment2.model.ViewModelForRecyclerView
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+        val model: ViewModelForRecyclerView =
+            ViewModelProvider(this)
+            .get(ViewModelForRecyclerView::class.java)
 
-        // Initialize data.
-        val myDataset = Datasource().loadPersonData()
 
         val recyclerView = binding.recyclerView
-        recyclerView.adapter = ItemAdapter(this, myDataset)
+        val itemAdapter = ItemAdapter(this, model.getValue())
+        recyclerView.adapter = itemAdapter
+
 
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true)
-
-//        val actionMode = startSupportActionMode(callback)
-//        actionMode?.title = "1 selected"
+        ItemTouchHelper(itemAdapter.itemTouchHelperCallBack).attachToRecyclerView(recyclerView)
 
         setContentView(binding.root)
-
     }
-
-
-    val callback = object : ActionMode.Callback {
-
-        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            menuInflater.inflate(R.menu.top_app_bar, menu)
-            return true
-        }
-
-        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            return false
-        }
-
-        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            return when (item?.itemId) {
-                R.id.search_button -> {
-                    true
-                }
-                else -> false
-            }
-        }
-
-        override fun onDestroyActionMode(mode: ActionMode?) {
-        }
-    }
-
 }

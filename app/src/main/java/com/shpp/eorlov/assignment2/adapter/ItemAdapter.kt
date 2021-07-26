@@ -1,19 +1,14 @@
 package com.shpp.eorlov.assignment2.adapter
 
-import android.content.ContentResolver
-import android.content.ContentValues.TAG
 import android.content.Context
-import android.database.Cursor
-import android.provider.ContactsContract
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.shpp.eorlov.assignment2.databinding.ListItemBinding
-import com.shpp.eorlov.assignment2.model.PersonData
+import com.shpp.eorlov.assignment2.data.PersonData
 import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingGlide
 
 
@@ -23,73 +18,25 @@ import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingGlide
 
 class ItemAdapter(
     private val context: Context,
-    private val dataset: MutableList<PersonData>
+    private val dataset: MutableList<PersonData>,
 
-) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+    ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+    private val adapter: ItemAdapter = this
 
-
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder.
-    // Each data item is just an Affirmation object.
+    /**
+     * Class that represents an item of RecyclerView
+     */
     class ItemViewHolder(binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        val personNameTextView: AppCompatTextView = binding.nameTextView
-        val personProfessionTextView: AppCompatTextView =
-            binding.professionTextView
-        val personImageImageView: AppCompatImageView =
-            binding.imageContactsImageView
-
-        val clearButtonImageView: AppCompatImageView =
-            binding.clearButtonImageView
-    }
-
-    private fun getContactList() {
-        val cr: ContentResolver = context.contentResolver
-        val cur: Cursor? = cr.query(
-            ContactsContract.Contacts.CONTENT_URI,
-            null, null, null, null
-        )
-        if ((cur?.count ?: 0) > 0) {
-            while (cur != null && cur.moveToNext()) {
-                val id: String = cur.getString(
-                    cur.getColumnIndex(ContactsContract.Contacts._ID)
-                )
-                val name: String = cur.getString(
-                    cur.getColumnIndex(
-                        ContactsContract.Contacts.DISPLAY_NAME
-                    )
-                )
-                if (cur.getInt(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
-                    val pCur: Cursor? = cr.query(
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        null,
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                        arrayOf(id),
-                        null
-                    )
-                    while (pCur?.moveToNext() ?: return) {
-                        val phoneNo: String = pCur.getString(
-                            pCur.getColumnIndex(
-                                ContactsContract.CommonDataKinds.Phone.NUMBER
-                            )
-                        )
-                        Log.i(TAG, "Name: $name")
-                        Log.i(TAG, "Phone Number: $phoneNo")
-                    }
-                    pCur.close()
-                }
-            }
-        }
-        if (cur != null) {
-            cur.close()
-        }
+        val personNameTextView = binding.nameTextView
+        val personProfessionTextView = binding.professionTextView
+        val personImageImageView = binding.imageContactsImageView
+        val clearButtonImageView = binding.clearButtonImageView
     }
 
     /**
      * Create new views (invoked by the layout manager)
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-
         val binding = ListItemBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
         return ItemViewHolder(binding)
@@ -107,21 +54,34 @@ class ItemAdapter(
 
         holder.personImageImageView.loadImageUsingGlide(context.resources.getString(item.photoId))
 
+        blockButton(holder.clearButtonImageView)
 
-        holder.clearButtonImageView.isEnabled = true
-        // remove the item from recycler view
         holder.clearButtonImageView.setOnClickListener {
-
-            dataset.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, dataset.size)
-
-            val toast: Toast =
-                Toast.makeText(context, "Contact has been removed", Toast.LENGTH_LONG)
-            toast.show()
-            holder.clearButtonImageView.isEnabled = false
+            removeItem(position)
         }
 
+        unBlockButton(holder.clearButtonImageView)
+    }
+
+    private fun unBlockButton(button: AppCompatImageView) {
+        button.isEnabled = false
+    }
+
+    private fun blockButton(button: AppCompatImageView) {
+        button.isEnabled = true
+    }
+
+    /**
+     *  Removes item by clicking to button
+     */
+    private fun removeItem(position: Int) {
+        dataset.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, dataset.size)
+
+        val toast: Toast =
+            Toast.makeText(context, "Contact has been removed", Toast.LENGTH_LONG)
+        toast.show()
     }
 
 
@@ -130,4 +90,25 @@ class ItemAdapter(
      */
     override fun getItemCount() = dataset.size
 
+    var itemTouchHelperCallBack: ItemTouchHelper.SimpleCallback =
+        object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+        ) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                dataset.removeAt(viewHolder.absoluteAdapterPosition)
+                adapter.notifyDataSetChanged()
+
+                val toast: Toast =
+                    Toast.makeText(context, "Contact has been removed", Toast.LENGTH_LONG)
+                toast.show()
+            }
+
+            override fun onMove(recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+        }
 }
