@@ -36,4 +36,6 @@
     <string name="search_button">search button</string>
     <string name="add_contacts">Add contacts</string>
     <string name="select">Select</string>
+    <string name="add_contact_username">Username</string>
+    <string name="save">SAVE</string>
 </resources>

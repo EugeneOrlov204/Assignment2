@@ -1,19 +1,49 @@
 package com.shpp.eorlov.assignment2.model
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.data.PersonData
 
 class ViewModelForRecyclerView : ViewModel() {
-    private var personData: MutableList<PersonData>? = null
-    fun getValue(): MutableList<PersonData> {
-        if (personData == null) {
-            personData = loadPersonData()
-        }
 
-        return personData as MutableList<PersonData>
+    private var dataset: MutableLiveData<MutableList<PersonData>>? = null
+
+    /**
+     * Returns value of dataset
+     */
+    fun getPersonData(): MutableList<PersonData> {
+        if (dataset == null) {
+            dataset = MutableLiveData()
+            dataset?.value = loadPersonData()
+        }
+        return dataset?.value!!
     }
 
+    /**
+     * Returns item from dataset
+     */
+    fun getItem(position: Int): PersonData {
+        return getPersonData()[position]
+    }
+
+    /**
+     *  Removes item by clicking to button
+     */
+    fun removeItem(position: Int) {
+        getPersonData().removeAt(position)
+    }
+
+    /**
+     * Adds item to dataset
+     */
+    fun addItem(position: Int, removedItem: PersonData) {
+        getPersonData().add(position, removedItem)
+    }
+
+    /**
+     * Returns list of person's data
+     */
     private fun loadPersonData(): MutableList<PersonData> {
         return mutableListOf(
             PersonData(R.string.name1, R.string.profession1, R.string.photo1, 0, 0, 0, 0),
@@ -28,5 +58,4 @@ class ViewModelForRecyclerView : ViewModel() {
             PersonData(R.string.name10, R.string.profession10, R.string.photo10, 0, 0, 0, 0)
         )
     }
-
 }
