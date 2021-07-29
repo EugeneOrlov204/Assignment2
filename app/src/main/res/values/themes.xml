@@ -36,7 +36,6 @@
     </style>
 
     <style name="add_contact_edit_text">
-        <item name="android:textColor">#18181F</item>
         <item name="android:textSize">18sp</item>
         <item name="fontFamily">@font/open_sans</item>
         <item name="android:layout_marginStart">16dp</item>

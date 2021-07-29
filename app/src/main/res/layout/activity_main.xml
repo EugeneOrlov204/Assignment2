@@ -41,7 +41,7 @@
             app:layout_constraintTop_toTopOf="@id/contacts_text_view" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/add_contacts"
+            android:id="@+id/add_contacts_text_view"
             style="@style/header_text"
             android:layout_marginStart="@dimen/add_contacts_margin_start"
             android:layout_marginBottom="@dimen/subtitle_margin_bottom"

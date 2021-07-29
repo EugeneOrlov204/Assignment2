@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.data.PersonData
+import kotlin.random.Random
 
 class ViewModelForRecyclerView : ViewModel() {
 
@@ -35,27 +36,78 @@ class ViewModelForRecyclerView : ViewModel() {
     }
 
     /**
-     * Adds item to dataset
+     * Adds item to dataset by given position
      */
-    fun addItem(position: Int, removedItem: PersonData) {
-        getPersonData().add(position, removedItem)
+    fun addItem(position: Int, addedItem: PersonData) {
+        getPersonData().add(position, addedItem)
+    }
+
+    /**
+     * Adds item to dataset in the end of list
+     */
+    fun addItem(addedItem: PersonData) {
+        getPersonData().add(addedItem)
     }
 
     /**
      * Returns list of person's data
      */
     private fun loadPersonData(): MutableList<PersonData> {
-        return mutableListOf(
-            PersonData(R.string.name1, R.string.profession1, R.string.photo1, 0, 0, 0, 0),
-            PersonData(R.string.name2, R.string.profession2, R.string.photo2, 0, 0, 0, 0),
-            PersonData(R.string.name3, R.string.profession3, R.string.photo3, 0, 0, 0, 0),
-            PersonData(R.string.name4, R.string.profession4, R.string.photo4, 0, 0, 0, 0),
-            PersonData(R.string.name5, R.string.profession5, R.string.photo5, 0, 0, 0, 0),
-            PersonData(R.string.name6, R.string.profession6, R.string.photo6, 0, 0, 0, 0),
-            PersonData(R.string.name7, R.string.profession7, R.string.photo7, 0, 0, 0, 0),
-            PersonData(R.string.name8, R.string.profession8, R.string.photo8, 0, 0, 0, 0),
-            PersonData(R.string.name9, R.string.profession9, R.string.photo9, 0, 0, 0, 0),
-            PersonData(R.string.name10, R.string.profession10, R.string.photo10, 0, 0, 0, 0)
+        val listOfNames: List<String> = getNames()
+        val listOfCareers: List<String> = getCareers()
+        val urlOfPhoto = "https://i.pravatar.cc/"
+        val result = mutableListOf<PersonData>()
+
+        for (i in 0..9) {
+            result.add(PersonData(
+                listOfNames[i],
+                listOfCareers[i],
+                urlOfPhoto + Random.nextInt(1500),
+                "",
+                "",
+                "",
+                ""
+            ))
+        }
+
+        return result
+
+    }
+
+
+    /**
+     * Returns list of careers
+     */
+    private fun getCareers(): List<String> {
+        return listOf(
+            "Community worker",
+            "Estate agent",
+            "Pilot",
+            "Dentist",
+            "Clockmaker",
+            "Barrister",
+            "Auctioneer",
+            "Printer",
+            "Comedian",
+            "Car dealer"
+        )
+    }
+
+    /**
+     * Returns list of names
+     */
+    private fun getNames(): List<String> {
+        return listOf(
+            "Darcy Benn",
+            "Tatiana Matthewson",
+            "Zandra Bailey",
+            "Eliot Stevenson",
+            "Mina Derrickson",
+            "Gyles Breckinridge",
+            "Sharlene Horsfall",
+            "Milton Bryson",
+            "Allissa Tindall",
+            "Frannie Morriss"
         )
     }
 }

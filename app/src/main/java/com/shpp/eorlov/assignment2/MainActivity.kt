@@ -1,6 +1,7 @@
 package com.shpp.eorlov.assignment2
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -9,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.shpp.eorlov.assignment2.adapter.ItemAdapter
 import com.shpp.eorlov.assignment2.data.PersonData
 import com.shpp.eorlov.assignment2.databinding.ActivityMainBinding
+import com.shpp.eorlov.assignment2.dialog.ContactDialogFragment
 import com.shpp.eorlov.assignment2.model.ViewModelForRecyclerView
 import com.shpp.eorlov.assignment2.utils.Constants
 
@@ -19,28 +21,36 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var modelViewModel: ViewModelForRecyclerView
     private lateinit var itemAdapter: ItemAdapter
+    private lateinit var dialog: ContactDialogFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+        //Add listener to add contact button, that create DialogFragment
+        val addContactsButton = binding.addContactsTextView
+        addContactsButton.setOnClickListener {
+            addContactsButton.isEnabled = false
+            dialog = ContactDialogFragment()
+            dialog.show(supportFragmentManager, "contact")
+        }
+
         modelViewModel = ViewModelProvider(this)
             .get(ViewModelForRecyclerView::class.java)
 
-
+        //modelViewModel.getPersonData().toMutableList() means that we take copy of given data
         itemAdapter = ItemAdapter(this, modelViewModel.getPersonData().toMutableList())
 
         val recyclerView = binding.recyclerView
         recyclerView.adapter = itemAdapter
-
-        // Use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true)
 
+        //Implement swipe-to-delete
         ItemTouchHelper(itemAdapter.itemTouchHelperCallBack).attachToRecyclerView(recyclerView)
 
         setContentView(binding.root)
     }
+
 
     fun removeItemFromViewModel(
         viewHolder: RecyclerView.ViewHolder,
@@ -58,10 +68,19 @@ class MainActivity : AppCompatActivity() {
 
         snackbar.setAction("Cancel") {
             modelViewModel.addItem(position, removedItem)
-            this.itemAdapter.updateItems(modelViewModel.getPersonData())
+            itemAdapter.updateItems(modelViewModel.getPersonData())
         }
 
         snackbar.show()
-        this.itemAdapter.updateItems(modelViewModel.getPersonData())
+        itemAdapter.updateItems(modelViewModel.getPersonData())
+    }
+
+    fun addContact(view: View) {
+        dialog.addContact(modelViewModel)
+        itemAdapter.updateItems(modelViewModel.getPersonData())
+    }
+
+    fun closeDialog(view: View) {
+        dialog.dismiss()
     }
 }

@@ -28,4 +28,6 @@
     <dimen name="add_contacts_margin_start">16dp</dimen>
     <dimen name="select_margin_end">17dp</dimen>
     <dimen name="subtitle_margin_top">32dp</dimen>
+    <dimen name="size_of_picture">113dp</dimen>
+    <dimen name="load_image_image_view_size">55dp</dimen>
 </resources>

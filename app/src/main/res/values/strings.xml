@@ -1,36 +1,6 @@
 <resources>
     <string name="app_name"></string>
     <string name="element_text" />
-    <string name="name1">Darcy Benn.</string>
-    <string name="name2">Tatiana Matthewson</string>
-    <string name="name3">Zandra Bailey</string>
-    <string name="name4">Eliot Stevenson</string>
-    <string name="name5">Mina Derrickson</string>
-    <string name="name6">Gyles Breckinridge</string>
-    <string name="name7">Sharlene Horsfall</string>
-    <string name="name8">Milton Bryson</string>
-    <string name="name9">Allissa Tindall</string>
-    <string name="name10">Frannie Morriss</string>
-    <string name="profession1">Community worker</string>
-    <string name="profession2">Estate agent</string>
-    <string name="profession3">Pilot</string>
-    <string name="profession4">Dentist</string>
-    <string name="profession5">Clockmaker</string>
-    <string name="profession6">Barrister</string>
-    <string name="profession7">Auctioneer</string>
-    <string name="profession8">Printer</string>
-    <string name="profession9">Comedian</string>
-    <string name="profession10">Car dealer</string>
-    <string name="photo1">"https://i.pravatar.cc/300"</string>
-    <string name="photo2">"https://i.pravatar.cc/301"</string>
-    <string name="photo3">"https://i.pravatar.cc/302"</string>
-    <string name="photo4">"https://i.pravatar.cc/303"</string>
-    <string name="photo5">"https://i.pravatar.cc/304"</string>
-    <string name="photo6">"https://i.pravatar.cc/305"</string>
-    <string name="photo7">"https://i.pravatar.cc/306"</string>
-    <string name="photo8">"https://i.pravatar.cc/307"</string>
-    <string name="photo9">"https://i.pravatar.cc/308"</string>
-    <string name="photo10">"https://i.pravatar.cc/309"</string>
     <string name="contacts">Contacts</string>
     <string name="exit_from_this_activity">button to exit this activity</string>
     <string name="search_button">search button</string>
@@ -38,4 +8,10 @@
     <string name="select">Select</string>
     <string name="add_contact_username">Username</string>
     <string name="save">SAVE</string>
+    <string name="add_contact">Add contact</string>
+    <string name="career">Career</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="address">Address</string>
+    <string name="date_of_birth">Date of birth</string>
 </resources>

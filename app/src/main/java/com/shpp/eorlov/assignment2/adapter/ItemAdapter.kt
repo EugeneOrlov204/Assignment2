@@ -23,6 +23,7 @@ class ItemAdapter(
 
     ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
+    /* Variable that implements swipe-to-delete */
     var itemTouchHelperCallBack: ItemTouchHelper.SimpleCallback =
         object : ItemTouchHelper.SimpleCallback(
             0,
@@ -67,21 +68,21 @@ class ItemAdapter(
      * Replace the contents of a view (invoked by the layout manager)
      */
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-
         val item = dataset[position]
-        holder.personNameTextView.text = context.resources.getString(item.userNameId)
-        holder.personProfessionTextView.text =
-            context.resources.getString(item.careerId)
 
-        holder.personImageImageView.loadImageUsingGlide(context.resources.getString(item.photoId))
+        with(holder) {
+            personNameTextView.text = item.username
+            personProfessionTextView.text = item.career
+            personImageImageView.loadImageUsingGlide((item as PersonData) .photo)
 
-        holder.clearButtonImageView.setOnClickListener {
-//            holder.clearButtonImageView.isEnabled = false
-            (context as MainActivity).removeItemFromViewModel(
-                holder,
-                holder.absoluteAdapterPosition
-            )
-//            holder.clearButtonImageView.isEnabled = true
+            clearButtonImageView.setOnClickListener {
+//            clearButtonImageView.isEnabled = false
+                (context as MainActivity).removeItemFromViewModel(
+                    holder,
+                    absoluteAdapterPosition
+                )
+//            clearButtonImageView.isEnabled = true
+            }
         }
 
     }

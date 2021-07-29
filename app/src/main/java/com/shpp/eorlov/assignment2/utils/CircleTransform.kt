@@ -2,6 +2,7 @@ package com.shpp.eorlov.assignment2.utils
 
 import android.graphics.*
 import com.squareup.picasso.Transformation
+import kotlin.math.min
 
 /**
  * This class is to circle image with Picasso
@@ -12,7 +13,7 @@ class CircleTransform : Transformation {
 
     override fun transform(source: Bitmap): Bitmap {
 
-        val size = Math.min(source.width, source.height)
+        val size = min(source.width, source.height)
         val x = (source.width - size) / 2
         val y = (source.height - size) / 2
 
