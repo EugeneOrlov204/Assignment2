@@ -3,6 +3,7 @@ package com.shpp.eorlov.assignment2.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -73,7 +74,7 @@ class ItemAdapter(
         with(holder) {
             personNameTextView.text = item.username
             personProfessionTextView.text = item.career
-            personImageImageView.loadImageUsingGlide((item as PersonData) .photo)
+            personImageImageView.loadImageUsingGlide((item.photo).toUri())
 
             clearButtonImageView.setOnClickListener {
 //            clearButtonImageView.isEnabled = false

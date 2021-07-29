@@ -1,5 +1,6 @@
 package com.shpp.eorlov.assignment2
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -11,7 +12,7 @@ import com.shpp.eorlov.assignment2.adapter.ItemAdapter
 import com.shpp.eorlov.assignment2.data.PersonData
 import com.shpp.eorlov.assignment2.databinding.ActivityMainBinding
 import com.shpp.eorlov.assignment2.dialog.ContactDialogFragment
-import com.shpp.eorlov.assignment2.model.ViewModelForRecyclerView
+import com.shpp.eorlov.assignment2.viewmodel.MainViewModel
 import com.shpp.eorlov.assignment2.utils.Constants
 
 
@@ -19,9 +20,10 @@ class MainActivity : AppCompatActivity() {
 
     // view binding for the activity
     private lateinit var binding: ActivityMainBinding
-    private lateinit var modelViewModel: ViewModelForRecyclerView
+    private lateinit var modelViewModel: MainViewModel
     private lateinit var itemAdapter: ItemAdapter
     private lateinit var dialog: ContactDialogFragment
+    private lateinit var settings: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,13 +32,12 @@ class MainActivity : AppCompatActivity() {
         //Add listener to add contact button, that create DialogFragment
         val addContactsButton = binding.addContactsTextView
         addContactsButton.setOnClickListener {
-            addContactsButton.isEnabled = false
             dialog = ContactDialogFragment()
             dialog.show(supportFragmentManager, "contact")
         }
 
         modelViewModel = ViewModelProvider(this)
-            .get(ViewModelForRecyclerView::class.java)
+            .get(MainViewModel::class.java)
 
         //modelViewModel.getPersonData().toMutableList() means that we take copy of given data
         itemAdapter = ItemAdapter(this, modelViewModel.getPersonData().toMutableList())
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         //Implement swipe-to-delete
         ItemTouchHelper(itemAdapter.itemTouchHelperCallBack).attachToRecyclerView(recyclerView)
 
+        settings = getSharedPreferences(Constants.PREFS_FILE, MODE_PRIVATE)
         setContentView(binding.root)
     }
 
@@ -76,11 +78,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun addContact(view: View) {
-        dialog.addContact(modelViewModel)
+        val imageData = settings.getString(Constants.PREF_NAME, null)
+        val newContact = dialog.addContact() ?: return
+        modelViewModel.addItem(
+            newContact.username,
+            newContact.career,
+            imageData ?: "https://i.pravatar.cc/",
+            newContact.residenceAddress,
+            newContact.birthDate,
+            newContact.phoneNumber,
+            newContact.email
+
+        )
         itemAdapter.updateItems(modelViewModel.getPersonData())
+        settings.edit().clear().apply()
     }
 
     fun closeDialog(view: View) {
         dialog.dismiss()
+        settings.edit().clear().apply()
     }
 }

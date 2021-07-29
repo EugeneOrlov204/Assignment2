@@ -3,23 +3,24 @@ package com.shpp.eorlov.assignment2.dialog
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.net.Uri
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.shpp.eorlov.assignment2.MainActivity
 import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.data.PersonData
 import com.shpp.eorlov.assignment2.databinding.AddContactDialogBinding
-import com.shpp.eorlov.assignment2.model.ViewModelForRecyclerView
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingGlide
 import com.shpp.eorlov.assignment2.validator.Validator
@@ -27,6 +28,7 @@ import com.shpp.eorlov.assignment2.validator.Validator
 
 class ContactDialogFragment : DialogFragment() {
     private lateinit var dialogBinding: AddContactDialogBinding
+    private lateinit var settings: SharedPreferences
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBinding = AddContactDialogBinding.inflate(LayoutInflater.from(context))
@@ -38,10 +40,11 @@ class ContactDialogFragment : DialogFragment() {
                 MediaStore.Images.Media.INTERNAL_CONTENT_URI
             )
             startActivityForResult(gallery, Constants.PICK_IMAGE)
+            //FIXME registerForActivityResult
         }
 
         initializeDate()
-
+        settings = this.requireActivity().getSharedPreferences(Constants.PREFS_FILE, MODE_PRIVATE)
         return AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
             .create()
@@ -51,48 +54,56 @@ class ContactDialogFragment : DialogFragment() {
         super.onResume()
 
         //Set size of DialogFragment to all size of parent
-        val params: ViewGroup.LayoutParams = dialog!!.window!!.attributes
-        params.width = ViewGroup.LayoutParams.MATCH_PARENT
-        params.height = ViewGroup.LayoutParams.MATCH_PARENT
-        dialog!!.window!!.attributes = params as WindowManager.LayoutParams
+        if (dialog != null && dialog?.window != null) {
+            val params: ViewGroup.LayoutParams =
+                dialog?.window?.attributes ?: return
+            params.width = ViewGroup.LayoutParams.MATCH_PARENT
+            params.height = ViewGroup.LayoutParams.MATCH_PARENT
+            dialog?.window?.attributes = params as WindowManager.LayoutParams
+        }
     }
-
 
     /**
      * Add new contact to RecyclerView if all field are valid
      */
-    fun addContact(model: ViewModelForRecyclerView) {
+    fun addContact(): PersonData? {
         if (!canAddContact()) {
-            return
+            return null
         }
 
+        val newContact: PersonData
         with(dialogBinding) {
-            model.addItem(
-                PersonData(
-                    usernameTextInputEditText.text.toString(),
-                    careerTextInputEditText.text.toString(),
-                    loadImageImageView,
-                    addressTextInputEditText.text.toString(),
-                    birthdateTextInputEditText.text.toString(),
-                    phoneTextInputEditText.text.toString(),
-                    emailTextInputEditText.text.toString()
-                )
+            newContact = PersonData(
+                usernameTextInputEditText.text.toString(),
+                careerTextInputEditText.text.toString(),
+                "",
+                addressTextInputEditText.text.toString(),
+                birthdateTextInputEditText.text.toString(),
+                phoneTextInputEditText.text.toString(),
+                emailTextInputEditText.text.toString()
             )
         }
+
         dismiss()
+        return newContact
     }
+
 
     /**
      * I've taken code from here: https://stackoverflow.com/questions/38352148/get-image-from-the-gallery-and-show-in-imageview
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val imageUri: Uri
         val imageView: AppCompatImageView = dialogBinding.personPhotoImageView
 
         if (resultCode == RESULT_OK && requestCode == Constants.PICK_IMAGE) {
-            imageUri = data?.data!!
-            imageView.loadImageUsingGlide(imageUri)
+            if (data?.data != null) {
+                val imageData = data.data ?: return
+                val prefEditor = settings.edit();
+                prefEditor.putString(Constants.PREF_NAME, imageData.toString());
+                prefEditor.apply();
+                imageView.loadImageUsingGlide(imageData)
+            }
         }
     }
 
