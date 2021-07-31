@@ -18,12 +18,14 @@
     <dimen name="line_margin">8dp</dimen>
     <dimen name="view_holder_radius">30dp</dimen>
     <dimen name="text_size">5sp</dimen>
-    <dimen name="size_of_picture">113dp</dimen>
-    <dimen name="load_image_image_view_size">55dp</dimen>
+
+
+    <!--Common Data-->
+    <dimen name="close_button_margin_start_21dp">21dp</dimen>
+
 
     <!--Main Activity-->
     <dimen name="header_height_117dp">117dp</dimen>
-    <dimen name="close_button_margin_start_21dp">21dp</dimen>
     <dimen name="contacts_text_size_24sp">24sp</dimen>
     <dimen name="search_button_margin_end_19dp">19dp</dimen>
     <dimen name="contacts_text_margin_top_10dp">10dp</dimen>
@@ -34,4 +36,17 @@
     <dimen name="select_margin_top_32dp">32dp</dimen>
     <dimen name="select_text_size_14sp">14sp</dimen>
     <dimen name="select_margin_bottom_26dp">26dp</dimen>
+
+    <!--Add Contact Dialog-->
+    <dimen name="header_height_244dp">244dp</dimen>
+    <dimen name="add_contact_margin_top_20dp">20dp</dimen>
+    <dimen name="add_contact_text_size_18sp">18sp</dimen>
+    <dimen name="person_photo_size_113dp">113dp</dimen>
+    <dimen name="person_photo_margin_top_28dp">28dp</dimen>
+    <dimen name="image_loader_size_55dp">55dp</dimen>
+    <dimen name="image_loader_margin_start_22dp">22dp</dimen>
+    <dimen name="save_button_height_55dp">55dp</dimen>
+    <dimen name="save_button_margin_16dp">16dp</dimen>
+    <dimen name="save_button_text_size_16sp">16sp</dimen>
+
 </resources>

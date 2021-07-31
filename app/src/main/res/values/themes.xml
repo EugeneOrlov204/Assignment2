@@ -14,7 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="header_image_button">
+    <style name="image_button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@android:color/transparent</item>
@@ -28,6 +28,8 @@
     </style>
 
     <style name="add_contact_title_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#B2B2B3</item>
         <item name="android:textSize">14sp</item>
         <item name="fontFamily">@font/open_sans</item>
@@ -35,7 +37,9 @@
         <item name="android:layout_marginTop">24dp</item>
     </style>
 
-    <style name="add_contact_edit_text">
+    <style name="add_contact_text_input_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">18sp</item>
         <item name="fontFamily">@font/open_sans</item>
         <item name="android:layout_marginStart">16dp</item>
@@ -48,6 +52,19 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="add_contact_text_input_edit_text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:textColor">@color/required_field_color</item>
+        <item name="singleLine">true</item>
     </style>
 
 </resources>

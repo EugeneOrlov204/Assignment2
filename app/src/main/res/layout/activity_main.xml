@@ -15,8 +15,8 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/imageButtonCloseButton"
-            style="@style/header_image_button"
+            android:id="@+id/imageButtonMainCloseButton"
+            style="@style/image_button"
             android:layout_marginStart="@dimen/close_button_margin_start_21dp"
             android:src="@drawable/ic_arrow_back"
             app:layout_constraintBottom_toBottomOf="@id/textViewContacts"
@@ -32,12 +32,12 @@
             android:text="@string/contacts"
             android:textSize="@dimen/contacts_text_size_24sp"
             app:layout_constraintEnd_toStartOf="@id/imageButtonSearchButton"
-            app:layout_constraintStart_toEndOf="@id/imageButtonCloseButton"
+            app:layout_constraintStart_toEndOf="@id/imageButtonMainCloseButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/imageButtonSearchButton"
-            style="@style/header_image_button"
+            style="@style/image_button"
             android:layout_marginEnd="@dimen/search_button_margin_end_19dp"
             android:src="@drawable/search_button"
             app:layout_constraintBottom_toBottomOf="@id/textViewContacts"
