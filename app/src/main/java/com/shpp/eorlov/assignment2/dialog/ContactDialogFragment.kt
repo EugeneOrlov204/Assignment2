@@ -6,11 +6,13 @@ import android.app.Dialog
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.widget.addTextChangedListener
@@ -40,6 +42,19 @@ class ContactDialogFragment : DialogFragment() {
                 MediaStore.Images.Media.INTERNAL_CONTENT_URI
             )
             startActivityForResult(gallery, Constants.PICK_IMAGE)
+//            val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+//                val imageView: AppCompatImageView = dialogBinding.personPhotoImageView
+//
+//                if (resultCode == RESULT_OK && requestCode == Constants.PICK_IMAGE) {
+//                    if (data?.data != null) {
+//                        val imageData = data.data ?: return
+//                        val prefEditor = settings.edit();
+//                        prefEditor.putString(Constants.PREF_NAME, imageData.toString());
+//                        prefEditor.apply();
+//                        imageView.loadImageUsingGlide(imageData)
+//                    }
+//                }
+//            }
             //FIXME registerForActivityResult
         }
 
@@ -99,9 +114,9 @@ class ContactDialogFragment : DialogFragment() {
         if (resultCode == RESULT_OK && requestCode == Constants.PICK_IMAGE) {
             if (data?.data != null) {
                 val imageData = data.data ?: return
-                val prefEditor = settings.edit();
-                prefEditor.putString(Constants.PREF_NAME, imageData.toString());
-                prefEditor.apply();
+                val prefEditor = settings.edit()
+                prefEditor.putString(Constants.PREF_NAME, imageData.toString())
+                prefEditor.apply()
                 imageView.loadImageUsingGlide(imageData)
             }
         }

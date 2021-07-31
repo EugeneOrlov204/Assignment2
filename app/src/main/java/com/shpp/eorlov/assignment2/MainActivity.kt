@@ -6,6 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.shpp.eorlov.assignment2.adapter.ItemAdapter
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         //Add listener to add contact button, that create DialogFragment
-        val addContactsButton = binding.addContactsTextView
+        val addContactsButton = binding.textViewAddContacts
         addContactsButton.setOnClickListener {
             dialog = ContactDialogFragment()
             dialog.show(supportFragmentManager, "contact")
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         itemAdapter = ItemAdapter(this, modelViewModel.getPersonData().toMutableList())
 
         val recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = itemAdapter
         recyclerView.setHasFixedSize(true)
 

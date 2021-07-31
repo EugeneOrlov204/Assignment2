@@ -4,7 +4,6 @@
     <dimen name="margin_medium" />
     <dimen name="header_height_contacts">95dp</dimen>
     <dimen name="header_margin">36dp</dimen>
-    <dimen name="header_title_text_size">24sp</dimen>
     <dimen name="header_title_margin">30dp</dimen>
     <dimen name="margin_exit_button">18dp</dimen>
     <dimen name="margin_search_button">20dp</dimen>
@@ -19,15 +18,20 @@
     <dimen name="line_margin">8dp</dimen>
     <dimen name="view_holder_radius">30dp</dimen>
     <dimen name="text_size">5sp</dimen>
-    <dimen name="header_height">117dp</dimen>
-    <dimen name="arrow_back_margin">21dp</dimen>
-    <dimen name="search_button_margin">19dp</dimen>
-    <dimen name="header_title_text_margin">10dp</dimen>
-    <dimen name="subtitle_text_size">14sp</dimen>
-    <dimen name="subtitle_margin_bottom">26dp</dimen>
-    <dimen name="add_contacts_margin_start">16dp</dimen>
-    <dimen name="select_margin_end">17dp</dimen>
-    <dimen name="subtitle_margin_top">32dp</dimen>
     <dimen name="size_of_picture">113dp</dimen>
     <dimen name="load_image_image_view_size">55dp</dimen>
+
+    <!--Main Activity-->
+    <dimen name="header_height_117dp">117dp</dimen>
+    <dimen name="close_button_margin_start_21dp">21dp</dimen>
+    <dimen name="contacts_text_size_24sp">24sp</dimen>
+    <dimen name="search_button_margin_end_19dp">19dp</dimen>
+    <dimen name="contacts_text_margin_top_10dp">10dp</dimen>
+    <dimen name="add_contacts_margin_start_16dp">16dp</dimen>
+    <dimen name="add_contacts_margin_bottom_26dp">26dp</dimen>
+    <dimen name="add_contacts_text_size_14sp">14sp</dimen>
+    <dimen name="select_margin_end_17dp">17dp</dimen>
+    <dimen name="select_margin_top_32dp">32dp</dimen>
+    <dimen name="select_text_size_14sp">14sp</dimen>
+    <dimen name="select_margin_bottom_26dp">26dp</dimen>
 </resources>
