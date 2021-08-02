@@ -1,52 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="list_item_height" />
-    <dimen name="margin_medium" />
-    <dimen name="header_height_contacts">95dp</dimen>
-    <dimen name="header_margin">36dp</dimen>
-    <dimen name="header_title_margin">30dp</dimen>
-    <dimen name="margin_exit_button">18dp</dimen>
-    <dimen name="margin_search_button">20dp</dimen>
-    <dimen name="margin_recycler_view_item">16dp</dimen>
-    <dimen name="image_size">50dp</dimen>
-    <dimen name="image_margin">16dp</dimen>
-    <dimen name="name_margin">16dp</dimen>
-    <dimen name="name_text_size">18sp</dimen>
-    <dimen name="profession_text_size">12sp</dimen>
-    <dimen name="clear_button_margin">16dp</dimen>
-    <dimen name="line_height">1dp</dimen>
-    <dimen name="line_margin">8dp</dimen>
-    <dimen name="view_holder_radius">30dp</dimen>
-    <dimen name="text_size">5sp</dimen>
-
-
     <!--Common Data-->
     <dimen name="close_button_margin_start_21dp">21dp</dimen>
+    <dimen name="margin_normal_16dp">16dp</dimen>
+    <dimen name="text_size_normal_18sp">18sp</dimen>
 
+    <!--Round View Holder-->
+    <dimen name="view_holder_radius_30dp">30dp</dimen>
+
+    <!--List Item-->
+    <dimen name="person_image_size_50dp">50dp</dimen>
+    <dimen name="person_profession_text_size_12sp">12sp</dimen>
+    <dimen name="line_height_1dp">1dp</dimen>
+    <dimen name="line_margin_top_8dp">8dp</dimen>
 
     <!--Main Activity-->
     <dimen name="header_height_117dp">117dp</dimen>
     <dimen name="contacts_text_size_24sp">24sp</dimen>
     <dimen name="search_button_margin_end_19dp">19dp</dimen>
     <dimen name="contacts_text_margin_top_10dp">10dp</dimen>
-    <dimen name="add_contacts_margin_start_16dp">16dp</dimen>
     <dimen name="add_contacts_margin_bottom_26dp">26dp</dimen>
-    <dimen name="add_contacts_text_size_14sp">14sp</dimen>
     <dimen name="select_margin_end_17dp">17dp</dimen>
     <dimen name="select_margin_top_32dp">32dp</dimen>
-    <dimen name="select_text_size_14sp">14sp</dimen>
     <dimen name="select_margin_bottom_26dp">26dp</dimen>
+    <dimen name="main_activity_text_size_small_14sp">14sp</dimen>
 
     <!--Add Contact Dialog-->
     <dimen name="header_height_244dp">244dp</dimen>
     <dimen name="add_contact_margin_top_20dp">20dp</dimen>
-    <dimen name="add_contact_text_size_18sp">18sp</dimen>
     <dimen name="person_photo_size_113dp">113dp</dimen>
     <dimen name="person_photo_margin_top_28dp">28dp</dimen>
     <dimen name="image_loader_size_55dp">55dp</dimen>
     <dimen name="image_loader_margin_start_22dp">22dp</dimen>
     <dimen name="save_button_height_55dp">55dp</dimen>
-    <dimen name="save_button_margin_16dp">16dp</dimen>
     <dimen name="save_button_text_size_16sp">16sp</dimen>
 
 </resources>

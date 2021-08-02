@@ -50,10 +50,10 @@ class ItemAdapter(
      * Class that represents an item of RecyclerView
      */
     class ItemViewHolder(binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        val personNameTextView = binding.nameTextView
-        val personProfessionTextView = binding.professionTextView
-        val personImageImageView = binding.imageContactsImageView
-        val clearButtonImageView = binding.clearButtonImageView
+        val personNameTextView = binding.textViewPersonName
+        val personProfessionTextView = binding.textViewPersonProfession
+        val personImageImageView = binding.imageViewPersonImage
+        val clearButtonImageView = binding.imageViewClearButton
     }
 
     /**
