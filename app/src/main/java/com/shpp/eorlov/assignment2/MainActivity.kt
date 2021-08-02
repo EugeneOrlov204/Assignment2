@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,13 +14,14 @@ import com.shpp.eorlov.assignment2.databinding.ActivityMainBinding
 import com.shpp.eorlov.assignment2.dialog.ContactDialogFragment
 import com.shpp.eorlov.assignment2.viewmodel.MainViewModel
 import com.shpp.eorlov.assignment2.utils.Constants
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : AppCompatActivity() {
 
     // view binding for the activity
     private lateinit var binding: ActivityMainBinding
-    private lateinit var modelViewModel: MainViewModel
+    private val modelViewModel: MainViewModel by viewModel()
     private lateinit var itemAdapter: ItemAdapter
     private lateinit var dialog: ContactDialogFragment
     private lateinit var settings: SharedPreferences
@@ -29,22 +29,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-
-        //Add listener to add contact button, that create DialogFragment
-        val addContactsButton = binding.textViewAddContacts
-        addContactsButton.setOnClickListener {
-            dialog = ContactDialogFragment()
-            dialog.show(supportFragmentManager, "contact")
-        }
-
-        modelViewModel = ViewModelProvider(this)
-            .get(MainViewModel::class.java)
+        setListeners()
 
         //modelViewModel.getPersonData().toMutableList() means that we take copy of given data
         itemAdapter = ItemAdapter(this, modelViewModel.getPersonData().toMutableList())
 
         val recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerView.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
         recyclerView.adapter = itemAdapter
         recyclerView.setHasFixedSize(true)
 
@@ -53,6 +48,18 @@ class MainActivity : AppCompatActivity() {
 
         settings = getSharedPreferences(Constants.PREFS_FILE, MODE_PRIVATE)
         setContentView(binding.root)
+    }
+
+    /**
+     * Add listener to add contact button, that create DialogFragment
+     */
+    private fun setListeners() {
+        with(binding) {
+            textViewAddContacts.setOnClickListener {
+                dialog = ContactDialogFragment()
+                dialog.show(supportFragmentManager, "contact")
+            }
+        }
     }
 
 

@@ -34,29 +34,6 @@ class ContactDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBinding = AddContactDialogBinding.inflate(LayoutInflater.from(context))
-        val loadImageButton = dialogBinding.imageViewImageLoader
-
-        loadImageButton.setOnClickListener {
-            val gallery = Intent(
-                Intent.ACTION_PICK,
-                MediaStore.Images.Media.INTERNAL_CONTENT_URI
-            )
-            startActivityForResult(gallery, Constants.PICK_IMAGE)
-//            val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-//                val imageView: AppCompatImageView = dialogBinding.personPhotoImageView
-//
-//                if (resultCode == RESULT_OK && requestCode == Constants.PICK_IMAGE) {
-//                    if (data?.data != null) {
-//                        val imageData = data.data ?: return
-//                        val prefEditor = settings.edit();
-//                        prefEditor.putString(Constants.PREF_NAME, imageData.toString());
-//                        prefEditor.apply();
-//                        imageView.loadImageUsingGlide(imageData)
-//                    }
-//                }
-//            }
-            //FIXME registerForActivityResult
-        }
 
         initializeDate()
         settings = this.requireActivity().getSharedPreferences(Constants.PREFS_FILE, MODE_PRIVATE)
@@ -126,15 +103,46 @@ class ContactDialogFragment : DialogFragment() {
      * Initialize date and set listeners to EditTexts
      */
     private fun initializeDate() {
+        dialogBinding.imageViewPersonPhoto.loadImageUsingGlide(R.mipmap.ic_launcher)
+        setListeners()
+    }
+
+    private fun setListeners() {
         with(dialogBinding) {
-            imageViewPersonPhoto.loadImageUsingGlide(R.mipmap.ic_launcher)
             addListenerToEditText(textInputEditTextAddress, textInputLayoutAddress, "")
             addListenerToEditText(textInputEditTextBirthdate, textInputLayoutBirthdate, "birthdate")
             addListenerToEditText(textInputEditTextCareer, textInputLayoutCareer, "")
             addListenerToEditText(textInputEditTextEmail, textInputLayoutEmail, "email")
             addListenerToEditText(textInputEditTextUsername, textInputLayoutUsername, "")
             addListenerToEditText(textInputEditTextPhone, textInputLayoutPhone, "phoneNumber")
+
+            imageViewImageLoader.setOnClickListener {
+                loadImageFromGallery()
+            }
+
         }
+    }
+
+    private fun loadImageFromGallery() {
+        val gallery = Intent(
+            Intent.ACTION_PICK,
+            MediaStore.Images.Media.INTERNAL_CONTENT_URI
+        )
+        startActivityForResult(gallery, Constants.PICK_IMAGE)
+//            val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+//                val imageView: AppCompatImageView = dialogBinding.personPhotoImageView
+//
+//                if (resultCode == RESULT_OK && requestCode == Constants.PICK_IMAGE) {
+//                    if (data?.data != null) {
+//                        val imageData = data.data ?: return
+//                        val prefEditor = settings.edit();
+//                        prefEditor.putString(Constants.PREF_NAME, imageData.toString());
+//                        prefEditor.apply();
+//                        imageView.loadImageUsingGlide(imageData)
+//                    }
+//                }
+//            }
+        //FIXME registerForActivityResult
     }
 
     /**
@@ -180,7 +188,11 @@ class ContactDialogFragment : DialogFragment() {
     private fun canAddContact(): Boolean {
         with(dialogBinding) {
             return isValidInput(textInputEditTextAddress, textInputLayoutAddress, "") &&
-                    isValidInput(textInputEditTextBirthdate, textInputLayoutBirthdate, "birthdate") &&
+                    isValidInput(
+                        textInputEditTextBirthdate,
+                        textInputLayoutBirthdate,
+                        "birthdate"
+                    ) &&
                     isValidInput(textInputEditTextCareer, textInputLayoutCareer, "") &&
                     isValidInput(textInputEditTextEmail, textInputLayoutEmail, "email") &&
                     isValidInput(textInputEditTextUsername, textInputLayoutUsername, "") &&

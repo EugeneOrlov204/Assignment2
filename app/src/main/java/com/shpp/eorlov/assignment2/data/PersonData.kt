@@ -1,7 +1,5 @@
 package com.shpp.eorlov.assignment2.data
 
-import androidx.appcompat.widget.AppCompatImageView
-
 data class PersonData(
     val username: String,
     val career: String,

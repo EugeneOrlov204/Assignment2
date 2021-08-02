@@ -2,13 +2,16 @@ package com.shpp.eorlov.assignment2.validator
 
 import android.util.Patterns
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import com.google.android.material.textfield.TextInputLayout as TextInputLayout1
 
 class Validator {
-    fun validateEmail(editText: TextInputEditText, errorMessageLayout: TextInputLayout): Boolean {
+    fun validateEmail(
+        editText: TextInputEditText,
+        errorMessageLayout: TextInputLayout1
+    ): Boolean {
         if (editText.text.toString().trim { it <= ' ' }.isEmpty()) {
             errorMessageLayout.error = ""
         } else {
@@ -24,7 +27,10 @@ class Validator {
         return true
     }
 
-    fun validateEmptyField(editText: TextInputEditText, errorMessageLayout: TextInputLayout): Boolean {
+    fun validateEmptyField(
+        editText: TextInputEditText,
+        errorMessageLayout: TextInputLayout1
+    ): Boolean {
         if (editText.text.toString().trim { it <= ' ' }.isEmpty()) {
             errorMessageLayout.error = "This field should not be empty"
             return false
@@ -34,7 +40,10 @@ class Validator {
         return true
     }
 
-    fun validatePhoneNumber(editText: TextInputEditText, errorMessageLayout: TextInputLayout): Boolean {
+    fun validatePhoneNumber(
+        editText: TextInputEditText,
+        errorMessageLayout: TextInputLayout1
+    ): Boolean {
         if (editText.text.toString().trim { it <= ' ' }.isEmpty()) {
             errorMessageLayout.error = ""
         } else {
@@ -50,14 +59,19 @@ class Validator {
         return true
     }
 
-    fun validateBirthdate(editText: TextInputEditText, errorMessageLayout: TextInputLayout): Boolean {
+    fun validateBirthdate(
+        editText: TextInputEditText,
+        errorMessageLayout: TextInputLayout1
+    ): Boolean {
 
         if (editText.text.toString().trim { it <= ' ' }.isEmpty()) {
             errorMessageLayout.error = "This field should not be empty"
             return false
         } else {
             val date = editText.text.toString()
-            val isValid = date.matches(Regex("^(1[0-9]|0[1-9]|3[0-1]|2[1-9])/(0[1-9]|1[0-2])/[0-9]{4}$"))
+            val isValid = date.matches(
+                Regex("^(1[0-9]|0[1-9]|3[0-1]|2[1-9])/(0[1-9]|1[0-2])/[0-9]{4}$")
+            )
             return if (!isValid) {
                 errorMessageLayout.error = "Invalid birthdate, ex: 01/01/2021"
                 false

@@ -48,12 +48,6 @@
         <item name="backgroundTint">#BDBDBD</item>
     </style>
 
-    <style name="DialogTheme" parent="Theme.Assignment2">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowFullscreen">false</item>
-        <item name="android:windowIsFloating">false</item>
-    </style>
-
     <style name="add_contact_text_input_edit_text">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
