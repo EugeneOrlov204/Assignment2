@@ -1,27 +1,27 @@
 package com.shpp.eorlov.assignment2.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.jakewharton.rxbinding.view.RxView
 import com.shpp.eorlov.assignment2.MainActivity
 import com.shpp.eorlov.assignment2.data.PersonData
 import com.shpp.eorlov.assignment2.databinding.ListItemBinding
 import com.shpp.eorlov.assignment2.utils.MyDiffUtil
 import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingGlide
+import com.shpp.eorlov.assignment2.viewholder.ItemViewHolder
+import java.util.concurrent.TimeUnit
 
 
 /**
  * Adapter for the [RecyclerView] in [MainActivity]. Displays [PersonData] data object.
  */
 
-class ItemAdapter(
-    private var dataset: MutableList<PersonData>,
-
-    ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+class ItemAdapter(dataset: MutableList<PersonData?>) : RecyclerView.Adapter<ItemViewHolder>() {
+    var items: List<PersonData?> = dataset
 
     /* Variable that implements swipe-to-delete */
     var itemTouchHelperCallBack: ItemTouchHelper.SimpleCallback =
@@ -45,15 +45,6 @@ class ItemAdapter(
             }
         }
 
-    /**
-     * Class that represents an item of RecyclerView
-     */
-    class ItemViewHolder(binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        val personNameTextView = binding.textViewPersonName
-        val personProfessionTextView = binding.textViewPersonProfession
-        val personImageImageView = binding.imageViewPersonImage
-        val clearButtonImageView = binding.imageViewClearButton
-    }
 
     /**
      * Create new views (invoked by the layout manager)
@@ -61,43 +52,48 @@ class ItemAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = ListItemBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
-        return ItemViewHolder(binding)
+        val viewHolder = ItemViewHolder(binding)
+        setListeners(viewHolder)
+        return viewHolder
+    }
+
+    private fun setListeners(holder: ItemViewHolder) {
+        RxView.clicks(holder.itemView).throttleFirst(
+            500,
+            TimeUnit.MILLISECONDS
+        ).subscribe { empty ->
+            (holder.itemView.context as MainActivity).removeItemFromViewModel(
+                holder,
+                holder.absoluteAdapterPosition
+            )
+        }
     }
 
     /**
      * Replace the contents of a view (invoked by the layout manager)
      */
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val item = dataset[position]
+        val item = items[position]
 
         with(holder) {
-            personNameTextView.text = item.username
-            personProfessionTextView.text = item.career
-            personImageImageView.loadImageUsingGlide((item.photo).toUri())
-
-            clearButtonImageView.setOnClickListener {
-//            clearButtonImageView.isEnabled = false
-                (holder.itemView.context as MainActivity).removeItemFromViewModel(
-                    holder,
-                    absoluteAdapterPosition
-                )
-//            clearButtonImageView.isEnabled = true
-            }
+            personNameTextView.text = item?.username
+            personProfessionTextView.text = item?.career
+            personImageImageView.loadImageUsingGlide(item?.photo?.toUri() ?: "")
         }
-
     }
 
     /**
      * Return the size of your dataset (invoked by the layout manager)
      */
-    override fun getItemCount() = dataset.size
+    override fun getItemCount() = items.size
 
 
-    fun updateItems(newDataset: List<PersonData>) {
+    fun updateRecyclerData(newDataset: List<PersonData?>) {
         val diffResult: DiffUtil.DiffResult =
-            DiffUtil.calculateDiff(MyDiffUtil(dataset, newDataset))
+            DiffUtil.calculateDiff(MyDiffUtil(items, newDataset))
         diffResult.dispatchUpdatesTo(this)
-        dataset.clear()
-        dataset.addAll(newDataset)
+        items.toMutableList().clear()
+        items.toMutableList().addAll(newDataset)
     }
 }
+

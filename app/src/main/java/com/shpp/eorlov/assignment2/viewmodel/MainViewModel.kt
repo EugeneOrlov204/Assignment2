@@ -7,45 +7,46 @@ import kotlin.random.Random
 
 class MainViewModel : ViewModel() {
 
-    private var dataset: MutableLiveData<MutableList<PersonData>>? = null
+    val dataset = MutableLiveData<MutableList<PersonData?>>()
+    val errorEvent = MutableLiveData<String>()
 
     /**
      * Returns value of dataset
      */
-    fun getPersonData(): MutableList<PersonData> {
-        if (dataset == null) {
-            dataset = MutableLiveData()
-            dataset?.value = loadPersonData()
+    fun getPersonData() {
+        if (dataset.value == null) {
+            dataset.value = loadPersonData()
+        } else {
+            errorEvent.value = errorMessage
         }
-        return dataset?.value!!
     }
 
     /**
      * Returns item from dataset
      */
-    fun getItem(position: Int): PersonData {
-        return getPersonData()[position]
+    fun getItem(position: Int): PersonData? {
+        return dataset.value?.get(position)
     }
 
     /**
      *  Removes item by clicking to button
      */
     fun removeItem(position: Int) {
-        getPersonData().removeAt(position)
+        dataset.value?.removeAt(position)
     }
 
     /**
      * Adds item to dataset by given position
      */
     fun addItem(position: Int, addedItem: PersonData) {
-        getPersonData().add(position, addedItem)
+        dataset.value?.add(position, addedItem)
     }
 
     /**
      * Adds item to dataset in the end of list
      */
     fun addItem(addedItem: PersonData) {
-        getPersonData().add(addedItem)
+        dataset.value?.add(addedItem)
     }
 
     /**
@@ -76,11 +77,11 @@ class MainViewModel : ViewModel() {
     /**
      * Returns list of person's data
      */
-    private fun loadPersonData(): MutableList<PersonData> {
+    private fun loadPersonData(): MutableList<PersonData?> {
         val listOfNames: List<String> = getNames()
         val listOfCareers: List<String> = getCareers()
         val urlOfPhoto = "https://i.pravatar.cc/"
-        val result = mutableListOf<PersonData>()
+        val result = mutableListOf<PersonData?>()
 
         for (i in 0..9) {
             result.add(
@@ -135,5 +136,9 @@ class MainViewModel : ViewModel() {
             "Allissa Tindall",
             "Frannie Morriss"
         )
+    }
+
+    companion object ErrorMessage{
+        const val errorMessage = "Can't load data"
     }
 }

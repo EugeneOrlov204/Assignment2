@@ -65,4 +65,7 @@ dependencies {
     // include koin-android-scope & koin-android
     implementation "io.insert-koin:koin-android:3.0.2"
     implementation "io.insert-koin:koin-core:3.0.2"
+
+    //RxBinding
+    implementation 'com.jakewharton.rxbinding:rxbinding:0.3.0'
 }
