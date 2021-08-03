@@ -1,5 +1,6 @@
 package com.shpp.eorlov.assignment2.dialog
 
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
@@ -82,24 +83,6 @@ class ContactDialogFragment : DialogFragment() {
 
 
     /**
-     * I've taken code from here: https://stackoverflow.com/questions/38352148/get-image-from-the-gallery-and-show-in-imageview
-     */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        val imageView: AppCompatImageView = dialogBinding.imageViewPersonPhoto
-
-        if (resultCode == RESULT_OK && requestCode == Constants.PICK_IMAGE) {
-            if (data?.data != null) {
-                val imageData = data.data ?: return
-                val prefEditor = settings.edit()
-                prefEditor.putString(Constants.PREF_NAME, imageData.toString())
-                prefEditor.apply()
-                imageView.loadImageUsingGlide(imageData)
-            }
-        }
-    }
-
-    /**
      * Initialize date and set listeners to EditTexts
      */
     private fun initializeDate() {
@@ -123,26 +106,27 @@ class ContactDialogFragment : DialogFragment() {
         }
     }
 
+    private var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val imageView: AppCompatImageView = dialogBinding.imageViewPersonPhoto
+
+            if (result.resultCode == RESULT_OK) {
+                if (result.data?.data != null) {
+                    val imageData = result.data?.data ?: return@registerForActivityResult
+                    val prefEditor = settings.edit()
+                    prefEditor.putString(Constants.PREF_NAME, imageData.toString())
+                    prefEditor.apply()
+                    imageView.loadImageUsingGlide(imageData)
+                }
+            }
+        }
+
     private fun loadImageFromGallery() {
         val gallery = Intent(
             Intent.ACTION_PICK,
             MediaStore.Images.Media.INTERNAL_CONTENT_URI
         )
-        startActivityForResult(gallery, Constants.PICK_IMAGE)
-//            val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-//                val imageView: AppCompatImageView = dialogBinding.personPhotoImageView
-//
-//                if (resultCode == RESULT_OK && requestCode == Constants.PICK_IMAGE) {
-//                    if (data?.data != null) {
-//                        val imageData = data.data ?: return
-//                        val prefEditor = settings.edit();
-//                        prefEditor.putString(Constants.PREF_NAME, imageData.toString());
-//                        prefEditor.apply();
-//                        imageView.loadImageUsingGlide(imageData)
-//                    }
-//                }
-//            }
-        //FIXME registerForActivityResult
+        resultLauncher.launch(gallery)
     }
 
     /**
