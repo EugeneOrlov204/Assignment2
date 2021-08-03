@@ -57,18 +57,6 @@ class ItemAdapter(dataset: MutableList<PersonData?>) : RecyclerView.Adapter<Item
         return viewHolder
     }
 
-    private fun setListeners(holder: ItemViewHolder) {
-        RxView.clicks(holder.itemView).throttleFirst(
-            500,
-            TimeUnit.MILLISECONDS
-        ).subscribe { empty ->
-            (holder.itemView.context as MainActivity).removeItemFromViewModel(
-                holder,
-                holder.absoluteAdapterPosition
-            )
-        }
-    }
-
     /**
      * Replace the contents of a view (invoked by the layout manager)
      */
@@ -87,6 +75,9 @@ class ItemAdapter(dataset: MutableList<PersonData?>) : RecyclerView.Adapter<Item
      */
     override fun getItemCount() = items.size
 
+    interface AdapterClickListener {
+        fun removeItem(item: PersonData)
+    }
 
     fun updateRecyclerData(newDataset: List<PersonData?>) {
         val diffResult: DiffUtil.DiffResult =
@@ -94,6 +85,24 @@ class ItemAdapter(dataset: MutableList<PersonData?>) : RecyclerView.Adapter<Item
         diffResult.dispatchUpdatesTo(this)
         items.toMutableList().clear()
         items.toMutableList().addAll(newDataset)
+    }
+
+    override fun removeItem(item: PersonData) {
+        if(items.isNotEmpty()) {
+            items.toMutableList().remove(item)
+        }
+    }
+
+    private fun setListeners(holder: ItemViewHolder) {
+        RxView.clicks(holder.itemView).throttleFirst(
+            500,
+            TimeUnit.MILLISECONDS
+        ).subscribe { empty ->
+            (holder.itemView.context as MainActivity).removeItemFromViewModel(
+                holder,
+                holder.absoluteAdapterPosition
+            )
+        }
     }
 }
 

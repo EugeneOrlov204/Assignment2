@@ -30,17 +30,24 @@ class MainActivity : AppCompatActivity() {
     private lateinit var itemAdapter: ItemAdapter
     private lateinit var dialog: ContactDialogFragment
     private lateinit var settings: SharedPreferences
+    private lateinit var adapterClickListener: ItemAdapter.AdapterClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeData()
         setContentView(binding.root)
+
     }
 
     fun removeItemFromViewModel(
         viewHolder: RecyclerView.ViewHolder,
         position: Int,
     ) {
+        adapterClickListener = object: ItemAdapter.AdapterClickListener {
+            override fun removeItem(item: PersonData) {
+                adapterClickListener.removeItem(item)
+            }
+        }
 
         val removedItem: PersonData = model.getItem(position) ?: return
         model.removeItem(position)

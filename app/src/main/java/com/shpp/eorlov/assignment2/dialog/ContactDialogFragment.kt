@@ -81,7 +81,6 @@ class ContactDialogFragment : DialogFragment() {
         return newContact
     }
 
-
     /**
      * Initialize date and set listeners to EditTexts
      */
