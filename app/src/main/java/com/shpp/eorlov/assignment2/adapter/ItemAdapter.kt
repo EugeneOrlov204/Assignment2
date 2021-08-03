@@ -19,7 +19,6 @@ import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingGlide
  */
 
 class ItemAdapter(
-    private val context: Context,
     private var dataset: MutableList<PersonData>,
 
     ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
@@ -31,7 +30,7 @@ class ItemAdapter(
             ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
         ) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                (context as MainActivity).removeItemFromViewModel(
+                (viewHolder.itemView.context as MainActivity).removeItemFromViewModel(
                     viewHolder,
                     viewHolder.absoluteAdapterPosition
                 )
@@ -78,7 +77,7 @@ class ItemAdapter(
 
             clearButtonImageView.setOnClickListener {
 //            clearButtonImageView.isEnabled = false
-                (context as MainActivity).removeItemFromViewModel(
+                (holder.itemView.context as MainActivity).removeItemFromViewModel(
                     holder,
                     absoluteAdapterPosition
                 )

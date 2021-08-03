@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         setListeners()
 
         //modelViewModel.getPersonData().toMutableList() means that we take copy of given data
-        itemAdapter = ItemAdapter(this, modelViewModel.getPersonData().toMutableList())
+        itemAdapter = ItemAdapter(modelViewModel.getPersonData().toMutableList())
 
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(
