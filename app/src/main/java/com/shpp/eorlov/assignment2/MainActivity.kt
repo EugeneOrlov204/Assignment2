@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +13,7 @@ import com.jakewharton.rxbinding.view.RxView
 import com.shpp.eorlov.assignment2.adapter.ItemAdapter
 import com.shpp.eorlov.assignment2.data.PersonData
 import com.shpp.eorlov.assignment2.databinding.ActivityMainBinding
-import com.shpp.eorlov.assignment2.dialog.ContactDialogFragment
+import com.shpp.eorlov.assignment2.dialogfragment.ContactDialogFragment
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -30,24 +28,23 @@ class MainActivity : AppCompatActivity() {
     private lateinit var itemAdapter: ItemAdapter
     private lateinit var dialog: ContactDialogFragment
     private lateinit var settings: SharedPreferences
-    private lateinit var adapterClickListener: ItemAdapter.AdapterClickListener
+//    private lateinit var adapterClickListener: ItemAdapter.AdapterClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeData()
         setContentView(binding.root)
-
     }
 
     fun removeItemFromViewModel(
         viewHolder: RecyclerView.ViewHolder,
         position: Int,
     ) {
-        adapterClickListener = object: ItemAdapter.AdapterClickListener {
-            override fun removeItem(item: PersonData) {
-                adapterClickListener.removeItem(item)
-            }
-        }
+//        adapterClickListener = object: ItemAdapter.AdapterClickListener {
+//            override fun removeItem(item: PersonData) {
+//                adapterClickListener.removeItem(item)
+//            }
+//        }
 
         val removedItem: PersonData = model.getItem(position) ?: return
         model.removeItem(position)

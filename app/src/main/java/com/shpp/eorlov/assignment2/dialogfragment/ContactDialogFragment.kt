@@ -1,26 +1,22 @@
-package com.shpp.eorlov.assignment2.dialog
+package com.shpp.eorlov.assignment2.dialogfragment
 
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.shpp.eorlov.assignment2.MainActivity
 import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.data.PersonData
 import com.shpp.eorlov.assignment2.databinding.AddContactDialogBinding

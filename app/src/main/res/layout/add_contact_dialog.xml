@@ -124,7 +124,6 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditTextEmail"
                 style="@style/add_contact_text_input_edit_text"
-                android:textColor="@color/optional_field_color"
                 android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>

@@ -21,14 +21,14 @@ class MyDiffUtil(
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         // compare items based on their unique id
-        return oldList[oldItemPosition]?.username == newList[newItemPosition]?.username
+        return oldList[oldItemPosition]?.email == newList[newItemPosition]?.email
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         // in here compare each item if they are same or different
         // return false if any data is same else return true
         return when {
-            oldList[oldItemPosition]?.username != newList[newItemPosition]?.username -> false
+            oldList[oldItemPosition]?.email != newList[newItemPosition]?.email -> false
 
             else -> true
         }

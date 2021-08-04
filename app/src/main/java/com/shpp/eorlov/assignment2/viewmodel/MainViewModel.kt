@@ -80,6 +80,7 @@ class MainViewModel : ViewModel() {
     private fun loadPersonData(): MutableList<PersonData?> {
         val listOfNames: List<String> = getNames()
         val listOfCareers: List<String> = getCareers()
+        val listOfEmails: List<String> = getEmails()
         val urlOfPhoto = "https://i.pravatar.cc/"
         val result = mutableListOf<PersonData?>()
 
@@ -92,7 +93,7 @@ class MainViewModel : ViewModel() {
                     "",
                     "",
                     "",
-                    ""
+                    listOfEmails[i]
                 )
             )
         }
@@ -135,6 +136,24 @@ class MainViewModel : ViewModel() {
             "Milton Bryson",
             "Allissa Tindall",
             "Frannie Morriss"
+        )
+    }
+
+    /**
+     * Returns list of names
+     */
+    private fun getEmails(): List<String> {
+        return listOf(
+            "@name1.surname@gmail.com",
+            "@name2.surname@gmail.com",
+            "@name3.surname@gmail.com",
+            "@name4.surname@gmail.com",
+            "@name5.surname@gmail.com",
+            "@name6.surname@gmail.com",
+            "@name7.surname@gmail.com",
+            "@name8.surname@gmail.com",
+            "@name9.surname@gmail.com",
+            "@name10.surname@gmail.com",
         )
     }
 

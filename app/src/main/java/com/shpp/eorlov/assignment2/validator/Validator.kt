@@ -13,8 +13,9 @@ class Validator {
         errorMessageLayout: TextInputLayout1
     ): Boolean {
         if (editText.text.toString().trim { it <= ' ' }.isEmpty()) {
-            errorMessageLayout.error = ""
-        } else {
+            errorMessageLayout.error = "This field should not be empty"
+            return false
+        }  else {
             val emailId = editText.text.toString()
             val isValid = Patterns.EMAIL_ADDRESS.matcher(emailId).matches()
             if (!isValid) {

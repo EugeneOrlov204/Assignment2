@@ -87,11 +87,11 @@ class ItemAdapter(dataset: MutableList<PersonData?>) : RecyclerView.Adapter<Item
         items.toMutableList().addAll(newDataset)
     }
 
-    override fun removeItem(item: PersonData) {
-        if(items.isNotEmpty()) {
-            items.toMutableList().remove(item)
-        }
-    }
+//    override fun removeItem(item: PersonData) {
+//        if(items.isNotEmpty()) {
+//            items.toMutableList().remove(item)
+//        }
+//    }
 
     private fun setListeners(holder: ItemViewHolder) {
         RxView.clicks(holder.itemView).throttleFirst(
