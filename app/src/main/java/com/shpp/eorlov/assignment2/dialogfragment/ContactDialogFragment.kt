@@ -9,6 +9,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,6 +18,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.shpp.eorlov.assignment2.MainActivity
 import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.data.PersonData
 import com.shpp.eorlov.assignment2.databinding.AddContactDialogBinding
@@ -33,10 +35,18 @@ class ContactDialogFragment : DialogFragment() {
         dialogBinding = AddContactDialogBinding.inflate(LayoutInflater.from(context))
 
         initializeDate()
-        settings = this.requireActivity().getSharedPreferences(Constants.PREFS_FILE, MODE_PRIVATE)
+        settings = (activity as MainActivity).settings
         return AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
             .create()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        dialogBinding.imageButtonContactDialogCloseButton.setOnClickListener {
+            settings.edit().clear().apply()
+            dismiss()
+        }
     }
 
     override fun onResume() {
@@ -178,5 +188,4 @@ class ContactDialogFragment : DialogFragment() {
                     isValidInput(textInputEditTextPhone, textInputLayoutPhone, "phoneNumber")
         }
     }
-
 }

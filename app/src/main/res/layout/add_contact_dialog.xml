@@ -24,7 +24,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/close_button_margin_start_21dp"
-            android:onClick="closeDialog"
             android:src="@drawable/ic_arrow_back"
             app:layout_constraintBottom_toBottomOf="@id/textViewAddContact"
             app:layout_constraintStart_toStartOf="parent"

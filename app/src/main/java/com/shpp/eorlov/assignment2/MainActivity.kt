@@ -23,21 +23,22 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity() {
 
     // view binding for the activity
+    private val viewModel: MainViewModel by viewModel()
+
     private lateinit var binding: ActivityMainBinding
-    private val model: MainViewModel by viewModel()
     private lateinit var itemAdapter: ItemAdapter
     private lateinit var dialog: ContactDialogFragment
-    private lateinit var settings: SharedPreferences
+    lateinit var settings: SharedPreferences
 //    private lateinit var adapterClickListener: ItemAdapter.AdapterClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeData()
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
     fun removeItemFromViewModel(
-        viewHolder: RecyclerView.ViewHolder,
         position: Int,
     ) {
 //        adapterClickListener = object: ItemAdapter.AdapterClickListener {
@@ -46,25 +47,25 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 
-        val removedItem: PersonData = model.getItem(position) ?: return
-        model.removeItem(position)
+        val removedItem: PersonData = viewModel.getItem(position) ?: return
+        viewModel.removeItem(position)
 
         Snackbar.make(
-            viewHolder.itemView,
+            binding.root,
             "Contact has been removed",
             Constants.SNACKBAR_DURATION
         ).setAction("Cancel") {
-            model.addItem(position, removedItem)
-            itemAdapter.updateRecyclerData(model.dataset.value ?: return@setAction)
+            viewModel.addItem(position, removedItem)
+            itemAdapter.updateRecyclerData(viewModel.userListLiveData.value!!)
         }.show()
 
-        itemAdapter.updateRecyclerData(model.dataset.value ?: return)
+        itemAdapter.updateRecyclerData(viewModel.userListLiveData.value!!)
     }
 
-    fun addContact(view: View) {
+    fun addContact() {
         val imageData = settings.getString(Constants.PREF_NAME, null)
         val newContact = dialog.addContact() ?: return
-        model.addItem(
+        viewModel.addItem(
             newContact.username,
             newContact.career,
             imageData ?: "https://i.pravatar.cc/",
@@ -74,19 +75,36 @@ class MainActivity : AppCompatActivity() {
             newContact.email
 
         )
-        itemAdapter.updateRecyclerData(model.dataset.value?: return)
-        settings.edit().clear().apply()
-    }
-
-    fun closeDialog(view: View) {
-        dialog.dismiss()
+        itemAdapter.updateRecyclerData(viewModel.userListLiveData.value?: return)
         settings.edit().clear().apply()
     }
 
     private fun initializeData() {
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        model.getPersonData()
-        itemAdapter = ItemAdapter(model.dataset.value ?: return)
+        viewModel.getPersonData()
+
+        // init recycler
+        val itemTouchHelperCallBack: ItemTouchHelper.SimpleCallback =
+            object : ItemTouchHelper.SimpleCallback(
+                0,
+                ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+            ) {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    (viewHolder.itemView.context as MainActivity).removeItemFromViewModel(
+                        viewHolder,
+                        viewHolder.absoluteAdapterPosition
+                    )
+                }
+
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+            }
+
+        itemAdapter = ItemAdapter(viewModel.userListLiveData.value!!)
 
         val recyclerView = binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(
@@ -99,7 +117,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         //Implement swipe-to-delete
-        ItemTouchHelper(itemAdapter.itemTouchHelperCallBack).attachToRecyclerView(recyclerView)
+        ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView)
 
         settings = getSharedPreferences(Constants.PREFS_FILE, MODE_PRIVATE)
 
@@ -108,11 +126,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setObserver() {
-        model.dataset.observe(this) { listPersonData ->
+        viewModel.userListLiveData.observe(this) { listPersonData ->
             itemAdapter.updateRecyclerData(listPersonData)
         }
 
-        model.errorEvent.observe(this) { error ->
+        viewModel.errorEvent.observe(this) { error ->
             Toast.makeText(this, error, Toast.LENGTH_LONG).show()
         }
     }
