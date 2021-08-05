@@ -3,7 +3,6 @@ package com.shpp.eorlov.assignment2.dialogfragment
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -20,7 +19,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.shpp.eorlov.assignment2.MainActivity
 import com.shpp.eorlov.assignment2.R
-import com.shpp.eorlov.assignment2.data.PersonData
+import com.shpp.eorlov.assignment2.model.UserData
 import com.shpp.eorlov.assignment2.databinding.AddContactDialogBinding
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingGlide
@@ -65,14 +64,14 @@ class ContactDialogFragment : DialogFragment() {
     /**
      * Add new contact to RecyclerView if all field are valid
      */
-    fun addContact(): PersonData? {
+    fun addContact(): UserData? {
         if (!canAddContact()) {
             return null
         }
 
-        val newContact: PersonData
+        val newContact: UserData
         with(dialogBinding) {
-            newContact = PersonData(
+            newContact = UserData(
                 textInputEditTextUsername.text.toString(),
                 textInputEditTextCareer.text.toString(),
                 "",

@@ -2,29 +2,23 @@ package com.shpp.eorlov.assignment2.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.jakewharton.rxbinding.view.RxView
 import com.shpp.eorlov.assignment2.MainActivity
-import com.shpp.eorlov.assignment2.data.PersonData
+import com.shpp.eorlov.assignment2.model.UserData
 import com.shpp.eorlov.assignment2.databinding.ListItemBinding
 import com.shpp.eorlov.assignment2.utils.MyDiffUtil
-import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingGlide
 import com.shpp.eorlov.assignment2.viewholder.ItemViewHolder
-import java.util.concurrent.TimeUnit
 
 
 /**
- * Adapter for the [RecyclerView] in [MainActivity]. Displays [PersonData] data object.
+ * Adapter for the [RecyclerView] in [MainActivity]. Displays [UserData] data object.
  */
 
-class ItemAdapter(
-    dataset: MutableList<PersonData>
+class ContactsRecyclerAdapter(
+    private val items: ArrayList<UserData>
 ) : RecyclerView.Adapter<ItemViewHolder>() {
-    private var items: List<PersonData?> = dataset
 
-    /* Variable that implements swipe-to-delete */
 
     /**
      * Create new views (invoked by the layout manager)
@@ -39,7 +33,7 @@ class ItemAdapter(
      * Replace the contents of a view (invoked by the layout manager)
      */
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(items[position]!!)
+        holder.bind(items[position])
     }
 
     /**
@@ -47,22 +41,14 @@ class ItemAdapter(
      */
     override fun getItemCount() = items.size
 
-    interface AdapterClickListener {
-        fun removeItem(item: PersonData)
-    }
 
-    fun updateRecyclerData(newDataset: List<PersonData?>) {
+    fun updateRecyclerData(newDataset: ArrayList<UserData>) {
         val diffResult: DiffUtil.DiffResult =
             DiffUtil.calculateDiff(MyDiffUtil(items, newDataset))
-        diffResult.dispatchUpdatesTo(this)
         items.toMutableList().clear()
         items.toMutableList().addAll(newDataset)
+        diffResult.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
     }
-
-//    override fun removeItem(item: PersonData) {
-//        if(items.isNotEmpty()) {
-//            items.toMutableList().remove(item)
-//        }
-//    }
 }
 

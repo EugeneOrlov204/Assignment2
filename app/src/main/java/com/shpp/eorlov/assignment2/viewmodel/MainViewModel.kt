@@ -2,29 +2,30 @@ package com.shpp.eorlov.assignment2.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.shpp.eorlov.assignment2.data.PersonData
+import com.shpp.eorlov.assignment2.model.UserData
 import kotlin.random.Random
 
 class MainViewModel : ViewModel() {
 
-    val userListLiveData = MutableLiveData<MutableList<PersonData>>(mutableListOf())
+    val userListLiveData = MutableLiveData<ArrayList<UserData>>(ArrayList())
     val errorEvent = MutableLiveData<String>()
 
     /**
      * Returns value of dataset
      */
     fun getPersonData() {
-        if (userListLiveData.value == null) {
-            userListLiveData.value = loadPersonData()
-        } else {
+        if(userListLiveData.value == null) {
             errorEvent.value = errorMessage
+        }
+        else if (userListLiveData.value?.isEmpty() == true) {
+            userListLiveData.value = loadPersonData()
         }
     }
 
     /**
      * Returns item from dataset
      */
-    fun getItem(position: Int): PersonData? {
+    fun getItem(position: Int): UserData? {
         return userListLiveData.value?.get(position)
     }
 
@@ -38,7 +39,7 @@ class MainViewModel : ViewModel() {
     /**
      * Adds item to dataset by given position
      */
-    fun addItem(position: Int, addedItem: PersonData) {
+    fun addItem(position: Int, addedItem: UserData) {
         userListLiveData.value?.add(position, addedItem)
     }
 
@@ -55,7 +56,7 @@ class MainViewModel : ViewModel() {
         email: String
     ) {
         userListLiveData.value?.add(
-            PersonData(
+            UserData(
                 username,
                 career,
                 photo,
@@ -71,19 +72,19 @@ class MainViewModel : ViewModel() {
      * Returns list of person's data
      * Temporary hardcoded
      */
-    private fun loadPersonData(): MutableList<PersonData> {
+    private fun loadPersonData(): ArrayList<UserData> {
         val listOfNames: List<String> = getNames()
         val listOfCareers: List<String> = getCareers()
         val listOfEmails: List<String> = getEmails()
         val urlOfPhoto = "https://i.pravatar.cc/"
-        val result = mutableListOf<PersonData>()
+        val result = ArrayList<UserData>()
 
         for (i in 0..9) {
             result.add(
-                PersonData(
+                UserData(
                     listOfNames[i],
                     listOfCareers[i],
-                    urlOfPhoto + Random.nextInt(1500),
+                    urlOfPhoto + Random.nextInt(1000),
                     "",
                     "",
                     "",
@@ -93,12 +94,12 @@ class MainViewModel : ViewModel() {
         }
 
         return result
-
     }
 
 
     /**
      * Returns list of careers
+     * Temporary hardcoded
      */
     private fun getCareers(): List<String> {
         return listOf(
@@ -117,6 +118,7 @@ class MainViewModel : ViewModel() {
 
     /**
      * Returns list of names
+     * Temporary hardcoded
      */
     private fun getNames(): List<String> {
         return listOf(
@@ -135,6 +137,7 @@ class MainViewModel : ViewModel() {
 
     /**
      * Returns list of names
+     * Temporary hardcoded
      */
     private fun getEmails(): List<String> {
         return listOf(
