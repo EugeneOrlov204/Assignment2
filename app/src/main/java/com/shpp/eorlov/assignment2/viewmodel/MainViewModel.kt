@@ -7,7 +7,7 @@ import kotlin.random.Random
 
 class MainViewModel : ViewModel() {
 
-    val userListLiveData = MutableLiveData<ArrayList<UserData>>(ArrayList())
+    val userListLiveData = MutableLiveData<MutableList<UserData>>(ArrayList())
     val errorEvent = MutableLiveData<String>()
 
     /**
@@ -72,12 +72,12 @@ class MainViewModel : ViewModel() {
      * Returns list of person's data
      * Temporary hardcoded
      */
-    private fun loadPersonData(): ArrayList<UserData> {
+    private fun loadPersonData(): MutableList<UserData> {
         val listOfNames: List<String> = getNames()
         val listOfCareers: List<String> = getCareers()
         val listOfEmails: List<String> = getEmails()
         val urlOfPhoto = "https://i.pravatar.cc/"
-        val result = ArrayList<UserData>()
+        val result = mutableListOf<UserData>()
 
         for (i in 0..9) {
             result.add(

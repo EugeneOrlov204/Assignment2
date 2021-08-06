@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dialog: ContactDialogFragment
     lateinit var settings: SharedPreferences
 
-//    private lateinit var adapterClickListener: ItemAdapter.AdapterClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,11 +45,6 @@ class MainActivity : AppCompatActivity() {
     fun removeItemFromRecyclerView(
         position: Int,
     ) {
-//        adapterClickListener = object: ItemAdapter.AdapterClickListener {
-//            override fun removeItem(item: PersonData) {
-//                adapterClickListener.removeItem(item)
-//            }
-//        }
 
         val removedItem: UserData = viewModel.getItem(position) ?: return
         viewModel.removeItem(position)
@@ -62,11 +56,9 @@ class MainActivity : AppCompatActivity() {
         ).setAction("Cancel") {
             viewModel.addItem(position, removedItem)
             contactsRecyclerAdapter.updateRecyclerData(viewModel.userListLiveData.value!!)
-//            itemAdapter.notifyDataSetChanged();
         }.show()
 
         contactsRecyclerAdapter.updateRecyclerData(viewModel.userListLiveData.value!!)
-//        itemAdapter.notifyDataSetChanged();
     }
 
     fun addContact() {
@@ -96,7 +88,7 @@ class MainActivity : AppCompatActivity() {
                 ItemTouchHelper.RIGHT
             ) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    (viewHolder.itemView.context as MainActivity).removeItemFromRecyclerView(
+                    removeItemFromRecyclerView(
                         viewHolder.absoluteAdapterPosition
                     )
                 }

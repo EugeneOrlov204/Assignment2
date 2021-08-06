@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.shpp.eorlov.assignment2.MainActivity
 import com.shpp.eorlov.assignment2.model.UserData
 import com.shpp.eorlov.assignment2.databinding.ListItemBinding
-import com.shpp.eorlov.assignment2.utils.MyDiffUtil
 import com.shpp.eorlov.assignment2.viewholder.ItemViewHolder
 
 
@@ -16,7 +15,7 @@ import com.shpp.eorlov.assignment2.viewholder.ItemViewHolder
  */
 
 class ContactsRecyclerAdapter(
-    private val items: ArrayList<UserData>
+    private val items: List<UserData>
 ) : RecyclerView.Adapter<ItemViewHolder>() {
 
 
@@ -42,13 +41,40 @@ class ContactsRecyclerAdapter(
     override fun getItemCount() = items.size
 
 
-    fun updateRecyclerData(newDataset: ArrayList<UserData>) {
+    fun updateRecyclerData(newDataset: List<UserData>) {
         val diffResult: DiffUtil.DiffResult =
             DiffUtil.calculateDiff(MyDiffUtil(items, newDataset))
+        diffResult.dispatchUpdatesTo(this)
         items.toMutableList().clear()
         items.toMutableList().addAll(newDataset)
-        diffResult.dispatchUpdatesTo(this)
         notifyDataSetChanged()
+    }
+
+
+    class MyDiffUtil(
+        private val oldList: List<UserData>,
+        private val newList: List<UserData>
+    ) : DiffUtil.Callback() {
+
+        override fun getOldListSize(): Int {
+            return oldList.size
+        }
+
+        override fun getNewListSize(): Int {
+            return newList.size
+        }
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].username == newList[newItemPosition].username
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return when {
+                oldList[oldItemPosition].username != newList[newItemPosition].username -> false
+
+                else -> true
+            }
+        }
     }
 }
 
