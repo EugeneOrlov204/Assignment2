@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
         val itemTouchHelperCallBack: ItemTouchHelper.SimpleCallback =
             object : ItemTouchHelper.SimpleCallback(
                 0,
-                ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+                ItemTouchHelper.RIGHT
             ) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     (viewHolder.itemView.context as MainActivity).removeItemFromRecyclerView(
