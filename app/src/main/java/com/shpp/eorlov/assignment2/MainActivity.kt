@@ -2,6 +2,7 @@ package com.shpp.eorlov.assignment2
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -9,8 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding.view.RxView
+import com.shpp.eorlov.assignment2.adapter.ContactRemoveListener
 import com.shpp.eorlov.assignment2.adapter.ContactsRecyclerAdapter
-import com.shpp.eorlov.assignment2.model.UserData
+import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.databinding.ActivityMainBinding
 import com.shpp.eorlov.assignment2.dialogfragment.ContactDialogFragment
 import com.shpp.eorlov.assignment2.utils.Constants
@@ -22,10 +24,9 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity() {
 
     // view binding for the activity
-    private val viewModel: MainViewModel by viewModel()
+    val viewModel: MainViewModel by viewModel()
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var contactsRecyclerAdapter: ContactsRecyclerAdapter
     private lateinit var dialog: ContactDialogFragment
     lateinit var settings: SharedPreferences
 
@@ -33,10 +34,23 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        savedInstanceState?.getString(Constants.USERS_STATE_KEY)?.let {
+            // after screen rotation
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+//        initRecycler() // todo
         initializeData()
+        setObserver()
+        setListeners()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        val json: String = "json"
+        outState.putString(Constants.USERS_STATE_KEY, json)
+        super.onSaveInstanceState(outState)
     }
 
     /**
@@ -46,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         position: Int,
     ) {
 
-        val removedItem: UserData = viewModel.getItem(position) ?: return
+        val removedItem: UserModel = viewModel.getItem(position) ?: return
         viewModel.removeItem(position)
 
         Snackbar.make(
@@ -55,10 +69,10 @@ class MainActivity : AppCompatActivity() {
             Constants.SNACKBAR_DURATION
         ).setAction("Cancel") {
             viewModel.addItem(position, removedItem)
-            contactsRecyclerAdapter.updateRecyclerData(viewModel.userListLiveData.value!!)
+            (binding.recyclerView.adapter as ContactsRecyclerAdapter).updateRecyclerData(viewModel.userListLiveData.value!!)
         }.show()
 
-        contactsRecyclerAdapter.updateRecyclerData(viewModel.userListLiveData.value!!)
+        (binding.recyclerView.adapter as ContactsRecyclerAdapter).updateRecyclerData(viewModel.userListLiveData.value!!)
     }
 
     fun addContact() {
@@ -74,13 +88,12 @@ class MainActivity : AppCompatActivity() {
             newContact.email
         )
 
-        contactsRecyclerAdapter.updateRecyclerData(viewModel.userListLiveData.value!!)
+        (binding.recyclerView.adapter as ContactsRecyclerAdapter).updateRecyclerData(viewModel.userListLiveData.value!!)
         settings.edit().clear().apply()
     }
 
     private fun initializeData() {
         viewModel.getPersonData()
-
         /* Variable that implements swipe-to-delete */
         val itemTouchHelperCallBack: ItemTouchHelper.SimpleCallback =
             object : ItemTouchHelper.SimpleCallback(
@@ -89,7 +102,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     removeItemFromRecyclerView(
-                        viewHolder.absoluteAdapterPosition
+                        viewHolder.bindingAdapterPosition
                     )
                 }
 
@@ -102,30 +115,30 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-        contactsRecyclerAdapter = ContactsRecyclerAdapter(viewModel.userListLiveData.value!!)
-
-        val recyclerView = binding.recyclerView.apply {
+        binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(
                 this@MainActivity,
                 LinearLayoutManager.VERTICAL,
                 false
             )
-            adapter = contactsRecyclerAdapter
-            setHasFixedSize(true)
+            adapter = ContactsRecyclerAdapter(onContactRemoveListener = object: ContactRemoveListener {
+                override fun onContactRemove(position: Int) {
+                    removeItemFromRecyclerView(position)
+                }
+            })
+
+            //Implement swipe-to-delete
+            ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(this)
         }
 
-        //Implement swipe-to-delete
-        ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView)
+
 
         settings = getSharedPreferences(Constants.PREFS_FILE, MODE_PRIVATE)
-
-        setObserver()
-        setListeners()
     }
 
     private fun setObserver() {
         viewModel.userListLiveData.observe(this) { listPersonData ->
-            contactsRecyclerAdapter.updateRecyclerData(listPersonData)
+            (binding.recyclerView.adapter as ContactsRecyclerAdapter).updateRecyclerData(listPersonData)
         }
 
         viewModel.errorEvent.observe(this) { error ->

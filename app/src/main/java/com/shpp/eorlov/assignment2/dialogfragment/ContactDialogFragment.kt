@@ -19,16 +19,19 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.shpp.eorlov.assignment2.MainActivity
 import com.shpp.eorlov.assignment2.R
-import com.shpp.eorlov.assignment2.model.UserData
+import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.databinding.AddContactDialogBinding
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingGlide
 import com.shpp.eorlov.assignment2.validator.Validator
+import com.shpp.eorlov.assignment2.viewmodel.MainViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class ContactDialogFragment : DialogFragment() {
     private lateinit var dialogBinding: AddContactDialogBinding
     private lateinit var settings: SharedPreferences
+    private lateinit var sharedViewModel: MainViewModel
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBinding = AddContactDialogBinding.inflate(LayoutInflater.from(context))
@@ -46,6 +49,8 @@ class ContactDialogFragment : DialogFragment() {
             settings.edit().clear().apply()
             dismiss()
         }
+
+        sharedViewModel = (activity as MainActivity).viewModel
     }
 
     override fun onResume() {
@@ -64,14 +69,14 @@ class ContactDialogFragment : DialogFragment() {
     /**
      * Add new contact to RecyclerView if all field are valid
      */
-    fun addContact(): UserData? {
+    fun addContact(): UserModel? {
         if (!canAddContact()) {
             return null
         }
 
-        val newContact: UserData
+        val newContact: UserModel
         with(dialogBinding) {
-            newContact = UserData(
+            newContact = UserModel(
                 textInputEditTextUsername.text.toString(),
                 textInputEditTextCareer.text.toString(),
                 "",
@@ -141,10 +146,11 @@ class ContactDialogFragment : DialogFragment() {
         addressTextInput: TextInputLayout,
         validateOperation: String
     ) {
-        val validator = Validator()
+        val validator = Validator() // todo: make object
 
         editText.addTextChangedListener {
             when (validateOperation) {
+                // todo: use enums
                 "email" -> validator.validateEmail(editText, addressTextInput)
                 "phoneNumber" -> validator.validatePhoneNumber(editText, addressTextInput)
                 "birthdate" -> validator.validateBirthdate(editText, addressTextInput)
@@ -163,6 +169,7 @@ class ContactDialogFragment : DialogFragment() {
     ): Boolean {
         val validator = Validator()
         return when (validateOperation) {
+            // todo: use enums
             "email" -> validator.validateEmail(editText, addressTextInput)
             "phoneNumber" -> validator.validatePhoneNumber(editText, addressTextInput)
             "birthdate" -> validator.validateBirthdate(editText, addressTextInput)

@@ -1,6 +1,6 @@
 package com.shpp.eorlov.assignment2.model
 
-data class UserData(
+data class UserModel(
     val username: String,
     val career: String,
     val photo: String,

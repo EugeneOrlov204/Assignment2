@@ -2,12 +2,12 @@ package com.shpp.eorlov.assignment2.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.shpp.eorlov.assignment2.model.UserData
+import com.shpp.eorlov.assignment2.model.UserModel
 import kotlin.random.Random
 
 class MainViewModel : ViewModel() {
 
-    val userListLiveData = MutableLiveData<MutableList<UserData>>(ArrayList())
+    val userListLiveData = MutableLiveData<MutableList<UserModel>>(ArrayList())
     val errorEvent = MutableLiveData<String>()
 
     /**
@@ -25,7 +25,7 @@ class MainViewModel : ViewModel() {
     /**
      * Returns item from dataset
      */
-    fun getItem(position: Int): UserData? {
+    fun getItem(position: Int): UserModel? {
         return userListLiveData.value?.get(position)
     }
 
@@ -34,13 +34,15 @@ class MainViewModel : ViewModel() {
      */
     fun removeItem(position: Int) {
         userListLiveData.value?.removeAt(position)
+        userListLiveData.value = userListLiveData.value
     }
 
     /**
      * Adds item to dataset by given position
      */
-    fun addItem(position: Int, addedItem: UserData) {
+    fun addItem(position: Int, addedItem: UserModel) {
         userListLiveData.value?.add(position, addedItem)
+        userListLiveData.value = userListLiveData.value
     }
 
     /**
@@ -56,7 +58,7 @@ class MainViewModel : ViewModel() {
         email: String
     ) {
         userListLiveData.value?.add(
-            UserData(
+            UserModel(
                 username,
                 career,
                 photo,
@@ -72,16 +74,16 @@ class MainViewModel : ViewModel() {
      * Returns list of person's data
      * Temporary hardcoded
      */
-    private fun loadPersonData(): MutableList<UserData> {
+    private fun loadPersonData(): MutableList<UserModel> {
         val listOfNames: List<String> = getNames()
         val listOfCareers: List<String> = getCareers()
         val listOfEmails: List<String> = getEmails()
         val urlOfPhoto = "https://i.pravatar.cc/"
-        val result = mutableListOf<UserData>()
+        val result = mutableListOf<UserModel>()
 
         for (i in 0..9) {
             result.add(
-                UserData(
+                UserModel(
                     listOfNames[i],
                     listOfCareers[i],
                     urlOfPhoto + Random.nextInt(1000),

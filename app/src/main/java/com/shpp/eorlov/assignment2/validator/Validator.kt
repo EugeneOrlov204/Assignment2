@@ -7,7 +7,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import com.google.android.material.textfield.TextInputLayout as TextInputLayout1
 
+// todo: make object, remove view references, return error message
+// all methods take single string (input) as parameter
 class Validator {
+
     fun validateEmail(
         editText: TextInputEditText,
         errorMessageLayout: TextInputLayout1
@@ -77,7 +80,7 @@ class Validator {
                 errorMessageLayout.error = "Invalid birthdate, ex: 01/01/2021"
                 false
             } else {
-                val format = SimpleDateFormat("dd/MM/yyyy", Locale.CANADA_FRENCH)
+                val format = SimpleDateFormat("dd/MM/yyyy", Locale.CANADA_FRENCH) // todo: date format to constants
                 try {
                     format.parse(date)
                     errorMessageLayout.error = ""

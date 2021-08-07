@@ -42,7 +42,7 @@
         tools:text="Photograph" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageViewClearButton"
+        android:id="@+id/imageViewRemoveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_normal_16dp"
@@ -56,7 +56,7 @@
         android:layout_height="@dimen/line_height_1dp"
         android:layout_marginTop="@dimen/line_margin_top_8dp"
         android:background="@color/silver"
-        app:layout_constraintEnd_toEndOf="@+id/imageViewClearButton"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewRemoveButton"
         app:layout_constraintStart_toStartOf="@id/imageViewPersonImage"
         app:layout_constraintTop_toBottomOf="@+id/imageViewPersonImage" />
 
