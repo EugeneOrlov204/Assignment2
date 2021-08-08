@@ -2,10 +2,11 @@ package com.shpp.eorlov.assignment2.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.shpp.eorlov.assignment2.base.BaseViewModel
 import com.shpp.eorlov.assignment2.model.UserModel
 import kotlin.random.Random
 
-class MainViewModel : ViewModel() {
+class MainViewModel : BaseViewModel() {
 
     val userListLiveData = MutableLiveData<MutableList<UserModel>>(ArrayList())
     val errorEvent = MutableLiveData<String>()
@@ -48,26 +49,9 @@ class MainViewModel : ViewModel() {
     /**
      * Adds item to dataset in the end of list
      */
-    fun addItem(
-        username: String,
-        career: String,
-        photo: String,
-        residenceAddress: String,
-        birthDate: String,
-        phoneNumber: String,
-        email: String
-    ) {
-        userListLiveData.value?.add(
-            UserModel(
-                username,
-                career,
-                photo,
-                residenceAddress,
-                birthDate,
-                phoneNumber,
-                email
-            )
-        )
+    fun addItem(addedItem: UserModel) {
+        userListLiveData.value?.add(addedItem)
+        userListLiveData.value = userListLiveData.value
     }
 
     /**
