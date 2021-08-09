@@ -7,55 +7,65 @@ import com.bumptech.glide.Glide
 import com.shpp.eorlov.assignment2.utils.CircleTransform
 import com.squareup.picasso.Picasso
 
-fun AppCompatImageView.loadImageUsingGlide(url: String) {
-    Glide.with(this)
-        .load(url)
-        .circleCrop()
-        .into(this)
+enum class LIBRARIES {
+    GLIDE, PICASSO
 }
 
-fun AppCompatImageView.loadImageUsingGlide(resource: Int) {
-    Glide.with(this)
-        .load(resource)
-        .circleCrop()
-        .into(this)
+private val DEFAULT_LIBRARY = LIBRARIES.GLIDE
+
+fun AppCompatImageView.loadImage(url: String) {
+    when (DEFAULT_LIBRARY) {
+
+        LIBRARIES.GLIDE -> {
+            Glide.with(this)
+                .load(url)
+                .circleCrop()
+                .into(this)
+        }
+
+        LIBRARIES.PICASSO -> {
+            Picasso.get()
+                .load(url)
+                .transform(CircleTransform())
+                .into(this)
+        }
+    }
 }
 
+fun AppCompatImageView.loadImage(resource: Uri) {
+    when (DEFAULT_LIBRARY) {
 
-fun AppCompatImageView.loadImageUsingPicasso(url: String) {
-    Picasso.get()
-        .load(url)
-        .transform(CircleTransform())
-        .into(this)
+        LIBRARIES.GLIDE -> {
+            Glide.with(this)
+                .load(resource)
+                .circleCrop()
+                .into(this)
+        }
+
+        LIBRARIES.PICASSO -> {
+            Picasso.get()
+                .load(resource)
+                .transform(CircleTransform())
+                .into(this)
+        }
+    }
 }
 
-fun AppCompatImageView.loadImageUsingPicasso(resource: Int) {
+fun AppCompatImageView.loadImage(resource: Int) {
+    when (DEFAULT_LIBRARY) {
 
-    Picasso.get()
-        .load(resource)
-        .transform(CircleTransform())
-        .into(this)
-}
+        LIBRARIES.GLIDE -> {
+            Glide.with(this)
+                .load(resource)
+                .circleCrop()
+                .into(this)
+        }
 
-fun AppCompatImageView.loadImageUsingGlide(resource: ImageView) {
-    Glide.with(this)
-        .load(resource)
-        .circleCrop()
-        .into(this)
-}
-
-fun AppCompatImageView.loadImageUsingGlide(resource: Uri) {
-    Glide.with(this)
-        .load(resource)
-        .circleCrop()
-        .into(this)
-}
-
-fun AppCompatImageView.loadImageUsingGlide(image: Any) {
-    when(image) {
-        image is String -> loadImageUsingGlide(image as String)
-        image is Int -> loadImageUsingGlide(image as Int)
-        image is Uri -> loadImageUsingGlide(image as Uri)
-        image is ImageView -> loadImageUsingGlide(image as ImageView)
+        LIBRARIES.PICASSO -> {
+            Picasso.get()
+                .load(resource)
+                .transform(CircleTransform())
+                .into(this)
+        }
     }
 }

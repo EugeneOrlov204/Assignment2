@@ -13,11 +13,11 @@ object Validator {
         _value: String
     ): String {
         return if (_value.trim { it <= ' ' }.isEmpty()) {
-            "This field should not be empty"
+            ErrorMessage.EMPTY_FILE
         }  else {
             val isValid = Patterns.EMAIL_ADDRESS.matcher(_value).matches()
             if (!isValid) {
-                "Invalid Email address, ex: abc@example.com"
+                ErrorMessage.INVALID_EMAIL
             } else {
                 ""
             }
@@ -28,7 +28,7 @@ object Validator {
         _value: String
     ): String {
         return if (_value.trim { it <= ' ' }.isEmpty()) {
-            "This field should not be empty"
+            ErrorMessage.EMPTY_FILE
         } else {
             ""
         }
@@ -43,7 +43,7 @@ object Validator {
         else {
             val isValid = Patterns.PHONE.matcher(_value).matches()
             if (!isValid) {
-                "Invalid phone number, ex: (264)-654-3762"
+                ErrorMessage.INVALID_PHONE_NUMBER
             } else {
                 ""
             }
@@ -54,22 +54,29 @@ object Validator {
         _value: String
     ): String {
         if (_value.trim { it <= ' ' }.isEmpty()) {
-            return "This field should not be empty"
+            return ErrorMessage.EMPTY_FILE
         } else {
             val isValid = _value.matches(
                 Regex(DATE_REGEX_PATTERN)
             )
             return if (!isValid) {
-                "Invalid birthdate, ex: 01/01/2021"
+                ErrorMessage.INVALID_DATE
             } else {
                 val format = SimpleDateFormat(DATE_FORMAT, Locale.CANADA_FRENCH)
                 try {
                     format.parse(_value)
                     ""
                 } catch (e: ParseException) {
-                    "Invalid birthdate, ex: 01/01/2021"
+                    ErrorMessage.INVALID_DATE
                 }
             }
         }
+    }
+
+    object ErrorMessage {
+        const val INVALID_DATE = "Invalid birthdate, ex: 01/01/2021"
+        const val EMPTY_FILE = "This field should not be empty"
+        const val INVALID_PHONE_NUMBER = "Invalid phone number, ex: (264)-654-3762"
+        const val INVALID_EMAIL = "Invalid Email address, ex: abc@example.com"
     }
 }

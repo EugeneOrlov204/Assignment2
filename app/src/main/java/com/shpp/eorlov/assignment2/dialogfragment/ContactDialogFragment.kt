@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,23 +16,35 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.shpp.eorlov.assignment2.PreferenceStorage
-import com.shpp.eorlov.assignment2.ui.MainActivity
 import com.shpp.eorlov.assignment2.R
-import com.shpp.eorlov.assignment2.adapter.ContactsRecyclerAdapter
-import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.databinding.AddContactDialogBinding
+import com.shpp.eorlov.assignment2.model.UserModel
+import com.shpp.eorlov.assignment2.recyclerview.RecyclerViewModel
+import com.shpp.eorlov.assignment2.ui.MainActivity
 import com.shpp.eorlov.assignment2.utils.Constants
-import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingGlide
+import com.shpp.eorlov.assignment2.utils.PreferenceStorage
+import com.shpp.eorlov.assignment2.utils.ext.loadImage
 import com.shpp.eorlov.assignment2.validator.Validator
-import com.shpp.eorlov.assignment2.viewmodel.MainViewModel
 
 
 class ContactDialogFragment : DialogFragment() {
     private lateinit var dialogBinding: AddContactDialogBinding
     private lateinit var loadedImageFromGallery: PreferenceStorage
-    private lateinit var sharedViewModel: MainViewModel
-    private lateinit var sharedContactsAdapter: ContactsRecyclerAdapter
+    private lateinit var sharedViewModel: RecyclerViewModel
+
+    private var imageLoaderLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val imageView: AppCompatImageView = dialogBinding.imageViewPersonPhoto
+            if (result.resultCode == RESULT_OK && result.data?.data != null) {
+                val imageData = result.data?.data ?: return@registerForActivityResult
+                loadedImageFromGallery.save(Constants.PREF_NAME, imageData.toString())
+                imageView.loadImage(imageData)
+            }
+        }
+
+    enum class ValidateOperation {
+        BIRTHDAY, EMAIL, PHONE_NUMBER, EMPTY
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBinding = AddContactDialogBinding.inflate(LayoutInflater.from(context))
@@ -46,12 +57,8 @@ class ContactDialogFragment : DialogFragment() {
             .create()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
 
         //Set size of DialogFragment to all size of parent
         if (dialog != null && dialog?.window != null) {
@@ -95,14 +102,9 @@ class ContactDialogFragment : DialogFragment() {
      * Initialize date and set listeners to EditTexts
      */
     private fun initializeData() {
-        dialogBinding.imageViewPersonPhoto.loadImageUsingGlide(R.mipmap.ic_launcher)
+        dialogBinding.imageViewPersonPhoto.loadImage(R.mipmap.ic_launcher)
         sharedViewModel = (activity as MainActivity).viewModel
         loadedImageFromGallery = sharedViewModel.sharedPreferences
-        sharedContactsAdapter = (activity as MainActivity).contactsRecyclerAdapter
-    }
-
-    enum class ValidateOperation {
-        BIRTHDAY, EMAIL, PHONE_NUMBER, EMPTY
     }
 
     private fun setListeners() {
@@ -153,25 +155,12 @@ class ContactDialogFragment : DialogFragment() {
         }
     }
 
-    private var resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val imageView: AppCompatImageView = dialogBinding.imageViewPersonPhoto
-
-            if (result.resultCode == RESULT_OK) {
-                if (result.data?.data != null) {
-                    val imageData = result.data?.data ?: return@registerForActivityResult
-                    loadedImageFromGallery.save(Constants.PREF_NAME, imageData.toString())
-                    imageView.loadImageUsingGlide(imageData)
-                }
-            }
-        }
-
     private fun loadImageFromGallery() {
         val gallery = Intent(
             Intent.ACTION_PICK,
             MediaStore.Images.Media.INTERNAL_CONTENT_URI
         )
-        resultLauncher.launch(gallery)
+        imageLoaderLauncher.launch(gallery)
     }
 
     /**

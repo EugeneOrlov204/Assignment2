@@ -1,4 +1,4 @@
-package com.shpp.eorlov.assignment2.adapter
+package com.shpp.eorlov.assignment2.recyclerview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,7 +10,7 @@ import com.shpp.eorlov.assignment2.ui.MainActivity
 import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.databinding.ListItemBinding
 import com.shpp.eorlov.assignment2.utils.MyDiffUtil
-import com.shpp.eorlov.assignment2.utils.ext.loadImageUsingGlide
+import com.shpp.eorlov.assignment2.utils.ext.loadImage
 import java.util.concurrent.TimeUnit
 
 
@@ -59,11 +59,12 @@ class ContactsRecyclerAdapter(
         private val textViewPersonProfession = binding.textViewPersonProfession
         private val imageViewPersonImage = binding.imageViewPersonImage
         private val imageViewRemoveButton = binding.imageViewRemoveButton
+
         fun bind() {
             with (contacts[bindingAdapterPosition]) {
                 textViewPersonName.text = username
                 textViewPersonProfession.text = career
-                imageViewPersonImage.loadImageUsingGlide(photo.toUri())
+                imageViewPersonImage.loadImage(photo.toUri())
             }
             setListeners()
         }
@@ -76,7 +77,6 @@ class ContactsRecyclerAdapter(
                 onContactRemoveListener.onContactRemove(bindingAdapterPosition)
             }
         }
-
     }
 }
 

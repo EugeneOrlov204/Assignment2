@@ -1,7 +1,5 @@
 package com.shpp.eorlov.assignment2.ui
 
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,37 +8,31 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding.view.RxView
-import com.shpp.eorlov.assignment2.PreferenceStorage
-import com.shpp.eorlov.assignment2.adapter.ContactRemoveListener
-import com.shpp.eorlov.assignment2.adapter.ContactsRecyclerAdapter
-import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.databinding.ActivityMainBinding
 import com.shpp.eorlov.assignment2.dialogfragment.ContactDialogFragment
+import com.shpp.eorlov.assignment2.model.UserModel
+import com.shpp.eorlov.assignment2.recyclerview.ContactRemoveListener
+import com.shpp.eorlov.assignment2.recyclerview.ContactsRecyclerAdapter
+import com.shpp.eorlov.assignment2.recyclerview.RecyclerViewModel
 import com.shpp.eorlov.assignment2.utils.Constants
-import com.shpp.eorlov.assignment2.viewmodel.MainViewModel
+import com.shpp.eorlov.assignment2.utils.JSONHelper
+import com.shpp.eorlov.assignment2.utils.JSONHelper.exportToJSON
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
 
-//todo: fix unloaded image from gallery
-//todo: create BaseViewModel
 
 class MainActivity : AppCompatActivity() {
 
     // view binding for the activity
-    val viewModel: MainViewModel by inject()
-    private val loadedImageFromGallery: PreferenceStorage = viewModel.sharedPreferences
+    val viewModel: RecyclerViewModel by inject()
 
-    lateinit var contactsRecyclerAdapter : ContactsRecyclerAdapter
+    lateinit var contactsRecyclerAdapter: ContactsRecyclerAdapter
     private lateinit var binding: ActivityMainBinding
     private lateinit var dialog: ContactDialogFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        savedInstanceState?.getString(Constants.USERS_STATE_KEY)?.let {
-//            // after screen rotation
-//        }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -49,11 +41,16 @@ class MainActivity : AppCompatActivity() {
         setListeners()
     }
 
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        val json: String = "json"
-//        outState.putString(Constants.USERS_STATE_KEY, json)
-//        super.onSaveInstanceState(outState)
-//    }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        exportToJSON(this, viewModel.userListLiveData.value ?: emptyList())
+    }
+
+    // after screen rotation
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        viewModel.userListLiveData.value = JSONHelper.importFromJSON(this).toMutableList()
+    }
 
     /**
      * Removes item on given position from RecyclerView
