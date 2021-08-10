@@ -20,17 +20,18 @@ import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.databinding.AddContactDialogBinding
 import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.recyclerview.RecyclerViewModel
-import com.shpp.eorlov.assignment2.ui.MainActivity
+import com.shpp.eorlov.assignment2.ui.MainFragment
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.PreferenceStorage
 import com.shpp.eorlov.assignment2.utils.ext.loadImage
 import com.shpp.eorlov.assignment2.validator.Validator
+import org.koin.android.ext.android.inject
 
 
 class ContactDialogFragment : DialogFragment() {
     private lateinit var dialogBinding: AddContactDialogBinding
     private lateinit var loadedImageFromGallery: PreferenceStorage
-    private lateinit var sharedViewModel: RecyclerViewModel
+    private val sharedViewModel: RecyclerViewModel by inject() //todo?
 
     private var imageLoaderLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -103,7 +104,7 @@ class ContactDialogFragment : DialogFragment() {
      */
     private fun initializeData() {
         dialogBinding.imageViewPersonPhoto.loadImage(R.mipmap.ic_launcher)
-        sharedViewModel = (activity as MainActivity).recyclerViewModel
+//        sharedViewModel = (childFragmentManager as MainFragment).recyclerViewModel //todo?
         loadedImageFromGallery = sharedViewModel.sharedPreferences
     }
 
