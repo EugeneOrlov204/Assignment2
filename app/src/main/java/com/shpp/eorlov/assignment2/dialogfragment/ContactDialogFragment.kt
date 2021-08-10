@@ -103,7 +103,7 @@ class ContactDialogFragment : DialogFragment() {
      */
     private fun initializeData() {
         dialogBinding.imageViewPersonPhoto.loadImage(R.mipmap.ic_launcher)
-        sharedViewModel = (activity as MainActivity).viewModel
+        sharedViewModel = (activity as MainActivity).recyclerViewModel
         loadedImageFromGallery = sharedViewModel.sharedPreferences
     }
 
