@@ -54,7 +54,7 @@ class MainFragment : Fragment(R.layout.fragment_content) {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        recyclerVieFixewModel.userListLiveData.value = JSONHelper.importFromJSON(requireContext()).toMutableList()
+        recyclerViewModel.userListLiveData.value = JSONHelper.importFromJSON(requireContext()).toMutableList()
     }
 
 
