@@ -35,4 +35,16 @@
     <dimen name="save_button_height_55dp">55dp</dimen>
     <dimen name="save_button_text_size_16sp">16sp</dimen>
 
+    <!--FragmentDetailView-->
+    <dimen name="margin_size_normal_16dp">16dp</dimen>
+    <dimen name="margin_horizontal_socials_48dp">48dp</dimen>
+    <dimen name="margin_top_socials_62dp">62dp</dimen>
+    <dimen name="size_of_picture_113dp">113dp</dimen>
+    <dimen name="margin_top_person_name_24dp">24dp</dimen>
+    <dimen name="margin_small_8dp">8dp</dimen>
+
+    <!--Social network button-->
+    <dimen name="radius_socials_60dp">60dp</dimen>
+    <dimen name="border_radius_socials_3dp">3dp</dimen>
+
 </resources>

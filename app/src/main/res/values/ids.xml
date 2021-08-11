@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="textView" type="id" />
+    <item name="viewTopContainer" type="id" />
+    <item name="view_bottom_container" type="id" />
+    <item name="textViewProfile" type="id" />
+    <item name="guideLinePersonImage" type="id" />
+    <item name="imageViewPersonImageDetailView" type="id" />
+    <item name="textViewPersonNameDetailView" type="id" />
+    <item name="textViewPersonProfessionDetailView" type="id" />
+    <item name="textViewPersonResidence" type="id" />
+    <item name="image_button_facebook" type="id" />
+    <item name="image_button_linkedin" type="id" />
+    <item name="image_button_vkontakte" type="id" />
+    <item name="button_edit_profile" type="id" />
 </resources>

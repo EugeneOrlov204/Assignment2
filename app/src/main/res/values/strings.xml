@@ -20,4 +20,9 @@
     <string name="hardcoded_birthdate">01/01/0001</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="settings">settings</string>
+    <string name="person_name">Some Name</string>
+    <string name="profession_name">Some Proffession</string>
+    <string name="residence_address">Some Address</string>
+    <string name="edit_profile">EDIT_PROFILE</string>
 </resources>
