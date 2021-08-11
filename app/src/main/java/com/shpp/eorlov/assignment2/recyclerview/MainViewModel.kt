@@ -5,7 +5,7 @@ import com.shpp.eorlov.assignment2.base.BaseViewModel
 import com.shpp.eorlov.assignment2.model.UserModel
 import kotlin.random.Random
 
-class RecyclerViewModel : BaseViewModel() {
+class MainViewModel : BaseViewModel() {
 
     val userListLiveData = MutableLiveData<MutableList<UserModel>>(ArrayList())
     val errorEvent = MutableLiveData<String>()
