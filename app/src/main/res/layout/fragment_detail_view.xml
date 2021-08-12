@@ -12,18 +12,30 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/steel_gray"
-        app:layout_constraintBottom_toTopOf="@id/view_bottom_container"
+        app:layout_constraintBottom_toTopOf="@id/viewBottomContainer"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_weight="0.5"
         tools:layout_editor_absoluteX="0dp" />
 
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/imageButtonContactDialogCloseButton"
+        style="@style/image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/close_button_margin_start_21dp"
+        android:src="@drawable/ic_arrow_back"
+        app:layout_constraintBottom_toBottomOf="@id/textViewProfile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textViewProfile" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewProfile"
         style="@style/regular_text"
-        android:layout_marginStart="@dimen/margin_size_normal_16dp"
         android:layout_marginTop="@dimen/margin_size_normal_16dp"
-        android:text="@string/settings"
+        android:text="@string/profile"
+        android:textSize="@dimen/text_size_normal_18sp"
         app:layout_constraintStart_toStartOf="@id/viewTopContainer"
+        app:layout_constraintEnd_toEndOf="@id/viewTopContainer"
         app:layout_constraintTop_toTopOf="@id/viewTopContainer" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -72,7 +84,7 @@
 
 
     <View
-        android:id="@+id/view_bottom_container"
+        android:id="@+id/viewBottomContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/alabaster"
@@ -81,41 +93,39 @@
         app:layout_constraintVertical_weight="0.5" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/image_button_facebook"
+        android:id="@+id/imageButtonFacebook"
         style="@style/social_network_button"
         android:layout_marginHorizontal="@dimen/margin_horizontal_socials_48dp"
-        android:layout_marginStart="@dimen/margin_horizontal_socials_48dp"
         android:src="@drawable/main_facebook"
-        app:layout_constraintStart_toStartOf="@+id/view_bottom_container"
-        app:layout_constraintTop_toTopOf="@+id/image_button_linkedin" />
+        app:layout_constraintStart_toStartOf="@+id/viewBottomContainer"
+        app:layout_constraintTop_toTopOf="@+id/imageButtonLinkedin" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/image_button_linkedin"
+        android:id="@+id/imageButtonLinkedin"
         style="@style/social_network_button"
         android:layout_marginTop="@dimen/margin_top_socials_62dp"
         android:src="@drawable/main_linkedin"
-        app:layout_constraintEnd_toStartOf="@+id/image_button_vkontakte"
-        app:layout_constraintStart_toEndOf="@+id/image_button_facebook"
-        app:layout_constraintTop_toTopOf="@+id/view_bottom_container" />
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonVkontakte"
+        app:layout_constraintStart_toEndOf="@+id/imageButtonFacebook"
+        app:layout_constraintTop_toTopOf="@+id/viewBottomContainer" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/image_button_vkontakte"
+        android:id="@+id/imageButtonVkontakte"
         style="@style/social_network_button"
         android:layout_marginHorizontal="@dimen/margin_horizontal_socials_48dp"
         android:src="@drawable/main_vkontakte"
-        app:layout_constraintEnd_toEndOf="@+id/view_bottom_container"
-        app:layout_constraintTop_toTopOf="@+id/image_button_linkedin" />
+        app:layout_constraintEnd_toEndOf="@+id/viewBottomContainer"
+        app:layout_constraintTop_toTopOf="@+id/imageButtonLinkedin" />
 
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_edit_profile"
+        android:id="@+id/buttonMessage"
         style="@style/profile_button"
         android:layout_margin="@dimen/margin_size_normal_16dp"
-        android:layout_marginBottom="16dp"
         android:background="@drawable/round_corner_7dp"
-        android:text="@string/edit_profile"
+        android:text="@string/message"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/view_bottom_container"
-        app:layout_constraintStart_toStartOf="@id/view_bottom_container" />
+        app:layout_constraintEnd_toEndOf="@id/viewBottomContainer"
+        app:layout_constraintStart_toStartOf="@id/viewBottomContainer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

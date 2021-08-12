@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit
 class MainFragment : Fragment(R.layout.fragment_content) {
 
     // view binding for the activity
-    val fragmentViewModel: FragmentViewModel by inject()
+    private val fragmentViewModel: FragmentViewModel by inject()
 
     lateinit var contactsRecyclerAdapter: ContactsRecyclerAdapter
     private lateinit var binding: FragmentContentBinding

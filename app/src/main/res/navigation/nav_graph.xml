@@ -8,5 +8,13 @@
         android:id="@+id/mainFragment2"
         android:name="com.shpp.eorlov.assignment2.ui.MainFragment"
         android:label="fragment_content"
-        tools:layout="@layout/fragment_content" />
+        tools:layout="@layout/fragment_content" >
+        <action
+            android:id="@+id/action_mainFragment2_to_detailViewFragment"
+            app:destination="@id/detailViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailViewFragment"
+        android:name="com.shpp.eorlov.assignment2.ui.DetailViewFragment"
+        android:label="DetailViewFragment" />
 </navigation>
