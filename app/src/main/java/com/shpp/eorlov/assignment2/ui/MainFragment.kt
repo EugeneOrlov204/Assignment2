@@ -17,7 +17,7 @@ import com.shpp.eorlov.assignment2.dialogfragment.ContactDialogFragment
 import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.recyclerview.ContactRemoveListener
 import com.shpp.eorlov.assignment2.recyclerview.ContactsRecyclerAdapter
-import com.shpp.eorlov.assignment2.recyclerview.MainViewModel
+import com.shpp.eorlov.assignment2.recyclerview.FragmentViewModel
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.JSONHelper
 import org.koin.android.ext.android.inject
@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit
 class MainFragment : Fragment(R.layout.fragment_content) {
 
     // view binding for the activity
-    val recyclerViewModel: MainViewModel by inject()
+    val fragmentViewModel: FragmentViewModel by inject()
 
     lateinit var contactsRecyclerAdapter: ContactsRecyclerAdapter
     private lateinit var binding: FragmentContentBinding
@@ -49,15 +49,18 @@ class MainFragment : Fragment(R.layout.fragment_content) {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val jsonString = JSONHelper.exportToJSON(recyclerViewModel.userListLiveData.value ?: emptyList())
+        val jsonString =
+            JSONHelper.exportToJSON(fragmentViewModel.userListLiveData.value ?: emptyList())
         outState.putString("LIST", jsonString)
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        recyclerViewModel.userListLiveData.value = JSONHelper.importFromJSON(
-            savedInstanceState?.getString("LIST")
-        ).toMutableList()
+        if(savedInstanceState != null) {
+            fragmentViewModel.userListLiveData.value = JSONHelper.importFromJSON(
+                savedInstanceState.getString("LIST")
+            ).toMutableList()
+        }
     }
 
 
@@ -68,20 +71,20 @@ class MainFragment : Fragment(R.layout.fragment_content) {
         position: Int,
     ) {
 
-        val removedItem: UserModel = recyclerViewModel.getItem(position) ?: return
-        recyclerViewModel.removeItem(position)
+        val removedItem: UserModel = fragmentViewModel.getItem(position) ?: return
+        fragmentViewModel.removeItem(position)
 
         Snackbar.make(
             binding.root,
             "Contact has been removed",
             Constants.SNACKBAR_DURATION
         ).setAction("Cancel") {
-            recyclerViewModel.addItem(position, removedItem)
+            fragmentViewModel.addItem(position, removedItem)
         }.show()
     }
 
     private fun initRecycler() {
-        recyclerViewModel.getPersonData()
+        fragmentViewModel.getPersonData()
         /* Variable that implements swipe-to-delete */
         val itemTouchHelperCallBack: ItemTouchHelper.SimpleCallback =
             object : ItemTouchHelper.SimpleCallback(
@@ -124,13 +127,13 @@ class MainFragment : Fragment(R.layout.fragment_content) {
     }
 
     private fun setObserver() {
-        recyclerViewModel.userListLiveData.observe(viewLifecycleOwner) { listPersonData ->
+        fragmentViewModel.userListLiveData.observe(viewLifecycleOwner) { listPersonData ->
             (binding.recyclerView.adapter as ContactsRecyclerAdapter).updateRecyclerData(
                 listPersonData
             )
         }
 
-        recyclerViewModel.errorEvent.observe(viewLifecycleOwner) { error ->
+        fragmentViewModel.errorEvent.observe(viewLifecycleOwner) { error ->
             Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
         }
     }

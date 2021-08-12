@@ -20,19 +20,18 @@ import com.google.android.material.textfield.TextInputLayout
 import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.databinding.AddContactDialogBinding
 import com.shpp.eorlov.assignment2.model.UserModel
-import com.shpp.eorlov.assignment2.recyclerview.MainViewModel
+import com.shpp.eorlov.assignment2.recyclerview.FragmentViewModel
 import com.shpp.eorlov.assignment2.ui.MainFragment
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.PreferenceStorage
 import com.shpp.eorlov.assignment2.utils.ext.loadImage
 import com.shpp.eorlov.assignment2.validator.Validator
-import org.koin.android.ext.android.inject
 
 
 class ContactDialogFragment : DialogFragment() {
     private lateinit var dialogBinding: AddContactDialogBinding
     private lateinit var loadedImageFromGallery: PreferenceStorage
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: FragmentViewModel
 
     private var imageLoaderLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -50,7 +49,7 @@ class ContactDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = (targetFragment as MainFragment).recyclerViewModel
+        viewModel = (targetFragment as MainFragment).fragmentViewModel
 
     }
 
