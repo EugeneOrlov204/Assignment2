@@ -8,30 +8,31 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.databinding.AddContactDialogBinding
 import com.shpp.eorlov.assignment2.model.UserModel
-import com.shpp.eorlov.assignment2.recyclerview.FragmentViewModel
-import com.shpp.eorlov.assignment2.ui.MainFragment
 import com.shpp.eorlov.assignment2.utils.Constants
+import com.shpp.eorlov.assignment2.utils.Constants.DIALOG_FRAGMENT_REQUEST_KEY
+import com.shpp.eorlov.assignment2.utils.Constants.NEW_CONTACT_KEY
+import com.shpp.eorlov.assignment2.utils.JSONHelper
 import com.shpp.eorlov.assignment2.utils.PreferenceStorage
 import com.shpp.eorlov.assignment2.utils.ext.loadImage
 import com.shpp.eorlov.assignment2.validator.Validator
+import org.koin.android.ext.android.inject
 
 
 class ContactDialogFragment : DialogFragment() {
     private lateinit var dialogBinding: AddContactDialogBinding
-    private lateinit var loadedImageFromGallery: PreferenceStorage
-    private lateinit var viewModel: FragmentViewModel
+    private val loadedImageFromGallery: PreferenceStorage by inject()
 
     private var imageLoaderLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -45,12 +46,6 @@ class ContactDialogFragment : DialogFragment() {
 
     enum class ValidateOperation {
         BIRTHDAY, EMAIL, PHONE_NUMBER, EMPTY
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel = (targetFragment as MainFragment).fragmentViewModel
-
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -89,7 +84,8 @@ class ContactDialogFragment : DialogFragment() {
         val imageData = loadedImageFromGallery.getString(Constants.PREF_NAME)
 
         with(dialogBinding) {
-            viewModel.addItem(
+
+            val newContact = listOf(
                 UserModel(
                     textInputEditTextUsername.text.toString(),
                     textInputEditTextCareer.text.toString(),
@@ -98,8 +94,14 @@ class ContactDialogFragment : DialogFragment() {
                     textInputEditTextBirthdate.text.toString(),
                     textInputEditTextPhone.text.toString(),
                     textInputEditTextEmail.text.toString()
+
                 )
             )
+            val jsonString = JSONHelper.exportToJSON(newContact)
+
+            val bundle = Bundle()
+            bundle.putString(NEW_CONTACT_KEY, jsonString)
+            setFragmentResult(DIALOG_FRAGMENT_REQUEST_KEY, bundle)
         }
         loadedImageFromGallery.clearPrefs()
         dismiss()
@@ -110,8 +112,6 @@ class ContactDialogFragment : DialogFragment() {
      */
     private fun initializeData() {
         dialogBinding.imageViewPersonPhoto.loadImage(R.mipmap.ic_launcher)
-//        sharedViewModel = (childFragmentManager as MainFragment).recyclerViewModel //todo?
-        loadedImageFromGallery = viewModel.sharedPreferences
     }
 
     private fun setListeners() {

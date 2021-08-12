@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,9 @@ import com.shpp.eorlov.assignment2.recyclerview.ContactRemoveListener
 import com.shpp.eorlov.assignment2.recyclerview.ContactsRecyclerAdapter
 import com.shpp.eorlov.assignment2.recyclerview.FragmentViewModel
 import com.shpp.eorlov.assignment2.utils.Constants
+import com.shpp.eorlov.assignment2.utils.Constants.DATA_OF_LIST_KEY
+import com.shpp.eorlov.assignment2.utils.Constants.DIALOG_FRAGMENT_REQUEST_KEY
+import com.shpp.eorlov.assignment2.utils.Constants.NEW_CONTACT_KEY
 import com.shpp.eorlov.assignment2.utils.JSONHelper
 import org.koin.android.ext.android.inject
 import java.util.concurrent.TimeUnit
@@ -51,14 +55,14 @@ class MainFragment : Fragment(R.layout.fragment_content) {
         super.onSaveInstanceState(outState)
         val jsonString =
             JSONHelper.exportToJSON(fragmentViewModel.userListLiveData.value ?: emptyList())
-        outState.putString("LIST", jsonString)
+        outState.putString(DATA_OF_LIST_KEY, jsonString)
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             fragmentViewModel.userListLiveData.value = JSONHelper.importFromJSON(
-                savedInstanceState.getString("LIST")
+                savedInstanceState.getString(DATA_OF_LIST_KEY)
             ).toMutableList()
         }
     }
@@ -145,7 +149,14 @@ class MainFragment : Fragment(R.layout.fragment_content) {
         )
             .subscribe {
                 dialog = ContactDialogFragment()
-                dialog.show(childFragmentManager, "contact")
+                dialog.show(childFragmentManager, "contact_dialog")
+                dialog.setFragmentResultListener(DIALOG_FRAGMENT_REQUEST_KEY) { key, bundle ->
+                    if (key == DIALOG_FRAGMENT_REQUEST_KEY) {
+                        fragmentViewModel.addItem(
+                            JSONHelper.importFromJSON(bundle.getString(NEW_CONTACT_KEY))[0]
+                        )
+                    }
+                }
             }
     }
 }
