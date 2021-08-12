@@ -61,6 +61,7 @@ class FragmentViewModel : BaseViewModel() {
         val listOfNames: List<String> = getNames()
         val listOfCareers: List<String> = getCareers()
         val listOfEmails: List<String> = getEmails()
+        val listOfResidence: List<String> = getResidence()
         val urlOfPhoto = "https://i.pravatar.cc/"
         val result = mutableListOf<UserModel>()
 
@@ -70,7 +71,7 @@ class FragmentViewModel : BaseViewModel() {
                     listOfNames[i],
                     listOfCareers[i],
                     urlOfPhoto + Random.nextInt(1000),
-                    "",
+                    listOfResidence[i],
                     "",
                     "",
                     listOfEmails[i]
@@ -136,6 +137,25 @@ class FragmentViewModel : BaseViewModel() {
             "@name8.surname@gmail.com",
             "@name9.surname@gmail.com",
             "@name10.surname@gmail.com",
+        )
+    }
+
+    /**
+     * Returns list of residence
+     * Temporary hardcoded
+     */
+    private fun getResidence(): List<String> {
+        return listOf(
+            "5295 Gaylord Walks Apk. 110",
+            "5295 Gaylord Walks Apk. 111",
+            "5295 Gaylord Walks Apk. 112",
+            "5295 Gaylord Walks Apk. 113",
+            "5295 Gaylord Walks Apk. 114",
+            "5295 Gaylord Walks Apk. 115",
+            "5295 Gaylord Walks Apk. 116",
+            "5295 Gaylord Walks Apk. 117",
+            "5295 Gaylord Walks Apk. 118",
+            "5295 Gaylord Walks Apk. 119",
         )
     }
 

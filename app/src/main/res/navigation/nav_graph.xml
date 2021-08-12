@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment2">
+    app:startDestination="@id/mainFragment">
     <fragment
-        android:id="@+id/mainFragment2"
+        android:id="@+id/mainFragment"
         android:name="com.shpp.eorlov.assignment2.ui.MainFragment"
         android:label="fragment_content"
         tools:layout="@layout/fragment_content" >
         <action
-            android:id="@+id/action_mainFragment2_to_detailViewFragment"
-            app:destination="@id/detailViewFragment" />
+            android:id="@+id/action_mainFragment_to_detailViewFragment"
+            app:destination="@id/detailViewFragmentNavigation" />
     </fragment>
     <fragment
-        android:id="@+id/detailViewFragment"
+        android:id="@+id/detailViewFragmentNavigation"
         android:name="com.shpp.eorlov.assignment2.ui.DetailViewFragment"
         android:label="DetailViewFragment" />
 </navigation>
