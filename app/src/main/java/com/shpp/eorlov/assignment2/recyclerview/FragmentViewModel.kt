@@ -1,14 +1,17 @@
 package com.shpp.eorlov.assignment2.recyclerview
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.shpp.eorlov.assignment2.base.BaseViewModel
 import com.shpp.eorlov.assignment2.model.UserModel
 import kotlin.random.Random
 
+
 class FragmentViewModel : BaseViewModel() {
 
     val userListLiveData = MutableLiveData<MutableList<UserModel>>(ArrayList())
     val errorEvent = MutableLiveData<String>()
+
 
     /**
      * Returns value of dataset

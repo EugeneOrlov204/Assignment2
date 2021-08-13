@@ -11,10 +11,14 @@
         tools:layout="@layout/fragment_content" >
         <action
             android:id="@+id/action_mainFragment_to_detailViewFragment"
-            app:destination="@id/detailViewFragmentNavigation" />
+            app:destination="@id/detailViewFragment" />
     </fragment>
     <fragment
-        android:id="@+id/detailViewFragmentNavigation"
+        android:id="@+id/detailViewFragment"
         android:name="com.shpp.eorlov.assignment2.ui.DetailViewFragment"
-        android:label="DetailViewFragment" />
+        android:label="DetailViewFragment" >
+        <argument
+            android:name="uri"
+            app:argType="string" />
+    </fragment>
 </navigation>

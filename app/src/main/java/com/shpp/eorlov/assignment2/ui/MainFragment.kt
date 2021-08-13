@@ -1,14 +1,16 @@
 package com.shpp.eorlov.assignment2.ui
 
-import android.app.ActivityOptions
-import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +21,7 @@ import com.shpp.eorlov.assignment2.databinding.FragmentContentBinding
 import com.shpp.eorlov.assignment2.dialogfragment.ContactDialogFragment
 import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.recyclerview.ContactRemoveListener
+import com.shpp.eorlov.assignment2.recyclerview.ContactSelectedListener
 import com.shpp.eorlov.assignment2.recyclerview.ContactsRecyclerAdapter
 import com.shpp.eorlov.assignment2.recyclerview.FragmentViewModel
 import com.shpp.eorlov.assignment2.utils.Constants
@@ -51,6 +54,11 @@ class MainFragment : Fragment(R.layout.fragment_content) {
         setListeners()
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -123,7 +131,15 @@ class MainFragment : Fragment(R.layout.fragment_content) {
                     override fun onContactRemove(position: Int) {
                         removeItemFromRecyclerView(position)
                     }
-                })
+                },
+                    onContactSelectedListener = object : ContactSelectedListener {
+                        override fun onContactSelected(
+                            holder: ContactsRecyclerAdapter.ContactViewHolder,
+                            imagePath: Uri
+                        ) {
+                            sharedElementTransitionWithSelectedContact(holder, imagePath)
+                        }
+                    })
 
             contactsRecyclerAdapter = binding.recyclerView.adapter as ContactsRecyclerAdapter
 
@@ -132,11 +148,44 @@ class MainFragment : Fragment(R.layout.fragment_content) {
         }
     }
 
+    private fun sharedElementTransitionWithSelectedContact(
+        holder: ContactsRecyclerAdapter.ContactViewHolder,
+        imagePath: Uri
+    ) {
+
+        val action = ArtistsFragmentDirections.navToArtistDetail(uri = artist.imageUri)
+        findNavController().navigate(action, extras)
+
+        val extras = FragmentNavigatorExtras(
+            holder.imageViewPersonImage to "contactPhoto",
+            holder.textViewPersonResidence to "contactResidence",
+            holder.textViewPersonName to "contactName",
+            holder.textViewPersonProfession to "contactProfession"
+        )
+
+        findNavController().navigate(
+            R.id.action_mainFragment_to_detailViewFragment,
+            null,
+            null,
+            extras
+        )
+
+    }
+
     private fun setObserver() {
+
+        postponeEnterTransition()
+
         fragmentViewModel.userListLiveData.observe(viewLifecycleOwner) { listPersonData ->
             (binding.recyclerView.adapter as ContactsRecyclerAdapter).updateRecyclerData(
                 listPersonData
             )
+
+            // Start the transition once all views have been
+            // measured and laid out
+            (view?.parent as? ViewGroup)?.doOnPreDraw {
+                startPostponedEnterTransition()
+            }
         }
 
         fragmentViewModel.errorEvent.observe(viewLifecycleOwner) { error ->
