@@ -29,7 +29,16 @@ class DetailViewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentDetailViewBinding.inflate(inflater, container, false)
+
+        setListeners()
+
         return binding.root
+    }
+
+    private fun setListeners() {
+        binding.imageButtonContactDialogCloseButton.setOnClickListener {
+            activity?.onBackPressed()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
