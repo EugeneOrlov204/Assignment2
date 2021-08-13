@@ -153,8 +153,8 @@ class MainFragment : Fragment(R.layout.fragment_content) {
         imagePath: Uri
     ) {
 
-        val action = ArtistsFragmentDirections.navToArtistDetail(uri = artist.imageUri)
-        findNavController().navigate(action, extras)
+//        val action = ArtistsFragmentDirections.navToArtistDetail(uri = artist.imageUri)
+//        findNavController().navigate(action, extras)
 
         val extras = FragmentNavigatorExtras(
             holder.imageViewPersonImage to "contactPhoto",
@@ -169,7 +169,6 @@ class MainFragment : Fragment(R.layout.fragment_content) {
             null,
             extras
         )
-
     }
 
     private fun setObserver() {
