@@ -57,10 +57,9 @@ class ContactsRecyclerAdapter(
 
     inner class ContactViewHolder(binding: ListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-         val textViewPersonName = binding.textViewPersonName
-         val textViewPersonProfession = binding.textViewPersonProfession
-         val imageViewPersonImage = binding.imageViewPersonImage
-         val textViewPersonResidence = binding.textViewPersonResidence
+        private val textViewPersonName = binding.textViewPersonName
+        private val textViewPersonProfession = binding.textViewPersonProfession
+        private val imageViewPersonImage = binding.imageViewPersonImage
         private val imageViewRemoveButton = binding.imageViewRemoveButton
         private val constraintLayoutContact = binding.constraintLayoutContact
 
@@ -85,10 +84,15 @@ class ContactsRecyclerAdapter(
                 1000,
                 TimeUnit.MILLISECONDS
             ).subscribe {
-                onContactSelectedListener.onContactSelected(
-                    this,
-                    contacts[bindingAdapterPosition].photo.toUri()
-                )
+                val args: MutableList<String> = mutableListOf()
+                with(contacts[bindingAdapterPosition]) {
+                    args.add(photo)
+                    args.add(username)
+                    args.add(career)
+                    args.add(residenceAddress)
+                }
+
+                onContactSelectedListener.onContactSelected(args)
             }
         }
     }

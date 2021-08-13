@@ -4,11 +4,11 @@
     <item name="viewTopContainer" type="id" />
     <item name="viewBottomContainer" type="id" />
     <item name="textViewProfile" type="id" />
-    <item name="guideLinePersonImage" type="id" />
-    <item name="imageViewPersonImageDetailView" type="id" />
-    <item name="textViewPersonNameDetailView" type="id" />
-    <item name="textViewPersonProfessionDetailView" type="id" />
-    <item name="textViewPersonResidence" type="id" />
+    <item name="guideLineUserImage" type="id" />
+    <item name="imageViewUserImageDetailView" type="id" />
+    <item name="textViewUserNameDetailView" type="id" />
+    <item name="textViewUserProfessionDetailView" type="id" />
+    <item name="textViewUserResidence" type="id" />
     <item name="imageButtonFacebook" type="id" />
     <item name="imageButtonLinkedin" type="id" />
     <item name="imageButtonVkontakte" type="id" />

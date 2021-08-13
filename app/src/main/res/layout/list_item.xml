@@ -46,7 +46,7 @@
         tools:text="Photograph" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textViewPersonResidence"
+        android:id="@+id/textViewUserResidence"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:transitionName="contactResidence"

@@ -39,52 +39,52 @@
         app:layout_constraintTop_toTopOf="@id/viewTopContainer" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideLinePersonImage"
+        android:id="@+id/guideLineUserImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.09" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageViewPersonImageDetailView"
+        android:id="@+id/imageViewUserImageDetailView"
         android:layout_width="@dimen/size_of_picture_113dp"
         android:layout_height="@dimen/size_of_picture_113dp"
         android:transitionName="contactPhoto"
         app:layout_constraintEnd_toEndOf="@id/viewTopContainer"
         app:layout_constraintStart_toStartOf="@id/viewTopContainer"
-        app:layout_constraintTop_toTopOf="@id/guideLinePersonImage"
+        app:layout_constraintTop_toTopOf="@id/guideLineUserImage"
         tools:src="@tools:sample/avatars" />
 
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textViewPersonNameDetailView"
+        android:id="@+id/textViewUserNameDetailView"
         style="@style/person_name"
         android:layout_marginTop="@dimen/margin_top_person_name_24dp"
         android:text="@string/person_name"
         android:transitionName="contactName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageViewPersonImageDetailView" />
+        app:layout_constraintTop_toBottomOf="@id/imageViewUserImageDetailView" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textViewPersonProfessionDetailView"
+        android:id="@+id/textViewUserProfessionDetailView"
         style="@style/description_text"
         android:layout_marginTop="@dimen/margin_small_8dp"
         android:text="@string/profession_name"
         android:transitionName="contactProfession"
-        app:layout_constraintEnd_toEndOf="@id/textViewPersonNameDetailView"
-        app:layout_constraintStart_toStartOf="@id/textViewPersonNameDetailView"
-        app:layout_constraintTop_toBottomOf="@id/textViewPersonNameDetailView" />
+        app:layout_constraintEnd_toEndOf="@id/textViewUserNameDetailView"
+        app:layout_constraintStart_toStartOf="@id/textViewUserNameDetailView"
+        app:layout_constraintTop_toBottomOf="@id/textViewUserNameDetailView" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textViewPersonResidence"
+        android:id="@+id/textViewUserResidence"
         style="@style/description_text"
         android:layout_marginTop="@dimen/margin_size_normal_16dp"
         android:text="@string/residence_address"
         android:transitionName="contactResidence"
-        app:layout_constraintEnd_toEndOf="@id/textViewPersonProfessionDetailView"
-        app:layout_constraintStart_toStartOf="@id/textViewPersonProfessionDetailView"
-        app:layout_constraintTop_toBottomOf="@id/textViewPersonProfessionDetailView" />
+        app:layout_constraintEnd_toEndOf="@id/textViewUserProfessionDetailView"
+        app:layout_constraintStart_toStartOf="@id/textViewUserProfessionDetailView"
+        app:layout_constraintTop_toBottomOf="@id/textViewUserProfessionDetailView" />
 
 
     <View

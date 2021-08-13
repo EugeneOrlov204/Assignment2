@@ -1,6 +1,5 @@
 package com.shpp.eorlov.assignment2.ui
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -134,10 +133,9 @@ class MainFragment : Fragment(R.layout.fragment_content) {
                 },
                     onContactSelectedListener = object : ContactSelectedListener {
                         override fun onContactSelected(
-                            holder: ContactsRecyclerAdapter.ContactViewHolder,
-                            imagePath: Uri
+                            args: MutableList<String>
                         ) {
-                            sharedElementTransitionWithSelectedContact(holder, imagePath)
+                            sharedElementTransitionWithSelectedContact(args)
                         }
                     })
 
@@ -149,26 +147,16 @@ class MainFragment : Fragment(R.layout.fragment_content) {
     }
 
     private fun sharedElementTransitionWithSelectedContact(
-        holder: ContactsRecyclerAdapter.ContactViewHolder,
-        imagePath: Uri
+        args: MutableList<String>,
     ) {
 
-//        val action = ArtistsFragmentDirections.navToArtistDetail(uri = artist.imageUri)
-//        findNavController().navigate(action, extras)
-
-        val extras = FragmentNavigatorExtras(
-            holder.imageViewPersonImage to "contactPhoto",
-            holder.textViewPersonResidence to "contactResidence",
-            holder.textViewPersonName to "contactName",
-            holder.textViewPersonProfession to "contactProfession"
+        val action = MainFragmentDirections.actionMainFragmentToDetailViewFragment(
+            contactPhotoUri = args[0],
+            contactName = args[1],
+            contactCareer = args[2],
+            contactResidence = args[3]
         )
-
-        findNavController().navigate(
-            R.id.action_mainFragment_to_detailViewFragment,
-            null,
-            null,
-            extras
-        )
+        findNavController().navigate(action)
     }
 
     private fun setObserver() {

@@ -89,4 +89,7 @@ dependencies {
 }
 
 //Safe args for navigation component
-apply plugin: "androidx.navigation.safeargs.kotlin"
+//apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'kotlin-kapt'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
+

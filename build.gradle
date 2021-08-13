@@ -14,7 +14,7 @@ buildscript {
         // in the individual module build.gradle files
 
         //Safe args for navigation component
-        def nav_version = "2.3.5"
+        def nav_version = "2.4.0-alpha06"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
     }
 }
