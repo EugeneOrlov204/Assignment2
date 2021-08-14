@@ -13,7 +13,9 @@ import com.shpp.eorlov.assignment2.utils.ext.loadImage
 
 
 class DetailViewFragment : Fragment() {
+
     private val args: DetailViewFragmentArgs by navArgs()
+
     private lateinit var binding: FragmentDetailViewBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

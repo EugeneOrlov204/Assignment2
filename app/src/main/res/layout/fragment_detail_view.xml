@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <View
         android:id="@+id/viewTopContainer"
         android:layout_width="match_parent"
@@ -34,8 +33,8 @@
         android:layout_marginTop="@dimen/margin_size_normal_16dp"
         android:text="@string/profile"
         android:textSize="@dimen/text_size_normal_18sp"
-        app:layout_constraintStart_toStartOf="@id/viewTopContainer"
         app:layout_constraintEnd_toEndOf="@id/viewTopContainer"
+        app:layout_constraintStart_toStartOf="@id/viewTopContainer"
         app:layout_constraintTop_toTopOf="@id/viewTopContainer" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -54,7 +53,6 @@
         app:layout_constraintStart_toStartOf="@id/viewTopContainer"
         app:layout_constraintTop_toTopOf="@id/guideLineUserImage"
         tools:src="@tools:sample/avatars" />
-
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewUserNameDetailView"
@@ -86,7 +84,6 @@
         app:layout_constraintStart_toStartOf="@id/textViewUserProfessionDetailView"
         app:layout_constraintTop_toBottomOf="@id/textViewUserProfessionDetailView" />
 
-
     <View
         android:id="@+id/viewBottomContainer"
         android:layout_width="match_parent"
@@ -96,31 +93,33 @@
         app:layout_constraintTop_toBottomOf="@id/viewTopContainer"
         app:layout_constraintVertical_weight="0.5" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/imageButtonFacebook"
-        style="@style/social_network_button"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_socials_48dp"
-        android:src="@drawable/main_facebook"
-        app:layout_constraintStart_toStartOf="@+id/viewBottomContainer"
-        app:layout_constraintTop_toTopOf="@+id/imageButtonLinkedin" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/imageButtonLinkedin"
-        style="@style/social_network_button"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top_socials_62dp"
-        android:src="@drawable/main_linkedin"
-        app:layout_constraintEnd_toStartOf="@+id/imageButtonVkontakte"
-        app:layout_constraintStart_toEndOf="@+id/imageButtonFacebook"
-        app:layout_constraintTop_toTopOf="@+id/viewBottomContainer" />
+        app:layout_constraintTop_toTopOf="@+id/viewBottomContainer"
+        app:layout_constraintStart_toStartOf="@id/viewBottomContainer"
+        app:layout_constraintEnd_toEndOf="@id/viewBottomContainer">
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/imageButtonVkontakte"
-        style="@style/social_network_button"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_socials_48dp"
-        android:src="@drawable/main_vkontakte"
-        app:layout_constraintEnd_toEndOf="@+id/viewBottomContainer"
-        app:layout_constraintTop_toTopOf="@+id/imageButtonLinkedin" />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/imageButtonFacebook"
+            style="@style/social_network_button"
+            android:layout_marginEnd="@dimen/margin_end_socials_48dp"
+            android:src="@drawable/main_facebook" />
 
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/imageButtonLinkedin"
+            style="@style/social_network_button"
+            android:src="@drawable/main_linkedin" />
+
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/imageButtonVkontakte"
+            style="@style/social_network_button"
+            android:layout_marginStart="@dimen/margin_start_socials_48dp"
+            android:src="@drawable/main_vkontakte"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonMessage"

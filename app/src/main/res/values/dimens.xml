@@ -37,7 +37,8 @@
 
     <!--FragmentDetailView-->
     <dimen name="margin_size_normal_16dp">16dp</dimen>
-    <dimen name="margin_horizontal_socials_48dp">48dp</dimen>
+    <dimen name="margin_start_socials_48dp">48dp</dimen>
+    <dimen name="margin_end_socials_48dp">48dp</dimen>
     <dimen name="margin_top_socials_62dp">62dp</dimen>
     <dimen name="size_of_picture_113dp">113dp</dimen>
     <dimen name="margin_top_person_name_24dp">24dp</dimen>

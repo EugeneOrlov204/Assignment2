@@ -37,7 +37,7 @@ class MainFragment : Fragment(R.layout.fragment_content) {
     // view binding for the activity
     private val fragmentViewModel: FragmentViewModel by inject()
 
-    lateinit var contactsRecyclerAdapter: ContactsRecyclerAdapter
+    private lateinit var contactsRecyclerAdapter: ContactsRecyclerAdapter
     private lateinit var binding: FragmentContentBinding
     private lateinit var dialog: ContactDialogFragment
 
@@ -55,11 +55,6 @@ class MainFragment : Fragment(R.layout.fragment_content) {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         val jsonString =
@@ -75,7 +70,6 @@ class MainFragment : Fragment(R.layout.fragment_content) {
             ).toMutableList()
         }
     }
-
 
     /**
      * Removes item on given position from RecyclerView

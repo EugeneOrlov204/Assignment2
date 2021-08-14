@@ -20,26 +20,23 @@ import com.google.android.material.textfield.TextInputLayout
 import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.databinding.AddContactDialogBinding
 import com.shpp.eorlov.assignment2.model.UserModel
-import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.Constants.DIALOG_FRAGMENT_REQUEST_KEY
 import com.shpp.eorlov.assignment2.utils.Constants.NEW_CONTACT_KEY
 import com.shpp.eorlov.assignment2.utils.JSONHelper
-import com.shpp.eorlov.assignment2.utils.PreferenceStorage
 import com.shpp.eorlov.assignment2.utils.ext.loadImage
 import com.shpp.eorlov.assignment2.validator.Validator
-import org.koin.android.ext.android.inject
 
 
 class ContactDialogFragment : DialogFragment() {
     private lateinit var dialogBinding: AddContactDialogBinding
-    private val loadedImageFromGallery: PreferenceStorage by inject()
+    private lateinit var pathToLoadedImageFromGallery: String
 
     private var imageLoaderLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val imageView: AppCompatImageView = dialogBinding.imageViewPersonPhoto
             if (result.resultCode == RESULT_OK && result.data?.data != null) {
                 val imageData = result.data?.data ?: return@registerForActivityResult
-                loadedImageFromGallery.save(Constants.PREF_NAME, imageData.toString())
+                pathToLoadedImageFromGallery = imageData.toString()
                 imageView.loadImage(imageData)
             }
         }
@@ -81,7 +78,7 @@ class ContactDialogFragment : DialogFragment() {
             return
         }
 
-        val imageData = loadedImageFromGallery.getString(Constants.PREF_NAME)
+        val imageData = pathToLoadedImageFromGallery
 
         with(dialogBinding) {
 
@@ -89,7 +86,7 @@ class ContactDialogFragment : DialogFragment() {
                 UserModel(
                     textInputEditTextUsername.text.toString(),
                     textInputEditTextCareer.text.toString(),
-                    imageData ?: "https://i.pravatar.cc/",
+                    imageData,
                     textInputEditTextAddress.text.toString(),
                     textInputEditTextBirthdate.text.toString(),
                     textInputEditTextPhone.text.toString(),
@@ -103,7 +100,6 @@ class ContactDialogFragment : DialogFragment() {
             bundle.putString(NEW_CONTACT_KEY, jsonString)
             setFragmentResult(DIALOG_FRAGMENT_REQUEST_KEY, bundle)
         }
-        loadedImageFromGallery.clearPrefs()
         dismiss()
     }
 
@@ -152,7 +148,6 @@ class ContactDialogFragment : DialogFragment() {
             }
 
             imageButtonContactDialogCloseButton.setOnClickListener {
-                loadedImageFromGallery.clearPrefs()
                 dismiss()
             }
 
