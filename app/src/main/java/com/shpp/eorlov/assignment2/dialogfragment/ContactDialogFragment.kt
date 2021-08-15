@@ -25,11 +25,13 @@ import com.shpp.eorlov.assignment2.utils.Constants.NEW_CONTACT_KEY
 import com.shpp.eorlov.assignment2.utils.JSONHelper
 import com.shpp.eorlov.assignment2.utils.ext.loadImage
 import com.shpp.eorlov.assignment2.validator.Validator
+import org.koin.android.ext.android.inject
 
 
 class ContactDialogFragment : DialogFragment() {
     private lateinit var dialogBinding: AddContactDialogBinding
     private var pathToLoadedImageFromGallery: String = ""
+    private val viewModel: ContactDialogFragmentViewModel by inject()
 
     private var imageLoaderLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -91,7 +93,6 @@ class ContactDialogFragment : DialogFragment() {
                     textInputEditTextBirthdate.text.toString(),
                     textInputEditTextPhone.text.toString(),
                     textInputEditTextEmail.text.toString()
-
                 )
             )
             val jsonString = JSONHelper.exportToJSON(newContact)

@@ -24,4 +24,8 @@
     <string name="residence_address">Some Address</string>
     <string name="message">Message</string>
     <string name="profile">Profile</string>
+    <string name="invalidate_birthdate">Invalid birthdate, ex: 01/01/2021</string>
+    <string name="empty_field">This field should not be empty</string>
+    <string name="invalid_phone_number">Invalid phone number, ex: (264)-654-3762</string>
+    <string name="invalid_email">Invalid Email address, ex: abc@example.com</string>
 </resources>

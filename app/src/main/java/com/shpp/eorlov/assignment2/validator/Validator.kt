@@ -1,6 +1,7 @@
 package com.shpp.eorlov.assignment2.validator
 
 import android.util.Patterns
+import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.utils.Constants.DATE_FORMAT
 import com.shpp.eorlov.assignment2.utils.Constants.DATE_REGEX_PATTERN
 import java.text.ParseException
@@ -79,4 +80,11 @@ object Validator {
         const val INVALID_PHONE_NUMBER = "Invalid phone number, ex: (264)-654-3762"
         const val INVALID_EMAIL = "Invalid Email address, ex: abc@example.com"
     }
+
+//    object ErrorMessage {
+//        const val INVALID_DATE = context.getString(R.string.invalidate_birthdate)
+//        const val EMPTY_FILE = context.getString(R.string.empty_field)
+//        const val INVALID_PHONE_NUMBER = context.getString(R.string.invalid_phone_number)
+//        const val INVALID_EMAIL = context.getString(R.string.invalid_email)
+//    }
 }

@@ -1,4 +1,4 @@
-package com.shpp.eorlov.assignment2.ui
+package com.shpp.eorlov.assignment2.ui.detailview
 
 import android.os.Bundle
 import android.transition.TransitionInflater

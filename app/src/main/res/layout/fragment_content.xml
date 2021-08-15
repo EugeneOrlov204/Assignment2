@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:name="com.shpp.eorlov.assignment2.fragment.MyFragment"
-    tools:context=".ui.MainFragment">
+    tools:context=".ui.fragment.MainFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutHeader"

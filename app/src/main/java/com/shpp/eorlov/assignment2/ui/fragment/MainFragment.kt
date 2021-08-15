@@ -1,4 +1,4 @@
-package com.shpp.eorlov.assignment2.ui
+package com.shpp.eorlov.assignment2.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,7 +21,6 @@ import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.recyclerview.ContactRemoveListener
 import com.shpp.eorlov.assignment2.recyclerview.ContactSelectedListener
 import com.shpp.eorlov.assignment2.recyclerview.ContactsRecyclerAdapter
-import com.shpp.eorlov.assignment2.recyclerview.FragmentViewModel
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.Constants.DATA_OF_LIST_KEY
 import com.shpp.eorlov.assignment2.utils.Constants.DIALOG_FRAGMENT_REQUEST_KEY

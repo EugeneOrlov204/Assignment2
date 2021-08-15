@@ -1,6 +1,5 @@
-package com.shpp.eorlov.assignment2.recyclerview
+package com.shpp.eorlov.assignment2.ui.fragment
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.shpp.eorlov.assignment2.base.BaseViewModel
 import com.shpp.eorlov.assignment2.model.UserModel

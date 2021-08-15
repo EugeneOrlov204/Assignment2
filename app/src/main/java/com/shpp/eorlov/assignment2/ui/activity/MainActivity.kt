@@ -1,4 +1,4 @@
-package com.shpp.eorlov.assignment2.ui
+package com.shpp.eorlov.assignment2.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import com.shpp.eorlov.assignment2.R
