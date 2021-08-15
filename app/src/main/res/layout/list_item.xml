@@ -1,5 +1,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayoutContact"
     android:layout_width="match_parent"
@@ -7,8 +8,8 @@
     android:layout_marginTop="@dimen/margin_normal_16dp"
     android:background="@drawable/round_view_holder">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageViewPersonImage"
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/draweeViewPersonImage"
         android:layout_width="@dimen/person_image_size_50dp"
         android:layout_height="@dimen/person_image_size_50dp"
         android:layout_marginStart="@dimen/margin_normal_16dp"
@@ -16,6 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:roundAsCircle="true"
         tools:src="@tools:sample/avatars" />
 
 
@@ -29,8 +31,8 @@
         android:textSize="@dimen/text_size_normal_18sp"
         android:transitionName="contactName"
         app:layout_constraintBottom_toTopOf="@+id/textViewPersonProfession"
-        app:layout_constraintLeft_toRightOf="@id/imageViewPersonImage"
-        app:layout_constraintTop_toTopOf="@id/imageViewPersonImage"
+        app:layout_constraintLeft_toRightOf="@id/draweeViewPersonImage"
+        app:layout_constraintTop_toTopOf="@id/draweeViewPersonImage"
         tools:text="Ava Smith" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -41,7 +43,7 @@
         android:textColor="@color/gray"
         android:textSize="@dimen/person_profession_text_size_12sp"
         android:transitionName="contactProfession"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewPersonImage"
+        app:layout_constraintBottom_toBottomOf="@+id/draweeViewPersonImage"
         app:layout_constraintLeft_toLeftOf="@id/textViewPersonName"
         tools:text="Photograph" />
 
@@ -50,7 +52,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:transitionName="contactResidence"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewPersonImage"
+        app:layout_constraintBottom_toBottomOf="@+id/draweeViewPersonImage"
         app:layout_constraintLeft_toLeftOf="@id/textViewPersonName" />
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -69,7 +71,7 @@
         android:layout_marginTop="@dimen/line_margin_top_8dp"
         android:background="@color/silver"
         app:layout_constraintEnd_toEndOf="@+id/imageViewRemoveButton"
-        app:layout_constraintStart_toStartOf="@id/imageViewPersonImage"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewPersonImage" />
+        app:layout_constraintStart_toStartOf="@id/draweeViewPersonImage"
+        app:layout_constraintTop_toBottomOf="@+id/draweeViewPersonImage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

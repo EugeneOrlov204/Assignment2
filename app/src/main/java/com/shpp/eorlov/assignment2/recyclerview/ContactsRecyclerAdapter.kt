@@ -1,16 +1,18 @@
 package com.shpp.eorlov.assignment2.recyclerview
 
+import android.R
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.facebook.drawee.view.SimpleDraweeView
 import com.jakewharton.rxbinding.view.RxView
 import com.shpp.eorlov.assignment2.databinding.ListItemBinding
 import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.ui.activity.MainActivity
 import com.shpp.eorlov.assignment2.utils.MyDiffUtil
-import com.shpp.eorlov.assignment2.utils.ext.loadImage
 import java.util.concurrent.TimeUnit
 
 
@@ -63,7 +65,7 @@ class ContactsRecyclerAdapter(
                 with(contacts[bindingAdapterPosition]) {
                     textViewPersonName.text = username
                     textViewPersonProfession.text = career
-                    imageViewPersonImage.loadImage(photo.toUri())
+                    draweeViewPersonImage.setImageURI(photo)
                 }
             }
             setListeners()
