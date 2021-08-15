@@ -6,6 +6,13 @@ import com.shpp.eorlov.assignment2.model.UserModel
 
 class ContactDialogFragmentViewModel : BaseViewModel() {
 
-    val userListLiveData = MutableLiveData<MutableList<UserModel>>(ArrayList())
-    val errorEvent = MutableLiveData<String>()
+    val newUser = MutableLiveData<UserModel>()
+
+    /**
+     * Adds item to dataset in the end of list
+     */
+    fun addItem(newUser: UserModel) {
+        this.newUser.value = newUser
+        this.newUser.value = this.newUser.value
+    }
 }

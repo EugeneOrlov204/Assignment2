@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,6 +19,7 @@ import androidx.fragment.app.setFragmentResult
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.shpp.eorlov.assignment2.R
+import com.shpp.eorlov.assignment2.SharedViewModel
 import com.shpp.eorlov.assignment2.databinding.AddContactDialogBinding
 import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.utils.Constants.DIALOG_FRAGMENT_REQUEST_KEY
@@ -32,6 +34,7 @@ class ContactDialogFragment : DialogFragment() {
     private lateinit var dialogBinding: AddContactDialogBinding
     private var pathToLoadedImageFromGallery: String = ""
     private val viewModel: ContactDialogFragmentViewModel by inject()
+    private val sharedViewModel: SharedViewModel by inject()
 
     private var imageLoaderLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -53,9 +56,15 @@ class ContactDialogFragment : DialogFragment() {
         initializeData()
         setListeners()
 
+
         return AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
             .create()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setObserver()
     }
 
     override fun onStart() {
@@ -71,6 +80,7 @@ class ContactDialogFragment : DialogFragment() {
         }
     }
 
+
     /**
      * Add new contact to RecyclerView if all field are valid
      */
@@ -84,7 +94,7 @@ class ContactDialogFragment : DialogFragment() {
 
         with(dialogBinding) {
 
-            val newContact = listOf(
+            val newContact =
                 UserModel(
                     textInputEditTextUsername.text.toString(),
                     textInputEditTextCareer.text.toString(),
@@ -94,8 +104,10 @@ class ContactDialogFragment : DialogFragment() {
                     textInputEditTextPhone.text.toString(),
                     textInputEditTextEmail.text.toString()
                 )
-            )
-            val jsonString = JSONHelper.exportToJSON(newContact)
+
+            viewModel.addItem(newContact)
+
+            val jsonString = JSONHelper.exportToJSON(listOf(newContact))
 
             val bundle = Bundle()
             bundle.putString(NEW_CONTACT_KEY, jsonString)
@@ -103,6 +115,12 @@ class ContactDialogFragment : DialogFragment() {
         }
         pathToLoadedImageFromGallery = ""
         dismiss()
+    }
+
+    private fun setObserver() {
+        viewModel.newUser.observe(viewLifecycleOwner) { user ->
+            user?.let { sharedViewModel.newUser.value = user }
+        }
     }
 
     /**

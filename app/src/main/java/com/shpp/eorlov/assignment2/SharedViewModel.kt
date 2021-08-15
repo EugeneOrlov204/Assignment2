@@ -6,6 +6,5 @@ import com.shpp.eorlov.assignment2.model.UserModel
 
 class SharedViewModel : BaseViewModel() {
 
-    val userListLiveData = MutableLiveData<MutableList<UserModel>>(ArrayList())
-    val errorEvent = MutableLiveData<String>()
+    val newUser = MutableLiveData<UserModel>()
 }

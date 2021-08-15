@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding.view.RxView
 import com.shpp.eorlov.assignment2.R
+import com.shpp.eorlov.assignment2.SharedViewModel
 import com.shpp.eorlov.assignment2.databinding.FragmentContentBinding
 import com.shpp.eorlov.assignment2.dialogfragment.ContactDialogFragment
 import com.shpp.eorlov.assignment2.model.UserModel
@@ -33,8 +34,8 @@ import java.util.concurrent.TimeUnit
 class MainFragment : Fragment(R.layout.fragment_content) {
 
     // view binding for the activity
-    private val fragmentViewModel: FragmentViewModel by inject()
-
+    private val viewModel: FragmentViewModel by inject()
+    private val sharedViewModel: SharedViewModel by inject()
     private lateinit var contactsRecyclerAdapter: ContactsRecyclerAdapter
     private lateinit var binding: FragmentContentBinding
     private lateinit var dialog: ContactDialogFragment
@@ -47,7 +48,7 @@ class MainFragment : Fragment(R.layout.fragment_content) {
         binding = FragmentContentBinding.inflate(inflater, container, false)
 
         initRecycler()
-        setObserver()
+        setObservers()
         setListeners()
 
         return binding.root
@@ -56,14 +57,14 @@ class MainFragment : Fragment(R.layout.fragment_content) {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         val jsonString =
-            JSONHelper.exportToJSON(fragmentViewModel.userListLiveData.value ?: emptyList())
+            JSONHelper.exportToJSON(viewModel.userListLiveData.value ?: emptyList())
         outState.putString(DATA_OF_LIST_KEY, jsonString)
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         if (savedInstanceState != null) {
-            fragmentViewModel.userListLiveData.value = JSONHelper.importFromJSON(
+            viewModel.userListLiveData.value = JSONHelper.importFromJSON(
                 savedInstanceState.getString(DATA_OF_LIST_KEY)
             ).toMutableList()
         }
@@ -76,20 +77,20 @@ class MainFragment : Fragment(R.layout.fragment_content) {
         position: Int,
     ) {
 
-        val removedItem: UserModel = fragmentViewModel.getItem(position) ?: return
-        fragmentViewModel.removeItem(position)
+        val removedItem: UserModel = viewModel.getItem(position) ?: return
+        viewModel.removeItem(position)
 
         Snackbar.make(
             binding.root,
             "Contact has been removed",
             Constants.SNACKBAR_DURATION
         ).setAction("Cancel") {
-            fragmentViewModel.addItem(position, removedItem)
+            viewModel.addItem(position, removedItem)
         }.show()
     }
 
     private fun initRecycler() {
-        fragmentViewModel.getPersonData()
+        viewModel.getPersonData()
         /* Variable that implements swipe-to-delete */
         val itemTouchHelperCallBack: ItemTouchHelper.SimpleCallback =
             object : ItemTouchHelper.SimpleCallback(
@@ -151,11 +152,11 @@ class MainFragment : Fragment(R.layout.fragment_content) {
         findNavController().navigate(action)
     }
 
-    private fun setObserver() {
+    private fun setObservers() {
 
         postponeEnterTransition()
 
-        fragmentViewModel.userListLiveData.observe(viewLifecycleOwner) { listPersonData ->
+        viewModel.userListLiveData.observe(viewLifecycleOwner) { listPersonData ->
             (binding.recyclerView.adapter as ContactsRecyclerAdapter).updateRecyclerData(
                 listPersonData
             )
@@ -167,8 +168,15 @@ class MainFragment : Fragment(R.layout.fragment_content) {
             }
         }
 
-        fragmentViewModel.errorEvent.observe(viewLifecycleOwner) { error ->
+        viewModel.errorEvent.observe(viewLifecycleOwner) { error ->
             Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+        }
+
+        sharedViewModel.newUser.observe(viewLifecycleOwner)  { newUser ->
+            newUser?.let {
+                viewModel.addItem(newUser)
+                sharedViewModel.newUser.value = null
+            }
         }
     }
 
@@ -182,7 +190,7 @@ class MainFragment : Fragment(R.layout.fragment_content) {
                 dialog.show(childFragmentManager, "contact_dialog")
                 dialog.setFragmentResultListener(DIALOG_FRAGMENT_REQUEST_KEY) { key, bundle ->
                     if (key == DIALOG_FRAGMENT_REQUEST_KEY) {
-                        fragmentViewModel.addItem(
+                        viewModel.addItem(
                             JSONHelper.importFromJSON(bundle.getString(NEW_CONTACT_KEY))[0]
                         )
                     }
