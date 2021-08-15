@@ -29,7 +29,7 @@ import com.shpp.eorlov.assignment2.validator.Validator
 
 class ContactDialogFragment : DialogFragment() {
     private lateinit var dialogBinding: AddContactDialogBinding
-    private lateinit var pathToLoadedImageFromGallery: String
+    private var pathToLoadedImageFromGallery: String = ""
 
     private var imageLoaderLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -100,6 +100,7 @@ class ContactDialogFragment : DialogFragment() {
             bundle.putString(NEW_CONTACT_KEY, jsonString)
             setFragmentResult(DIALOG_FRAGMENT_REQUEST_KEY, bundle)
         }
+        pathToLoadedImageFromGallery = ""
         dismiss()
     }
 
