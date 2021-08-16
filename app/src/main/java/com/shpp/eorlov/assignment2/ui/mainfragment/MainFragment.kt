@@ -1,6 +1,7 @@
-package com.shpp.eorlov.assignment2.ui.fragment
+package com.shpp.eorlov.assignment2.ui.mainfragment
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,38 +9,47 @@ import android.widget.Toast
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.jakewharton.rxbinding.view.RxView
 import com.shpp.eorlov.assignment2.R
-import com.shpp.eorlov.assignment2.SharedViewModel
 import com.shpp.eorlov.assignment2.databinding.FragmentContentBinding
-import com.shpp.eorlov.assignment2.dialogfragment.ContactDialogFragment
 import com.shpp.eorlov.assignment2.model.UserModel
-import com.shpp.eorlov.assignment2.recyclerview.ContactRemoveListener
-import com.shpp.eorlov.assignment2.recyclerview.ContactSelectedListener
-import com.shpp.eorlov.assignment2.recyclerview.ContactsRecyclerAdapter
+import com.shpp.eorlov.assignment2.ui.SharedViewModel
+import com.shpp.eorlov.assignment2.ui.dialogfragment.ContactDialogFragment
+import com.shpp.eorlov.assignment2.ui.mainfragment.adapter.ContactClickListener
+import com.shpp.eorlov.assignment2.ui.mainfragment.adapter.ContactsRecyclerAdapter
 import com.shpp.eorlov.assignment2.utils.Constants
+import com.shpp.eorlov.assignment2.utils.Constants.BUTTON_CLICK_DELAY
 import com.shpp.eorlov.assignment2.utils.Constants.DATA_OF_LIST_KEY
 import com.shpp.eorlov.assignment2.utils.Constants.DIALOG_FRAGMENT_REQUEST_KEY
 import com.shpp.eorlov.assignment2.utils.Constants.NEW_CONTACT_KEY
 import com.shpp.eorlov.assignment2.utils.JSONHelper
+import com.shpp.eorlov.assignment2.utils.ext.clicks
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
-import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 
-class MainFragment : Fragment(R.layout.fragment_content) {
+class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
 
     // view binding for the activity
-    private val viewModel: FragmentViewModel by inject()
+    private val viewModel: MainFragmentViewModel by inject()
     private val sharedViewModel: SharedViewModel by inject()
-    private lateinit var contactsRecyclerAdapter: ContactsRecyclerAdapter
+    private val contactsRecyclerAdapter: ContactsRecyclerAdapter by lazy {
+        ContactsRecyclerAdapter(
+            this
+        )
+    }
     private lateinit var binding: FragmentContentBinding
     private lateinit var dialog: ContactDialogFragment
 
+    @ExperimentalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,8 +57,8 @@ class MainFragment : Fragment(R.layout.fragment_content) {
     ): View {
         binding = FragmentContentBinding.inflate(inflater, container, false)
 
-        initRecycler()
         setObservers()
+        initRecycler()
         setListeners()
 
         return binding.root
@@ -118,21 +128,7 @@ class MainFragment : Fragment(R.layout.fragment_content) {
                 LinearLayoutManager.VERTICAL,
                 false
             )
-            adapter =
-                ContactsRecyclerAdapter(onContactRemoveListener = object : ContactRemoveListener {
-                    override fun onContactRemove(position: Int) {
-                        removeItemFromRecyclerView(position)
-                    }
-                },
-                    onContactSelectedListener = object : ContactSelectedListener {
-                        override fun onContactSelected(
-                            args: MutableList<String>
-                        ) {
-                            sharedElementTransitionWithSelectedContact(args)
-                        }
-                    })
-
-            contactsRecyclerAdapter = binding.recyclerView.adapter as ContactsRecyclerAdapter
+            adapter = contactsRecyclerAdapter
 
             //Implement swipe-to-delete
             ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(this)
@@ -152,27 +148,27 @@ class MainFragment : Fragment(R.layout.fragment_content) {
         findNavController().navigate(action)
     }
 
+
     private fun setObservers() {
 
         postponeEnterTransition()
 
-        viewModel.userListLiveData.observe(viewLifecycleOwner) { listPersonData ->
-            (binding.recyclerView.adapter as ContactsRecyclerAdapter).updateRecyclerData(
-                listPersonData
-            )
+        viewModel.userListLiveData.observe(viewLifecycleOwner, { list ->
+            contactsRecyclerAdapter.updateRecyclerData(list)
 
             // Start the transition once all views have been
             // measured and laid out
             (view?.parent as? ViewGroup)?.doOnPreDraw {
                 startPostponedEnterTransition()
             }
-        }
+        })
+
 
         viewModel.errorEvent.observe(viewLifecycleOwner) { error ->
             Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
         }
 
-        sharedViewModel.newUser.observe(viewLifecycleOwner)  { newUser ->
+        sharedViewModel.newUser.observe(viewLifecycleOwner) { newUser ->
             newUser?.let {
                 viewModel.addItem(newUser)
                 sharedViewModel.newUser.value = null
@@ -180,21 +176,34 @@ class MainFragment : Fragment(R.layout.fragment_content) {
         }
     }
 
+
+    private var previousClickTimestamp = SystemClock.uptimeMillis()
+
+    @ExperimentalCoroutinesApi
     private fun setListeners() {
-        RxView.clicks(binding.textViewAddContacts).throttleFirst(
-            500,
-            TimeUnit.MILLISECONDS
-        )
-            .subscribe {
-                dialog = ContactDialogFragment()
-                dialog.show(childFragmentManager, "contact_dialog")
-                dialog.setFragmentResultListener(DIALOG_FRAGMENT_REQUEST_KEY) { key, bundle ->
-                    if (key == DIALOG_FRAGMENT_REQUEST_KEY) {
-                        viewModel.addItem(
-                            JSONHelper.importFromJSON(bundle.getString(NEW_CONTACT_KEY))[0]
-                        )
+        binding.textViewAddContacts.clicks()
+            .onEach {
+                if(abs(SystemClock.uptimeMillis() - previousClickTimestamp) > BUTTON_CLICK_DELAY) {
+                    dialog = ContactDialogFragment()
+                    dialog.show(childFragmentManager, "contact_dialog")
+                    dialog.setFragmentResultListener(DIALOG_FRAGMENT_REQUEST_KEY) { key, bundle ->
+                        if (key == DIALOG_FRAGMENT_REQUEST_KEY) {
+                            viewModel.addItem(
+                                JSONHelper.importFromJSON(bundle.getString(NEW_CONTACT_KEY))[0]
+                            )
+                        }
                     }
+                    previousClickTimestamp = SystemClock.uptimeMillis()
                 }
             }
+            .launchIn(lifecycleScope)
+    }
+
+    override fun onContactRemove(position: Int) {
+        removeItemFromRecyclerView(position)
+    }
+
+    override fun onContactSelected(args: MutableList<String>) {
+        sharedElementTransitionWithSelectedContact(args)
     }
 }

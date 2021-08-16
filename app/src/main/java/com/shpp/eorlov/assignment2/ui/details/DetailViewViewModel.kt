@@ -1,4 +1,4 @@
-package com.shpp.eorlov.assignment2.ui.detailview
+package com.shpp.eorlov.assignment2.ui.details
 
 import androidx.lifecycle.MutableLiveData
 import com.shpp.eorlov.assignment2.base.BaseViewModel

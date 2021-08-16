@@ -6,7 +6,7 @@
     app:startDestination="@id/mainFragment">
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.shpp.eorlov.assignment2.ui.fragment.MainFragment"
+        android:name="com.shpp.eorlov.assignment2.ui.mainfragment.MainFragment"
         android:label="fragment_content"
         tools:layout="@layout/fragment_content">
         <action
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailViewFragment"
-        android:name="com.shpp.eorlov.assignment2.ui.detailview.DetailViewFragment"
+        android:name="com.shpp.eorlov.assignment2.ui.details.DetailViewFragment"
         android:label="DetailViewFragment">
 
         <argument

@@ -1,10 +1,11 @@
-package com.shpp.eorlov.assignment2.dialogfragment
+package com.shpp.eorlov.assignment2.ui.dialogfragment
 
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,18 +17,25 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.shpp.eorlov.assignment2.R
-import com.shpp.eorlov.assignment2.SharedViewModel
 import com.shpp.eorlov.assignment2.databinding.AddContactDialogBinding
 import com.shpp.eorlov.assignment2.model.UserModel
+import com.shpp.eorlov.assignment2.ui.SharedViewModel
+import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.Constants.DIALOG_FRAGMENT_REQUEST_KEY
 import com.shpp.eorlov.assignment2.utils.Constants.NEW_CONTACT_KEY
 import com.shpp.eorlov.assignment2.utils.JSONHelper
+import com.shpp.eorlov.assignment2.utils.ext.clicks
 import com.shpp.eorlov.assignment2.utils.ext.loadImage
 import com.shpp.eorlov.assignment2.validator.Validator
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
+import kotlin.math.abs
 
 
 class ContactDialogFragment : DialogFragment() {
@@ -50,6 +58,7 @@ class ContactDialogFragment : DialogFragment() {
         BIRTHDAY, EMAIL, PHONE_NUMBER, EMPTY
     }
 
+    @ExperimentalCoroutinesApi
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBinding = AddContactDialogBinding.inflate(LayoutInflater.from(context))
 
@@ -130,6 +139,9 @@ class ContactDialogFragment : DialogFragment() {
         dialogBinding.imageViewPersonPhoto.loadImage(R.mipmap.ic_launcher)
     }
 
+    private var previousClickTimestamp = SystemClock.uptimeMillis()
+
+    @ExperimentalCoroutinesApi
     private fun setListeners() {
         with(dialogBinding) {
             addListenerToEditText(
@@ -163,17 +175,36 @@ class ContactDialogFragment : DialogFragment() {
                 ValidateOperation.PHONE_NUMBER
             )
 
-            imageViewImageLoader.setOnClickListener {
-                loadImageFromGallery()
-            }
 
-            imageButtonContactDialogCloseButton.setOnClickListener {
-                dismiss()
-            }
+            imageViewImageLoader.clicks()
+                .onEach {
+                    if (abs(SystemClock.uptimeMillis() - previousClickTimestamp) > Constants.BUTTON_CLICK_DELAY) {
+                        loadImageFromGallery()
+                        previousClickTimestamp = SystemClock.uptimeMillis()
+                    }
+                }
+                .launchIn(lifecycleScope)
 
-            buttonSave.setOnClickListener {
-                addContact()
-            }
+
+            imageButtonContactDialogCloseButton.clicks()
+                .onEach {
+                    if (abs(SystemClock.uptimeMillis() - previousClickTimestamp) > Constants.BUTTON_CLICK_DELAY) {
+                        dismiss()
+                        previousClickTimestamp = SystemClock.uptimeMillis()
+                    }
+                }
+                .launchIn(lifecycleScope)
+
+
+            buttonSave.clicks()
+                .onEach {
+                    if (abs(SystemClock.uptimeMillis() - previousClickTimestamp) > Constants.BUTTON_CLICK_DELAY) {
+                        addContact()
+                        previousClickTimestamp = SystemClock.uptimeMillis()
+                    }
+                }
+                .launchIn(lifecycleScope)
+
         }
     }
 

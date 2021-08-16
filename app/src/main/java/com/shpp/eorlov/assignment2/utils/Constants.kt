@@ -9,4 +9,5 @@ object Constants {
     const val DIALOG_FRAGMENT_REQUEST_KEY = "dialogFragmentRequestKey"
     const val DATA_OF_LIST_KEY = "dataOfList"
     const val NEW_CONTACT_KEY = "newContact"
+    const val BUTTON_CLICK_DELAY: Long = 2000
 }

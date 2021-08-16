@@ -1,4 +1,4 @@
-package com.shpp.eorlov.assignment2.dialogfragment
+package com.shpp.eorlov.assignment2.ui.dialogfragment
 
 import androidx.lifecycle.MutableLiveData
 import com.shpp.eorlov.assignment2.base.BaseViewModel
