@@ -176,7 +176,6 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
         }
     }
 
-
     private var previousClickTimestamp = SystemClock.uptimeMillis()
 
     @ExperimentalCoroutinesApi

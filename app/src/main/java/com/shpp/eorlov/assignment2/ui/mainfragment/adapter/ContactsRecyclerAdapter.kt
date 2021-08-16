@@ -4,13 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.shpp.eorlov.assignment2.databinding.ListItemBinding
 import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.ui.MainActivity
-import com.shpp.eorlov.assignment2.utils.MyDiffUtil
+import com.shpp.eorlov.assignment2.utils.UserItemDiffCallback
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
@@ -55,20 +54,12 @@ class ContactsRecyclerAdapter(
      */
     override fun getItemCount() = contacts.size
 
-    class UserItemDiffCallback : DiffUtil.ItemCallback<UserModel>() {
-        override fun areItemsTheSame(oldItem: UserModel, newItem: UserModel): Boolean =
-            oldItem.email == newItem.email
-
-        override fun areContentsTheSame(oldItem: UserModel, newItem: UserModel): Boolean =
-            oldItem == newItem
-    }
-
     fun updateRecyclerData(newDataset: List<UserModel>) {
-        val diffResult: DiffUtil.DiffResult =
-            DiffUtil.calculateDiff(MyDiffUtil(contacts, newDataset))
+//        val diffResult: DiffUtil.DiffResult =
+//            DiffUtil.calculateDiff(UserItemDiffCallback(contacts, newDataset))
         (contacts as ArrayList).clear()
         contacts.addAll(newDataset)
-        diffResult.dispatchUpdatesTo(this@ContactsRecyclerAdapter)
+//        diffResult.dispatchUpdatesTo(this@ContactsRecyclerAdapter)
     }
 }
 

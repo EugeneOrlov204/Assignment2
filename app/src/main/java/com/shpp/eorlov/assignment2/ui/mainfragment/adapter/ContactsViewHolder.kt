@@ -45,12 +45,6 @@ class ContactsViewHolder(
             }
             .launchIn(lifecycleScope)
 
-//        RxView.clicks(binding.imageViewRemoveButton).throttleFirst(
-//            1000,
-//            TimeUnit.MILLISECONDS
-//        ).subscribe {
-//            onContactClickListener.onContactRemove(bindingAdapterPosition)
-//        }
 
         binding.constraintLayoutContact.clicks()
             .onEach {
@@ -68,19 +62,5 @@ class ContactsViewHolder(
             }
             .launchIn(lifecycleScope)
 
-//        RxView.clicks(binding.constraintLayoutContact).throttleFirst(
-//            1000,
-//            TimeUnit.MILLISECONDS
-//        ).subscribe {
-//            val args: MutableList<String> = mutableListOf()
-//            contacts[bindingAdapterPosition].apply {
-//                args.add(photo)
-//                args.add(username)
-//                args.add(career)
-//                args.add(residenceAddress)
-//            }
-//
-//            onContactClickListener.onContactSelected(args)
-//        }
     }
 }
