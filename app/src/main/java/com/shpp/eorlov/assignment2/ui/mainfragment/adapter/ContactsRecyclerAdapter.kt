@@ -25,16 +25,15 @@ class ContactsRecyclerAdapter(
 
     private val contacts: List<UserModel> = ArrayList()
 
-
     /**
      * Create new views (invoked by the layout manager)
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsViewHolder {
-        val binding = ListItemBinding
-            .inflate(LayoutInflater.from(parent.context), parent, false)
 
         return ContactsViewHolder(
-            binding,
+            ListItemBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            ),
             onContactClickListener,
             contacts,
             parent.findViewTreeLifecycleOwner()!!.lifecycleScope
@@ -46,7 +45,7 @@ class ContactsRecyclerAdapter(
      */
     @ExperimentalCoroutinesApi
     override fun onBindViewHolder(holder: ContactsViewHolder, position: Int) {
-        holder.bind()
+        holder.bind(getItem(position))
     }
 
     /**
@@ -54,12 +53,12 @@ class ContactsRecyclerAdapter(
      */
     override fun getItemCount() = contacts.size
 
-    fun updateRecyclerData(newDataset: List<UserModel>) {
+//    fun updateRecyclerData(newDataset: List<UserModel>) {
 //        val diffResult: DiffUtil.DiffResult =
 //            DiffUtil.calculateDiff(UserItemDiffCallback(contacts, newDataset))
-        (contacts as ArrayList).clear()
-        contacts.addAll(newDataset)
+//        (contacts as ArrayList).clear()
+//        contacts.addAll(newDataset)
 //        diffResult.dispatchUpdatesTo(this@ContactsRecyclerAdapter)
-    }
+//    }
 }
 

@@ -21,16 +21,17 @@ class ContactsViewHolder(
     RecyclerView.ViewHolder(binding.root) {
 
     @ExperimentalCoroutinesApi
-    fun bind() {
+    fun bind(item: UserModel) {
         binding.apply {
-            contacts[bindingAdapterPosition].apply {
-                textViewPersonName.text = username
-                textViewPersonProfession.text = career
+            item.apply {
+                textViewPersonName.text = name
+                textViewPersonProfession.text = profession
                 draweeViewPersonImage.setImageURI(photo)
             }
         }
         setListeners()
     }
+
 
     private var previousClickTimestamp = SystemClock.uptimeMillis()
 
@@ -49,14 +50,8 @@ class ContactsViewHolder(
         binding.constraintLayoutContact.clicks()
             .onEach {
                 if (abs(SystemClock.uptimeMillis() - previousClickTimestamp) > Constants.BUTTON_CLICK_DELAY) {
-                    val args: MutableList<String> = mutableListOf()
-                    contacts[bindingAdapterPosition].apply {
-                        args.add(photo)
-                        args.add(username)
-                        args.add(career)
-                        args.add(residenceAddress)
-                    }
-                    onContactClickListener.onContactSelected(args)
+                    val contact = contacts[bindingAdapterPosition]
+                    onContactClickListener.onContactSelected(contact)
                     previousClickTimestamp = SystemClock.uptimeMillis()
                 }
             }

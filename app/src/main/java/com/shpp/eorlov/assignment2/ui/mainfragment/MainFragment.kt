@@ -2,6 +2,7 @@ package com.shpp.eorlov.assignment2.ui.mainfragment
 
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,8 +58,8 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
     ): View {
         binding = FragmentContentBinding.inflate(inflater, container, false)
 
-        setObservers()
         initRecycler()
+        setObservers()
         setListeners()
 
         return binding.root
@@ -136,14 +137,11 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
     }
 
     private fun sharedElementTransitionWithSelectedContact(
-        args: MutableList<String>,
+        contact: UserModel,
     ) {
 
         val action = MainFragmentDirections.actionMainFragmentToDetailViewFragment(
-            contactPhotoUri = args[0],
-            contactName = args[1],
-            contactCareer = args[2],
-            contactResidence = args[3]
+            contact
         )
         findNavController().navigate(action)
     }
@@ -153,15 +151,17 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
 
         postponeEnterTransition()
 
-        viewModel.userListLiveData.observe(viewLifecycleOwner, { list ->
-            contactsRecyclerAdapter.updateRecyclerData(list)
+        viewModel.userListLiveData.observe(viewLifecycleOwner) { list ->
+            Log.d("Const.TAG", "initObservables: ${list.size} ")
+            contactsRecyclerAdapter.submitList(list.toList())
+
 
             // Start the transition once all views have been
             // measured and laid out
             (view?.parent as? ViewGroup)?.doOnPreDraw {
                 startPostponedEnterTransition()
             }
-        })
+        }
 
 
         viewModel.errorEvent.observe(viewLifecycleOwner) { error ->
@@ -182,7 +182,7 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
     private fun setListeners() {
         binding.textViewAddContacts.clicks()
             .onEach {
-                if(abs(SystemClock.uptimeMillis() - previousClickTimestamp) > BUTTON_CLICK_DELAY) {
+                if (abs(SystemClock.uptimeMillis() - previousClickTimestamp) > BUTTON_CLICK_DELAY) {
                     dialog = ContactDialogFragment()
                     dialog.show(childFragmentManager, "contact_dialog")
                     dialog.setFragmentResultListener(DIALOG_FRAGMENT_REQUEST_KEY) { key, bundle ->
@@ -202,7 +202,7 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
         removeItemFromRecyclerView(position)
     }
 
-    override fun onContactSelected(args: MutableList<String>) {
-        sharedElementTransitionWithSelectedContact(args)
+    override fun onContactSelected(contact: UserModel) {
+        sharedElementTransitionWithSelectedContact(contact)
     }
 }

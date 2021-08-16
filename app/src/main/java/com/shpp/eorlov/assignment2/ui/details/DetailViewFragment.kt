@@ -6,7 +6,6 @@ import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -33,6 +32,7 @@ class DetailViewFragment : Fragment() {
     }
 
 
+    @ExperimentalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,16 +60,17 @@ class DetailViewFragment : Fragment() {
                 if (abs(SystemClock.uptimeMillis() - previousClickTimestamp) > Constants.BUTTON_CLICK_DELAY) {
                     activity?.onBackPressed()
                     previousClickTimestamp = SystemClock.uptimeMillis()
-
                 }
             }
             .launchIn(lifecycleScope)
     }
 
     private fun initViews() {
-        binding.imageViewUserImageDetailView.loadImage(args.contactPhotoUri.toUri())
-        binding.textViewUserNameDetailView.text = args.contactName
-        binding.textViewUserProfessionDetailView.text = args.contactCareer
-        binding.textViewUserResidence.text = args.contactResidence
+        args.contact.apply {
+            binding.imageViewUserImageDetailView.loadImage(photo)
+            binding.textViewUserNameDetailView.text = name
+            binding.textViewUserProfessionDetailView.text = profession
+            binding.textViewUserResidence.text = residenceAddress
+        }
     }
 }

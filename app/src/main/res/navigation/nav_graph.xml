@@ -19,14 +19,7 @@
         android:label="DetailViewFragment">
 
         <argument
-            android:name="contactPhotoUri"
-            app:argType="string" />
-        <argument
-            android:name="contactName"
-            app:argType="string" />
-        <argument android:name="contactCareer"
-            app:argType="string" />
-        <argument android:name="contactResidence"
-            app:argType="string" />
+            android:name="contact"
+            app:argType="com.shpp.eorlov.assignment2.model.UserModel" />
     </fragment>
 </navigation>
