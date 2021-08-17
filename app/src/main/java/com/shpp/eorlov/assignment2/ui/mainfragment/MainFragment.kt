@@ -2,7 +2,6 @@ package com.shpp.eorlov.assignment2.ui.mainfragment
 
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,10 +24,10 @@ import com.shpp.eorlov.assignment2.ui.mainfragment.adapter.ContactClickListener
 import com.shpp.eorlov.assignment2.ui.mainfragment.adapter.ContactsRecyclerAdapter
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.Constants.BUTTON_CLICK_DELAY
-import com.shpp.eorlov.assignment2.utils.Constants.DATA_OF_LIST_KEY
+import com.shpp.eorlov.assignment2.utils.Constants.CONTACT_DIALOG_TAG
 import com.shpp.eorlov.assignment2.utils.Constants.DIALOG_FRAGMENT_REQUEST_KEY
+import com.shpp.eorlov.assignment2.utils.Constants.LIST_OF_CONTACTS_KEY
 import com.shpp.eorlov.assignment2.utils.Constants.NEW_CONTACT_KEY
-import com.shpp.eorlov.assignment2.utils.JSONHelper
 import com.shpp.eorlov.assignment2.utils.ext.clicks
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
@@ -67,18 +66,34 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val jsonString =
-            JSONHelper.exportToJSON(viewModel.userListLiveData.value ?: emptyList())
-        outState.putString(DATA_OF_LIST_KEY, jsonString)
+        val currentState = viewModel.userListLiveData.value ?: emptyList()
+        outState.putParcelableArray(
+            LIST_OF_CONTACTS_KEY,
+            currentState.toTypedArray()
+        )
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         if (savedInstanceState != null) {
-            viewModel.userListLiveData.value = JSONHelper.importFromJSON(
-                savedInstanceState.getString(DATA_OF_LIST_KEY)
-            ).toMutableList()
+            val receivedState =
+                savedInstanceState.getParcelableArray(LIST_OF_CONTACTS_KEY) ?: return
+
+            val receivedList = mutableListOf<UserModel>()
+            for (element in receivedState) {
+                receivedList.add(element as UserModel)
+            }
+
+            viewModel.userListLiveData.value = receivedList
         }
+    }
+
+    override fun onContactRemove(position: Int) {
+        removeItemFromRecyclerView(position)
+    }
+
+    override fun onContactSelected(contact: UserModel) {
+        sharedElementTransitionWithSelectedContact(contact)
     }
 
     /**
@@ -93,7 +108,7 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
 
         Snackbar.make(
             binding.root,
-            "Contact has been removed",
+            getString(R.string.removed_contact_message),
             Constants.SNACKBAR_DURATION
         ).setAction("Cancel") {
             viewModel.addItem(position, removedItem)
@@ -152,8 +167,7 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
         postponeEnterTransition()
 
         viewModel.userListLiveData.observe(viewLifecycleOwner) { list ->
-            Log.d("Const.TAG", "initObservables: ${list.size} ")
-            contactsRecyclerAdapter.submitList(list.toList())
+            contactsRecyclerAdapter.updateRecyclerData(list.toList())
 
 
             // Start the transition once all views have been
@@ -184,25 +198,20 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
             .onEach {
                 if (abs(SystemClock.uptimeMillis() - previousClickTimestamp) > BUTTON_CLICK_DELAY) {
                     dialog = ContactDialogFragment()
-                    dialog.show(childFragmentManager, "contact_dialog")
+                    dialog.show(childFragmentManager, CONTACT_DIALOG_TAG)
+
                     dialog.setFragmentResultListener(DIALOG_FRAGMENT_REQUEST_KEY) { key, bundle ->
                         if (key == DIALOG_FRAGMENT_REQUEST_KEY) {
                             viewModel.addItem(
-                                JSONHelper.importFromJSON(bundle.getString(NEW_CONTACT_KEY))[0]
+                                bundle.getParcelable(NEW_CONTACT_KEY)
+                                    ?: return@setFragmentResultListener
                             )
                         }
                     }
+
                     previousClickTimestamp = SystemClock.uptimeMillis()
                 }
             }
             .launchIn(lifecycleScope)
-    }
-
-    override fun onContactRemove(position: Int) {
-        removeItemFromRecyclerView(position)
-    }
-
-    override fun onContactSelected(contact: UserModel) {
-        sharedElementTransitionWithSelectedContact(contact)
     }
 }

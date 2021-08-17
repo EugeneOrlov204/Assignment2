@@ -21,9 +21,9 @@ class ContactsViewHolder(
     RecyclerView.ViewHolder(binding.root) {
 
     @ExperimentalCoroutinesApi
-    fun bind(item: UserModel) {
+    fun bind() {
         binding.apply {
-            item.apply {
+            contacts[absoluteAdapterPosition].apply {
                 textViewPersonName.text = name
                 textViewPersonProfession.text = profession
                 draweeViewPersonImage.setImageURI(photo)

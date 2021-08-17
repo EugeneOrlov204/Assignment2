@@ -27,7 +27,6 @@ import com.shpp.eorlov.assignment2.ui.SharedViewModel
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.Constants.DIALOG_FRAGMENT_REQUEST_KEY
 import com.shpp.eorlov.assignment2.utils.Constants.NEW_CONTACT_KEY
-import com.shpp.eorlov.assignment2.utils.JSONHelper
 import com.shpp.eorlov.assignment2.utils.ext.clicks
 import com.shpp.eorlov.assignment2.utils.ext.loadImage
 import com.shpp.eorlov.assignment2.validator.Validator
@@ -116,10 +115,8 @@ class ContactDialogFragment : DialogFragment() {
 
             viewModel.addItem(newContact)
 
-            val jsonString = JSONHelper.exportToJSON(listOf(newContact))
-
             val bundle = Bundle()
-            bundle.putString(NEW_CONTACT_KEY, jsonString)
+            bundle.putParcelable(NEW_CONTACT_KEY, newContact)
             setFragmentResult(DIALOG_FRAGMENT_REQUEST_KEY, bundle)
         }
         pathToLoadedImageFromGallery = ""

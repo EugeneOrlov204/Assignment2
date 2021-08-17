@@ -1,10 +1,11 @@
 package com.shpp.eorlov.assignment2.ui.dialogfragment
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.shpp.eorlov.assignment2.base.BaseViewModel
 import com.shpp.eorlov.assignment2.model.UserModel
 
-class ContactDialogFragmentViewModel : BaseViewModel() {
+class ContactDialogFragmentViewModel(application: Application) : BaseViewModel(application) {
 
     val newUser = MutableLiveData<UserModel>()
 
