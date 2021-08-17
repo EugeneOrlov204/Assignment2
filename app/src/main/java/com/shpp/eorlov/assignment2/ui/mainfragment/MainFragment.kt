@@ -22,14 +22,13 @@ import com.shpp.eorlov.assignment2.ui.SharedViewModel
 import com.shpp.eorlov.assignment2.ui.dialogfragment.ContactDialogFragment
 import com.shpp.eorlov.assignment2.ui.mainfragment.adapter.ContactClickListener
 import com.shpp.eorlov.assignment2.ui.mainfragment.adapter.ContactsRecyclerAdapter
-import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.Constants.BUTTON_CLICK_DELAY
 import com.shpp.eorlov.assignment2.utils.Constants.CONTACT_DIALOG_TAG
 import com.shpp.eorlov.assignment2.utils.Constants.DIALOG_FRAGMENT_REQUEST_KEY
 import com.shpp.eorlov.assignment2.utils.Constants.LIST_OF_CONTACTS_KEY
 import com.shpp.eorlov.assignment2.utils.Constants.NEW_CONTACT_KEY
+import com.shpp.eorlov.assignment2.utils.Constants.SNACKBAR_DURATION
 import com.shpp.eorlov.assignment2.utils.ext.clicks
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
@@ -49,19 +48,21 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
     private lateinit var binding: FragmentContentBinding
     private lateinit var dialog: ContactDialogFragment
 
-    @ExperimentalCoroutinesApi
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentContentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initRecycler()
         setObservers()
         setListeners()
-
-        return binding.root
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -109,7 +110,7 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
         Snackbar.make(
             binding.root,
             getString(R.string.removed_contact_message),
-            Constants.SNACKBAR_DURATION
+            SNACKBAR_DURATION
         ).setAction("Cancel") {
             viewModel.addItem(position, removedItem)
         }.show()
@@ -192,7 +193,7 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
 
     private var previousClickTimestamp = SystemClock.uptimeMillis()
 
-    @ExperimentalCoroutinesApi
+
     private fun setListeners() {
         binding.textViewAddContacts.clicks()
             .onEach {

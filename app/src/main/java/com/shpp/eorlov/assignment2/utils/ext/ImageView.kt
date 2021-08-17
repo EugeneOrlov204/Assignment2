@@ -1,7 +1,6 @@
 package com.shpp.eorlov.assignment2.utils.ext
 
 import android.net.Uri
-import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
 import com.shpp.eorlov.assignment2.utils.CircleTransform

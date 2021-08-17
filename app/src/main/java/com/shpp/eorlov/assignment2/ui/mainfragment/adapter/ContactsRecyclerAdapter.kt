@@ -12,7 +12,6 @@ import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.ui.MainActivity
 import com.shpp.eorlov.assignment2.utils.MyDiffUtil
 import com.shpp.eorlov.assignment2.utils.UserItemDiffCallback
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
 /**
@@ -45,7 +44,6 @@ class ContactsRecyclerAdapter(
     /**
      * Replace the contents of a view (invoked by the layout manager)
      */
-    @ExperimentalCoroutinesApi
     override fun onBindViewHolder(holder: ContactsViewHolder, position: Int) {
         holder.bind()
     }

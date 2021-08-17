@@ -11,4 +11,5 @@ object Constants {
     const val BUTTON_CLICK_DELAY: Long = 2000
     const val CONTACT_DIALOG_TAG = "Contact dialog"
     const val DEFAULT_PATH_TO_IMAGE = "https://i.pravatar.cc/500"
+    const val GENERATE_ID_CODE = -1
 }

@@ -7,7 +7,6 @@ import com.shpp.eorlov.assignment2.databinding.ListItemBinding
 import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.ext.clicks
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.math.abs
@@ -20,7 +19,6 @@ class ContactsViewHolder(
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
-    @ExperimentalCoroutinesApi
     fun bind() {
         binding.apply {
             contacts[absoluteAdapterPosition].apply {
@@ -35,7 +33,6 @@ class ContactsViewHolder(
 
     private var previousClickTimestamp = SystemClock.uptimeMillis()
 
-    @ExperimentalCoroutinesApi
     private fun setListeners() {
         binding.imageViewRemoveButton.clicks()
             .onEach {

@@ -13,7 +13,12 @@ class ContactDialogFragmentViewModel(application: Application) : BaseViewModel(a
      * Adds item to dataset in the end of list
      */
     fun addItem(newUser: UserModel) {
+        checksModelId()
         this.newUser.value = newUser
         this.newUser.value = this.newUser.value
+    }
+
+    private fun checksModelId() {
+
     }
 }

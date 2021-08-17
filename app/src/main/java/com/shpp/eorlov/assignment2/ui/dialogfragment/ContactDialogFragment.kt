@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,11 +25,11 @@ import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.ui.SharedViewModel
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.Constants.DIALOG_FRAGMENT_REQUEST_KEY
+import com.shpp.eorlov.assignment2.utils.Constants.GENERATE_ID_CODE
 import com.shpp.eorlov.assignment2.utils.Constants.NEW_CONTACT_KEY
 import com.shpp.eorlov.assignment2.utils.ext.clicks
 import com.shpp.eorlov.assignment2.utils.ext.loadImage
 import com.shpp.eorlov.assignment2.validator.Validator
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
@@ -57,7 +56,7 @@ class ContactDialogFragment : DialogFragment() {
         BIRTHDAY, EMAIL, PHONE_NUMBER, EMPTY
     }
 
-    @ExperimentalCoroutinesApi
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBinding = AddContactDialogBinding.inflate(LayoutInflater.from(context))
 
@@ -94,16 +93,16 @@ class ContactDialogFragment : DialogFragment() {
      */
     private fun addContact() {
         if (!canAddContact()) {
-            Log.d("Create contact", "Can't create new contact")
             return
         }
 
         val imageData = pathToLoadedImageFromGallery
 
-        with(dialogBinding) {
+        dialogBinding.apply {
 
             val newContact =
                 UserModel(
+                    GENERATE_ID_CODE,
                     textInputEditTextUsername.text.toString(),
                     textInputEditTextCareer.text.toString(),
                     imageData,
@@ -138,9 +137,9 @@ class ContactDialogFragment : DialogFragment() {
 
     private var previousClickTimestamp = SystemClock.uptimeMillis()
 
-    @ExperimentalCoroutinesApi
+
     private fun setListeners() {
-        with(dialogBinding) {
+        dialogBinding.apply {
             addListenerToEditText(
                 textInputEditTextAddress,
                 textInputLayoutAddress,
@@ -213,6 +212,8 @@ class ContactDialogFragment : DialogFragment() {
         imageLoaderLauncher.launch(gallery)
     }
 
+
+
     /**
      * Set listener to given EditText
      */
@@ -221,14 +222,14 @@ class ContactDialogFragment : DialogFragment() {
         addressTextInput: TextInputLayout,
         validateOperation: ValidateOperation
     ) {
-
+        val validator = Validator(requireContext())
         editText.addTextChangedListener {
             addressTextInput.error =
                 when (validateOperation) {
-                    ValidateOperation.EMAIL -> Validator.validateEmail(editText.text.toString())
-                    ValidateOperation.PHONE_NUMBER -> Validator.validatePhoneNumber(editText.text.toString())
-                    ValidateOperation.BIRTHDAY -> Validator.validateBirthdate(editText.text.toString())
-                    ValidateOperation.EMPTY -> Validator.checkIfFieldIsNotEmpty(editText.text.toString())
+                    ValidateOperation.EMAIL -> validator.validateEmail(editText.text.toString())
+                    ValidateOperation.PHONE_NUMBER -> validator.validatePhoneNumber(editText.text.toString())
+                    ValidateOperation.BIRTHDAY -> validator.validateBirthdate(editText.text.toString())
+                    ValidateOperation.EMPTY -> validator.checkIfFieldIsNotEmpty(editText.text.toString())
                 }
         }
     }
@@ -242,11 +243,12 @@ class ContactDialogFragment : DialogFragment() {
         textInputLayout: TextInputLayout,
         validateOperation: ValidateOperation,
     ): String {
+        val validator = Validator(requireContext())
         val errorMessage = when (validateOperation) {
-            ValidateOperation.EMAIL -> Validator.validateEmail(editText.text.toString())
-            ValidateOperation.PHONE_NUMBER -> Validator.validatePhoneNumber(editText.text.toString())
-            ValidateOperation.BIRTHDAY -> Validator.validateBirthdate(editText.text.toString())
-            else -> Validator.checkIfFieldIsNotEmpty(editText.text.toString())
+            ValidateOperation.EMAIL -> validator.validateEmail(editText.text.toString())
+            ValidateOperation.PHONE_NUMBER -> validator.validatePhoneNumber(editText.text.toString())
+            ValidateOperation.BIRTHDAY -> validator.validateBirthdate(editText.text.toString())
+            else -> validator.checkIfFieldIsNotEmpty(editText.text.toString())
         }
         textInputLayout.error = errorMessage
         return errorMessage
@@ -256,7 +258,7 @@ class ContactDialogFragment : DialogFragment() {
      * Return true if all field in add contact's dialog are valid, otherwise false
      */
     private fun canAddContact(): Boolean {
-        with(dialogBinding) {
+        dialogBinding.apply {
             return (getErrorMessage(
                 textInputEditTextAddress,
                 textInputLayoutAddress,

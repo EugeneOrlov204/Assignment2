@@ -13,7 +13,6 @@ import com.shpp.eorlov.assignment2.databinding.FragmentDetailViewBinding
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.ext.clicks
 import com.shpp.eorlov.assignment2.utils.ext.loadImage
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.math.abs
@@ -28,31 +27,27 @@ class DetailViewFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedElementEnterTransition =
-            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+            TransitionInflater.from(context).inflateTransition(android.R.transition.explode)
     }
 
 
-    @ExperimentalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentDetailViewBinding.inflate(inflater, container, false)
-
-        setListeners()
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        setListeners()
     }
 
     private var previousClickTimestamp = SystemClock.uptimeMillis()
 
-    @ExperimentalCoroutinesApi
     private fun setListeners() {
 
         binding.imageButtonContactDialogCloseButton.clicks()
