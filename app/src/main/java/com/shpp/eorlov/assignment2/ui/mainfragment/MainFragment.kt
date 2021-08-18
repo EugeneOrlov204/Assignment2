@@ -40,7 +40,7 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
     // view binding for the activity
     private val viewModel: MainFragmentViewModel by inject()
     private val sharedViewModel: SharedViewModel by inject()
-    private val contactsRecyclerAdapter: ContactsRecyclerAdapter by lazy {
+    private val contactsListAdapter: ContactsRecyclerAdapter by lazy {
         ContactsRecyclerAdapter(
             this
         )
@@ -145,11 +145,12 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
                 LinearLayoutManager.VERTICAL,
                 false
             )
-            adapter = contactsRecyclerAdapter
+            adapter = contactsListAdapter
 
             //Implement swipe-to-delete
             ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(this)
         }
+
     }
 
     private fun sharedElementTransitionWithSelectedContact(
@@ -168,7 +169,7 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
         postponeEnterTransition()
 
         viewModel.userListLiveData.observe(viewLifecycleOwner) { list ->
-            contactsRecyclerAdapter.updateRecyclerData(list.toList())
+            contactsListAdapter.submitList(list.toList())
 
 
             // Start the transition once all views have been

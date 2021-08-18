@@ -1,5 +1,7 @@
 package com.shpp.eorlov.assignment2.ui.details
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.SystemClock
 import android.transition.TransitionInflater
@@ -43,6 +45,17 @@ class DetailViewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         setListeners()
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    override fun onResume() {
+        super.onResume()
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+    }
+
+    override fun onPause() {
+        super.onPause()
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR;
     }
 
     private var previousClickTimestamp = SystemClock.uptimeMillis()

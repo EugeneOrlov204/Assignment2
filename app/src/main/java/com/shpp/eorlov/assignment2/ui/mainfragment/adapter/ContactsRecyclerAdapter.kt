@@ -20,9 +20,7 @@ import com.shpp.eorlov.assignment2.utils.UserItemDiffCallback
 
 class ContactsRecyclerAdapter(
     private val onContactClickListener: ContactClickListener,
-) : ListAdapter<UserModel, ContactsViewHolder>(
-    UserItemDiffCallback()
-) {
+) : ListAdapter<UserModel, ContactsViewHolder>(UserItemDiffCallback()) {
 
     private val contacts: List<UserModel> = ArrayList()
 
