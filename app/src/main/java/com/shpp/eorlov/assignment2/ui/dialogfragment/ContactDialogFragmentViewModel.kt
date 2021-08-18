@@ -21,4 +21,8 @@ class ContactDialogFragmentViewModel(application: Application) : BaseViewModel(a
     private fun checksModelId() {
 
     }
+
+    class ErrorMessage {
+
+    }
 }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <View
@@ -44,15 +45,16 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.09" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageViewUserImageDetailView"
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/draweeViewUserImageDetailView"
         android:layout_width="@dimen/size_of_picture_113dp"
         android:layout_height="@dimen/size_of_picture_113dp"
         android:transitionName="contactPhoto"
         app:layout_constraintEnd_toEndOf="@id/viewTopContainer"
         app:layout_constraintStart_toStartOf="@id/viewTopContainer"
         app:layout_constraintTop_toTopOf="@id/guideLineUserImage"
-        tools:src="@tools:sample/avatars" />
+        app:roundAsCircle="true"
+        fresco:placeholderImage="@mipmap/ic_launcher" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewUserNameDetailView"
@@ -62,7 +64,7 @@
         android:transitionName="contactName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageViewUserImageDetailView" />
+        app:layout_constraintTop_toBottomOf="@id/draweeViewUserImageDetailView" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewUserProfessionDetailView"
@@ -97,9 +99,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top_socials_62dp"
-        app:layout_constraintTop_toTopOf="@+id/viewBottomContainer"
+        app:layout_constraintEnd_toEndOf="@id/viewBottomContainer"
         app:layout_constraintStart_toStartOf="@id/viewBottomContainer"
-        app:layout_constraintEnd_toEndOf="@id/viewBottomContainer">
+        app:layout_constraintTop_toTopOf="@+id/viewBottomContainer">
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/imageButtonFacebook"
@@ -117,7 +119,7 @@
             android:id="@+id/imageButtonVkontakte"
             style="@style/social_network_button"
             android:layout_marginStart="@dimen/margin_start_socials_48dp"
-            android:src="@drawable/main_vkontakte"/>
+            android:src="@drawable/main_vkontakte" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

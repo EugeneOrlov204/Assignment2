@@ -5,7 +5,7 @@
     <item name="viewBottomContainer" type="id" />
     <item name="textViewProfile" type="id" />
     <item name="guideLineUserImage" type="id" />
-    <item name="imageViewUserImageDetailView" type="id" />
+    <item name="draweeViewUserImageDetailView" type="id" />
     <item name="textViewUserNameDetailView" type="id" />
     <item name="textViewUserProfessionDetailView" type="id" />
     <item name="textViewUserResidence" type="id" />

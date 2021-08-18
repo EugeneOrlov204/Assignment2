@@ -12,7 +12,6 @@ import androidx.navigation.fragment.navArgs
 import com.shpp.eorlov.assignment2.databinding.FragmentDetailViewBinding
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.ext.clicks
-import com.shpp.eorlov.assignment2.utils.ext.loadImage
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.math.abs
@@ -62,7 +61,7 @@ class DetailViewFragment : Fragment() {
 
     private fun initViews() {
         args.contact.apply {
-            binding.imageViewUserImageDetailView.loadImage(photo)
+            binding.draweeViewUserImageDetailView.setImageURI(photo)
             binding.textViewUserNameDetailView.text = name
             binding.textViewUserProfessionDetailView.text = profession
             binding.textViewUserResidence.text = residenceAddress
