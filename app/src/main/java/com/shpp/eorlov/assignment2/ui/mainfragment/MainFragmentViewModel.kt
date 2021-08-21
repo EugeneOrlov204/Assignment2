@@ -1,19 +1,17 @@
 package com.shpp.eorlov.assignment2.ui.mainfragment
 
-import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import com.shpp.eorlov.assignment2.R
-import com.shpp.eorlov.assignment2.base.BaseViewModel
-import com.shpp.eorlov.assignment2.db.ContactsDatabase
+import androidx.lifecycle.ViewModel
 import com.shpp.eorlov.assignment2.model.UserModel
+import javax.inject.Inject
 
 
-class MainFragmentViewModel(application: Application) : BaseViewModel(application) {
+class MainFragmentViewModel @Inject constructor() : ViewModel() {
 
     val userListLiveData = MutableLiveData<MutableList<UserModel>>(ArrayList())
     val errorEvent = MutableLiveData<String>()
+    var isInitialized = false
 
-    private val contactsDatabase: ContactsDatabase = ContactsDatabase(context)
 
 
     /**
@@ -21,9 +19,9 @@ class MainFragmentViewModel(application: Application) : BaseViewModel(applicatio
      */
     fun getPersonData() {
         if (userListLiveData.value == null) {
-            errorEvent.value = context.getString(R.string.loading_data_error_message)
-        } else if (userListLiveData.value?.isEmpty() == true) {
-            userListLiveData.value = contactsDatabase.listOfContacts
+            errorEvent.value = errorEvent.value
+        } else if (!isInitialized) {
+            userListLiveData.value = userListLiveData.value
         }
     }
 

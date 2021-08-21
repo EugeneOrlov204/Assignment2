@@ -1,5 +1,6 @@
 package com.shpp.eorlov.assignment2.ui.mainfragment
 
+import android.content.Context
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
@@ -17,7 +18,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.databinding.FragmentContentBinding
+import com.shpp.eorlov.assignment2.db.ContactsDatabase
 import com.shpp.eorlov.assignment2.model.UserModel
+import com.shpp.eorlov.assignment2.ui.MainActivity
 import com.shpp.eorlov.assignment2.ui.SharedViewModel
 import com.shpp.eorlov.assignment2.ui.dialogfragment.ContactDialogFragment
 import com.shpp.eorlov.assignment2.ui.mainfragment.adapter.ContactClickListener
@@ -31,15 +34,18 @@ import com.shpp.eorlov.assignment2.utils.Constants.SNACKBAR_DURATION
 import com.shpp.eorlov.assignment2.utils.ext.clicks
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 import kotlin.math.abs
 
 
 class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
 
-    // view binding for the activity
-    private val viewModel: MainFragmentViewModel by inject()
-    private val sharedViewModel: SharedViewModel by inject()
+    @Inject
+    lateinit var viewModel: MainFragmentViewModel
+
+    @Inject
+    lateinit var sharedViewModel: SharedViewModel
+
     private val contactsListAdapter: ContactsRecyclerAdapter by lazy {
         ContactsRecyclerAdapter(
             this
@@ -48,6 +54,12 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
     private lateinit var binding: FragmentContentBinding
     private lateinit var dialog: ContactDialogFragment
 
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        (activity as MainActivity).contactComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -168,26 +180,42 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
 
         postponeEnterTransition()
 
-        viewModel.userListLiveData.observe(viewLifecycleOwner) { list ->
-            contactsListAdapter.submitList(list.toList())
+        viewModel.apply {
+            userListLiveData.observe(viewLifecycleOwner) { list ->
+                if (!isInitialized) {
+                    val contactsDatabase =
+                        ContactsDatabase(context ?: return@observe).listOfContacts
+                    contactsListAdapter.updateRecyclerData(contactsDatabase)
+                    userListLiveData.value = contactsDatabase
+                    isInitialized = true
+                } else {
+                    contactsListAdapter.updateRecyclerData(list.toList())
+                }
 
 
-            // Start the transition once all views have been
-            // measured and laid out
-            (view?.parent as? ViewGroup)?.doOnPreDraw {
-                startPostponedEnterTransition()
+                // Start the transition once all views have been
+                // measured and laid out
+                (view?.parent as? ViewGroup)?.doOnPreDraw {
+                    startPostponedEnterTransition()
+                }
+            }
+
+            errorEvent.apply {
+                observe(viewLifecycleOwner) { error ->
+                    value = context?.getString(R.string.loading_data_error_message)
+                    Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+                    value = ""
+                }
             }
         }
 
 
-        viewModel.errorEvent.observe(viewLifecycleOwner) { error ->
-            Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
-        }
-
-        sharedViewModel.newUser.observe(viewLifecycleOwner) { newUser ->
-            newUser?.let {
-                viewModel.addItem(newUser)
-                sharedViewModel.newUser.value = null
+        sharedViewModel.apply {
+            newUser.observe(viewLifecycleOwner) { newUser ->
+                newUser?.let {
+                    viewModel.addItem(newUser)
+                    sharedViewModel.newUser.value = null
+                }
             }
         }
     }

@@ -1,11 +1,10 @@
 package com.shpp.eorlov.assignment2.ui
 
-import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import com.shpp.eorlov.assignment2.base.BaseViewModel
+import androidx.lifecycle.ViewModel
 import com.shpp.eorlov.assignment2.model.UserModel
+import javax.inject.Inject
 
-class SharedViewModel(application: Application) : BaseViewModel(application) {
-
-    val newUser = MutableLiveData<UserModel>()
+class SharedViewModel @Inject constructor() : ViewModel() {
+    val newUser = MutableLiveData<UserModel>(null)
 }

@@ -3,6 +3,7 @@ package com.shpp.eorlov.assignment2.ui.dialogfragment
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
@@ -15,32 +16,36 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.databinding.AddContactDialogBinding
 import com.shpp.eorlov.assignment2.model.UserModel
+import com.shpp.eorlov.assignment2.ui.MainActivity
 import com.shpp.eorlov.assignment2.ui.SharedViewModel
 import com.shpp.eorlov.assignment2.utils.Constants
-import com.shpp.eorlov.assignment2.utils.Constants.DIALOG_FRAGMENT_REQUEST_KEY
 import com.shpp.eorlov.assignment2.utils.Constants.GENERATE_ID_CODE
-import com.shpp.eorlov.assignment2.utils.Constants.NEW_CONTACT_KEY
 import com.shpp.eorlov.assignment2.utils.ext.clicks
 import com.shpp.eorlov.assignment2.utils.ext.loadImage
 import com.shpp.eorlov.assignment2.validator.Validator
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 import kotlin.math.abs
 
 
 class ContactDialogFragment : DialogFragment() {
-    private lateinit var dialogBinding: AddContactDialogBinding
+
+    @Inject
+    lateinit var viewModel: ContactDialogFragmentViewModel
+
+    @Inject
+    lateinit var sharedViewModel: SharedViewModel
+
     private var pathToLoadedImageFromGallery: String = ""
-    private val viewModel: ContactDialogFragmentViewModel by inject()
-    private val sharedViewModel: SharedViewModel by inject()
+
+    private lateinit var dialogBinding: AddContactDialogBinding
 
     private var imageLoaderLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -56,6 +61,11 @@ class ContactDialogFragment : DialogFragment() {
         BIRTHDAY, EMAIL, PHONE_NUMBER, EMPTY
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        (activity as MainActivity).contactComponent.inject(this)
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBinding = AddContactDialogBinding.inflate(LayoutInflater.from(context))
@@ -92,7 +102,7 @@ class ContactDialogFragment : DialogFragment() {
      * Add new contact to RecyclerView if all field are valid
      */
     private fun addContact() {
-        if (!canAddContact()) {
+        if (!viewModel.canAddContact(dialogBinding, Validator(context))) {
             return
         }
 
@@ -114,9 +124,9 @@ class ContactDialogFragment : DialogFragment() {
 
             viewModel.addItem(newContact)
 
-            val bundle = Bundle()
-            bundle.putParcelable(NEW_CONTACT_KEY, newContact)
-            setFragmentResult(DIALOG_FRAGMENT_REQUEST_KEY, bundle)
+//            val bundle = Bundle()
+//            bundle.putParcelable(NEW_CONTACT_KEY, newContact)
+//            setFragmentResult(DIALOG_FRAGMENT_REQUEST_KEY, bundle)
         }
         pathToLoadedImageFromGallery = ""
         dismiss()
@@ -213,83 +223,23 @@ class ContactDialogFragment : DialogFragment() {
     }
 
 
-
     /**
      * Set listener to given EditText
      */
     private fun addListenerToEditText(
         editText: TextInputEditText,
-        addressTextInput: TextInputLayout,
+        textInput: TextInputLayout,
         validateOperation: ValidateOperation
     ) {
         val validator = Validator(requireContext())
         editText.addTextChangedListener {
-            addressTextInput.error =
+            textInput.error =
                 when (validateOperation) {
                     ValidateOperation.EMAIL -> validator.validateEmail(editText.text.toString())
                     ValidateOperation.PHONE_NUMBER -> validator.validatePhoneNumber(editText.text.toString())
                     ValidateOperation.BIRTHDAY -> validator.validateBirthdate(editText.text.toString())
                     ValidateOperation.EMPTY -> validator.checkIfFieldIsNotEmpty(editText.text.toString())
                 }
-        }
-    }
-
-    /**
-     * Returns empty string if given edit text has valid input
-     * otherwise returns error message
-     */
-    private fun getErrorMessage(
-        editText: TextInputEditText,
-        textInputLayout: TextInputLayout,
-        validateOperation: ValidateOperation,
-    ): String {
-        val validator = Validator(requireContext())
-        val errorMessage = when (validateOperation) {
-            ValidateOperation.EMAIL -> validator.validateEmail(editText.text.toString())
-            ValidateOperation.PHONE_NUMBER -> validator.validatePhoneNumber(editText.text.toString())
-            ValidateOperation.BIRTHDAY -> validator.validateBirthdate(editText.text.toString())
-            else -> validator.checkIfFieldIsNotEmpty(editText.text.toString())
-        }
-        textInputLayout.error = errorMessage
-        return errorMessage
-    }
-
-    /**
-     * Return true if all field in add contact's dialog are valid, otherwise false
-     */
-    private fun canAddContact(): Boolean {
-        dialogBinding.apply {
-            return (getErrorMessage(
-                textInputEditTextAddress,
-                textInputLayoutAddress,
-                ValidateOperation.EMPTY
-            ) == "" &&
-                    getErrorMessage(
-                        textInputEditTextBirthdate,
-                        textInputLayoutBirthdate,
-                        ValidateOperation.BIRTHDAY
-                    ) == "" &&
-                    getErrorMessage(
-                        textInputEditTextCareer,
-                        textInputLayoutCareer,
-                        ValidateOperation.EMPTY
-                    ) == "" &&
-                    getErrorMessage(
-                        textInputEditTextEmail,
-                        textInputLayoutEmail,
-                        ValidateOperation.EMAIL
-                    ) == "" &&
-                    getErrorMessage(
-                        textInputEditTextUsername,
-                        textInputLayoutUsername,
-                        ValidateOperation.EMPTY
-                    ) == "" &&
-                    getErrorMessage(
-                        textInputEditTextPhone,
-                        textInputLayoutPhone,
-                        ValidateOperation.PHONE_NUMBER
-                    ) == "")
-
         }
     }
 }
