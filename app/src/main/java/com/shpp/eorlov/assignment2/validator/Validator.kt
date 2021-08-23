@@ -3,84 +3,78 @@ package com.shpp.eorlov.assignment2.validator
 import android.content.Context
 import android.util.Patterns
 import com.shpp.eorlov.assignment2.R
+import com.shpp.eorlov.assignment2.utils.*
 import com.shpp.eorlov.assignment2.utils.Constants.DATE_FORMAT
 import com.shpp.eorlov.assignment2.utils.Constants.DATE_REGEX_PATTERN
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class Validator(private val context: Context?) {
-
-    private val errorMessage = ErrorMessage()
+class Validator @Inject constructor(private val context: Context?) {
 
 
     fun validateEmail(
         _value: String
-    ): String {
+    ): ValidationError {
         return if (_value.trim { it <= ' ' }.isEmpty()) {
-            errorMessage.emptyFile
+            EmptyFieldError(context?.getString(R.string.empty_field) ?: "")
         } else {
             val isValid = Patterns.EMAIL_ADDRESS.matcher(_value).matches()
             if (!isValid) {
-                errorMessage.invalidEmail
+                InvalidEmail(context?.getString(R.string.invalid_email) ?: "")
             } else {
-                ""
+                NotAnError
             }
         }
     }
 
     fun checkIfFieldIsNotEmpty(
         _value: String
-    ): String {
+    ): ValidationError {
         return if (_value.trim { it <= ' ' }.isEmpty()) {
-            errorMessage.emptyFile
+            EmptyFieldError(context?.getString(R.string.empty_field) ?: "")
         } else {
-            ""
+            NotAnError
         }
     }
 
     fun validatePhoneNumber(
         _value: String
-    ): String {
+    ): ValidationError {
         return if (_value.trim { it <= ' ' }.isEmpty()) {
-            ""
+            NotAnError
+
         } else {
             val isValid = Patterns.PHONE.matcher(_value).matches()
             if (!isValid) {
-                errorMessage.invalidPhoneNumber
+                InvalidPhoneNumber(context?.getString(R.string.invalid_phone_number) ?: "")
             } else {
-                ""
+                NotAnError
             }
         }
     }
 
     fun validateBirthdate(
         _value: String
-    ): String {
-        if (_value.trim { it <= ' ' }.isEmpty()) {
-            return errorMessage.emptyFile
+    ): ValidationError {
+        return if (_value.trim { it <= ' ' }.isEmpty()) {
+            EmptyFieldError(context?.getString(R.string.empty_field) ?: "")
         } else {
             val isValid = _value.matches(
                 Regex(DATE_REGEX_PATTERN)
             )
-            return if (!isValid) {
-                errorMessage.invalidBirthdate
+            if (!isValid) {
+                InvalidBirthdate(context?.getString(R.string.invalid_birthdate) ?: "")
             } else {
                 val format = SimpleDateFormat(DATE_FORMAT, Locale.CANADA_FRENCH)
                 try {
                     format.parse(_value)
-                    ""
+                    NotAnError
                 } catch (e: ParseException) {
-                    errorMessage.invalidBirthdate
+                    InvalidBirthdate(context?.getString(R.string.invalid_birthdate) ?: "")
                 }
             }
         }
-    }
-
-    inner class ErrorMessage {
-        val invalidBirthdate = context?.getString(R.string.invalid_birthdate) ?: ""
-        val emptyFile = context?.getString(R.string.empty_field) ?: ""
-        val invalidPhoneNumber = context?.getString(R.string.invalid_phone_number) ?: ""
-        val invalidEmail = context?.getString(R.string.invalid_email) ?: ""
     }
 }

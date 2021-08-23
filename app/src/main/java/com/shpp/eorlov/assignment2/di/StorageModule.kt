@@ -16,6 +16,8 @@
 
 package com.shpp.eorlov.assignment2.di
 
+import com.shpp.eorlov.assignment2.db.ContactsDatabase
+import com.shpp.eorlov.assignment2.db.LocalDB
 import com.shpp.eorlov.assignment2.storage.SharedPreferencesStorage
 import com.shpp.eorlov.assignment2.storage.Storage
 import dagger.Binds
@@ -28,4 +30,7 @@ abstract class StorageModule {
     // Makes Dagger provide SharedPreferencesStorage when a Storage type is requested
     @Binds
     abstract fun provideStorage(storage: SharedPreferencesStorage): Storage
+
+    @Binds
+    abstract fun provideDatabase(contactsDatabase: ContactsDatabase): LocalDB
 }

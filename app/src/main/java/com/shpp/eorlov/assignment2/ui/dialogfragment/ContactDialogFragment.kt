@@ -26,6 +26,7 @@ import com.shpp.eorlov.assignment2.ui.MainActivity
 import com.shpp.eorlov.assignment2.ui.SharedViewModel
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.Constants.GENERATE_ID_CODE
+import com.shpp.eorlov.assignment2.utils.evaluateErrorMessage
 import com.shpp.eorlov.assignment2.utils.ext.clicks
 import com.shpp.eorlov.assignment2.utils.ext.loadImage
 import com.shpp.eorlov.assignment2.validator.Validator
@@ -102,7 +103,9 @@ class ContactDialogFragment : DialogFragment() {
      * Add new contact to RecyclerView if all field are valid
      */
     private fun addContact() {
-        if (!viewModel.canAddContact(dialogBinding, Validator(context))) {
+        //inject Validator, remove dialogBinding
+        //or Validator
+        if (!viewModel.canAddContact(dialogBinding)) {
             return
         }
 
@@ -134,7 +137,14 @@ class ContactDialogFragment : DialogFragment() {
 
     private fun setObserver() {
         viewModel.newUser.observe(viewLifecycleOwner) { user ->
-            user?.let { sharedViewModel.newUser.value = user }
+
+            sharedViewModel.newUser.value = user
+            sharedViewModel.newUser.value = sharedViewModel.newUser.value
+//
+//            user?.let {
+//                sharedViewModel.newUser.value = user
+//                sharedViewModel.newUser.value = sharedViewModel.newUser.value
+//            }
         }
     }
 
@@ -235,10 +245,22 @@ class ContactDialogFragment : DialogFragment() {
         editText.addTextChangedListener {
             textInput.error =
                 when (validateOperation) {
-                    ValidateOperation.EMAIL -> validator.validateEmail(editText.text.toString())
-                    ValidateOperation.PHONE_NUMBER -> validator.validatePhoneNumber(editText.text.toString())
-                    ValidateOperation.BIRTHDAY -> validator.validateBirthdate(editText.text.toString())
-                    ValidateOperation.EMPTY -> validator.checkIfFieldIsNotEmpty(editText.text.toString())
+                    ValidateOperation.EMAIL -> evaluateErrorMessage(validator.validateEmail(editText.text.toString()))
+                    ValidateOperation.PHONE_NUMBER -> evaluateErrorMessage(
+                        validator.validatePhoneNumber(
+                            editText.text.toString()
+                        )
+                    )
+                    ValidateOperation.BIRTHDAY -> evaluateErrorMessage(
+                        validator.validateBirthdate(
+                            editText.text.toString()
+                        )
+                    )
+                    ValidateOperation.EMPTY -> evaluateErrorMessage(
+                        validator.checkIfFieldIsNotEmpty(
+                            editText.text.toString()
+                        )
+                    )
                 }
         }
     }

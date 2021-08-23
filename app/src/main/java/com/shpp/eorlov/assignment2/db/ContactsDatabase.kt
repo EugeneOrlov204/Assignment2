@@ -4,13 +4,14 @@ import android.content.Context
 import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.utils.Constants.DEFAULT_PATH_TO_IMAGE
+import javax.inject.Inject
 
 
-class ContactsDatabase(private val context: Context) {
+class ContactsDatabase @Inject constructor(private val context: Context) : LocalDB  {
 
     val listOfContacts: MutableList<UserModel> by lazy { loadPersonData() }
     
-    private fun loadPersonData(): MutableList<UserModel> {
+    override fun loadPersonData(): MutableList<UserModel> {
         val listOfNames: List<String> = getNames()
         val listOfProfessions: List<String> = getCareers()
         val listOfEmails: List<String> = getEmails()
@@ -40,7 +41,7 @@ class ContactsDatabase(private val context: Context) {
      * Returns list of careers
      * Temporary hardcoded
      */
-    private fun getCareers(): List<String> {
+    override fun getCareers(): List<String> {
         return listOf(
             context.getString(R.string.user1_profession),
             context.getString(R.string.user2_profession),
@@ -59,7 +60,7 @@ class ContactsDatabase(private val context: Context) {
      * Returns list of names
      * Temporary hardcoded
      */
-    private fun getNames(): List<String> {
+    override fun getNames(): List<String> {
         return listOf(
             context.getString(R.string.user1_name),
             context.getString(R.string.user2_name),
@@ -78,7 +79,7 @@ class ContactsDatabase(private val context: Context) {
      * Returns list of names
      * Temporary hardcoded
      */
-    private fun getEmails(): List<String> {
+    override fun getEmails(): List<String> {
         return listOf(
             context.getString(R.string.user1_email),
             context.getString(R.string.user2_email),
@@ -97,7 +98,7 @@ class ContactsDatabase(private val context: Context) {
      * Returns list of residence
      * Temporary hardcoded
      */
-    private fun getResidence(): List<String> {
+    override fun getResidence(): List<String> {
         return listOf(
             context.getString(R.string.user1_residence),
             context.getString(R.string.user2_residence),

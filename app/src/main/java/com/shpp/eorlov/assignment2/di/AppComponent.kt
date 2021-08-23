@@ -38,7 +38,4 @@ interface AppComponent {
 
     // Types that can be retrieved from the graph
     fun contactComponent(): ContactComponent.Factory
-
-    // Classes that can be injected by this Component
-//    fun inject(activity: MainActivity)
 }

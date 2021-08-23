@@ -3,6 +3,7 @@ package com.shpp.eorlov.assignment2.ui.mainfragment
 import android.content.Context
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.shpp.eorlov.assignment2.R
 import com.shpp.eorlov.assignment2.databinding.FragmentContentBinding
-import com.shpp.eorlov.assignment2.db.ContactsDatabase
 import com.shpp.eorlov.assignment2.model.UserModel
 import com.shpp.eorlov.assignment2.ui.MainActivity
 import com.shpp.eorlov.assignment2.ui.SharedViewModel
@@ -31,6 +31,7 @@ import com.shpp.eorlov.assignment2.utils.Constants.DIALOG_FRAGMENT_REQUEST_KEY
 import com.shpp.eorlov.assignment2.utils.Constants.LIST_OF_CONTACTS_KEY
 import com.shpp.eorlov.assignment2.utils.Constants.NEW_CONTACT_KEY
 import com.shpp.eorlov.assignment2.utils.Constants.SNACKBAR_DURATION
+import com.shpp.eorlov.assignment2.utils.Results
 import com.shpp.eorlov.assignment2.utils.ext.clicks
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -101,6 +102,11 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("TAG", "ON DESTROY")
+    }
+
     override fun onContactRemove(position: Int) {
         removeItemFromRecyclerView(position)
     }
@@ -108,6 +114,7 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
     override fun onContactSelected(contact: UserModel) {
         sharedElementTransitionWithSelectedContact(contact)
     }
+
 
     /**
      * Removes item on given position from RecyclerView
@@ -182,15 +189,9 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
 
         viewModel.apply {
             userListLiveData.observe(viewLifecycleOwner) { list ->
-                if (!isInitialized) {
-                    val contactsDatabase =
-                        ContactsDatabase(context ?: return@observe).listOfContacts
-                    contactsListAdapter.updateRecyclerData(contactsDatabase)
-                    userListLiveData.value = contactsDatabase
-                    isInitialized = true
-                } else {
+
                     contactsListAdapter.updateRecyclerData(list.toList())
-                }
+
 
 
                 // Start the transition once all views have been
@@ -200,11 +201,27 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
                 }
             }
 
-            errorEvent.apply {
-                observe(viewLifecycleOwner) { error ->
-                    value = context?.getString(R.string.loading_data_error_message)
-                    Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
-                    value = ""
+            loadEvent.apply {
+                observe(viewLifecycleOwner) { event ->
+
+                    when (event) {
+                        //Когда загрузка данных повешать прогресс бар и залочить UI
+                        Results.OK -> {
+                            //Разлочить UI и убрать Loading
+                            //Everything OK. Remove loading
+                        }
+
+                        Results.LOADING -> {
+                            //Показать прогресс бар и залочит UI
+                        }
+                        Results.INIT_RECYCLER_VIEW_ERROR -> {
+                            //Разлочить UI и убрать Loading
+                            //По хорошему разные типы еррор
+                            Toast.makeText(requireContext(), event.name, Toast.LENGTH_LONG).show()
+                        }
+                        else -> {}
+                    }
+
                 }
             }
         }
