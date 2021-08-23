@@ -142,6 +142,7 @@ class ContactDialogFragment : DialogFragment() {
 //            val bundle = Bundle()
 //            bundle.putParcelable(NEW_CONTACT_KEY, newContact)
 //            setFragmentResult(DIALOG_FRAGMENT_REQUEST_KEY, bundle)
+
         }
         pathToLoadedImageFromGallery = ""
         dismiss()
