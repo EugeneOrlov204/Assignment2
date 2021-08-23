@@ -14,21 +14,25 @@ import kotlin.math.abs
 class ContactsViewHolder(
     private val binding: ListItemBinding,
     private val onContactClickListener: ContactClickListener,
-    private val contacts: List<UserModel>,
     private val lifecycleScope: LifecycleCoroutineScope
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind() {
+
+    private lateinit var userModel: UserModel
+    fun bindTo(userModel: UserModel){
+        this.userModel = userModel
+
         binding.apply {
-            contacts[absoluteAdapterPosition].apply {
+            userModel.apply {
                 textViewPersonName.text = name
                 textViewPersonProfession.text = profession
                 draweeViewPersonImage.setImageURI(photo)
+                setListeners()
             }
         }
-        setListeners()
     }
+
 
 
     private var previousClickTimestamp = SystemClock.uptimeMillis()
@@ -47,9 +51,9 @@ class ContactsViewHolder(
         binding.constraintLayoutContact.clicks()
             .onEach {
                 if (abs(SystemClock.uptimeMillis() - previousClickTimestamp) > Constants.BUTTON_CLICK_DELAY) {
-                    val contact = contacts[bindingAdapterPosition]
-                    onContactClickListener.onContactSelected(contact)
+                    onContactClickListener.onContactSelected(userModel)
                     previousClickTimestamp = SystemClock.uptimeMillis()
+
                 }
             }
             .launchIn(lifecycleScope)

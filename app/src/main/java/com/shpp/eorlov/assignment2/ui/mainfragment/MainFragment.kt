@@ -3,12 +3,13 @@ package com.shpp.eorlov.assignment2.ui.mainfragment
 import android.content.Context
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
@@ -102,11 +103,6 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("TAG", "ON DESTROY")
-    }
-
     override fun onContactRemove(position: Int) {
         removeItemFromRecyclerView(position)
     }
@@ -190,8 +186,7 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
         viewModel.apply {
             userListLiveData.observe(viewLifecycleOwner) { list ->
 
-                    contactsListAdapter.updateRecyclerData(list.toList())
-
+                contactsListAdapter.submitList(list)
 
 
                 // Start the transition once all views have been
@@ -203,23 +198,24 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
 
             loadEvent.apply {
                 observe(viewLifecycleOwner) { event ->
-
                     when (event) {
-                        //Когда загрузка данных повешать прогресс бар и залочить UI
                         Results.OK -> {
-                            //Разлочить UI и убрать Loading
-                            //Everything OK. Remove loading
+                            unlockUI()
+                            binding.contentLoadingProgressBarRecyclerView.isVisible = false
                         }
 
                         Results.LOADING -> {
-                            //Показать прогресс бар и залочит UI
+                            lockUI()
+                            binding.contentLoadingProgressBarRecyclerView.isVisible = true
                         }
+
                         Results.INIT_RECYCLER_VIEW_ERROR -> {
-                            //Разлочить UI и убрать Loading
-                            //По хорошему разные типы еррор
+                            unlockUI()
+                            binding.contentLoadingProgressBarRecyclerView.isVisible = false
                             Toast.makeText(requireContext(), event.name, Toast.LENGTH_LONG).show()
                         }
-                        else -> {}
+                        else -> {
+                        }
                     }
 
                 }
@@ -235,6 +231,14 @@ class MainFragment : Fragment(R.layout.fragment_content), ContactClickListener {
                 }
             }
         }
+    }
+
+    private fun lockUI() {
+        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    }
+
+    private fun unlockUI() {
+        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     private var previousClickTimestamp = SystemClock.uptimeMillis()

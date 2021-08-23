@@ -26,6 +26,7 @@ import com.shpp.eorlov.assignment2.ui.MainActivity
 import com.shpp.eorlov.assignment2.ui.SharedViewModel
 import com.shpp.eorlov.assignment2.utils.Constants
 import com.shpp.eorlov.assignment2.utils.Constants.GENERATE_ID_CODE
+import com.shpp.eorlov.assignment2.utils.ValidateOperation
 import com.shpp.eorlov.assignment2.utils.evaluateErrorMessage
 import com.shpp.eorlov.assignment2.utils.ext.clicks
 import com.shpp.eorlov.assignment2.utils.ext.loadImage
@@ -58,9 +59,6 @@ class ContactDialogFragment : DialogFragment() {
             }
         }
 
-    enum class ValidateOperation {
-        BIRTHDAY, EMAIL, PHONE_NUMBER, EMPTY
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -98,14 +96,28 @@ class ContactDialogFragment : DialogFragment() {
         }
     }
 
+    private fun setObserver() {
+        viewModel.newUser.observe(viewLifecycleOwner) { user ->
+            user?.let {
+                sharedViewModel.newUser.value = user
+                sharedViewModel.newUser.value = sharedViewModel.newUser.value
+            }
+        }
+    }
+
+    /**
+     * Initialize date and set listeners to EditTexts
+     */
+    private fun initializeData() {
+        dialogBinding.imageViewPersonPhoto.loadImage(R.mipmap.ic_launcher)
+    }
+
 
     /**
      * Add new contact to RecyclerView if all field are valid
      */
     private fun addContact() {
-        //inject Validator, remove dialogBinding
-        //or Validator
-        if (!viewModel.canAddContact(dialogBinding)) {
+        if (!canAddNewContact()) {
             return
         }
 
@@ -135,25 +147,55 @@ class ContactDialogFragment : DialogFragment() {
         dismiss()
     }
 
-    private fun setObserver() {
-        viewModel.newUser.observe(viewLifecycleOwner) { user ->
+    /**
+     * Returns true if user entered valid data,
+     * otherwise false
+     */
+    private fun canAddNewContact(): Boolean {
+        processEnteredValues()
+        dialogBinding.apply {
 
-            sharedViewModel.newUser.value = user
-            sharedViewModel.newUser.value = sharedViewModel.newUser.value
-//
-//            user?.let {
-//                sharedViewModel.newUser.value = user
-//                sharedViewModel.newUser.value = sharedViewModel.newUser.value
-//            }
+            return textInputLayoutAddress.error.isNullOrEmpty() &&
+                    textInputLayoutBirthdate.error.isNullOrEmpty() &&
+                    textInputLayoutCareer.error.isNullOrEmpty() &&
+                    textInputLayoutEmail.error.isNullOrEmpty() &&
+                    textInputLayoutUsername.error.isNullOrEmpty() &&
+                    textInputLayoutPhone.error.isNullOrEmpty()
         }
     }
 
     /**
-     * Initialize date and set listeners to EditTexts
+     * Processing of user-entered values
      */
-    private fun initializeData() {
-        dialogBinding.imageViewPersonPhoto.loadImage(R.mipmap.ic_launcher)
+    private fun processEnteredValues() {
+        dialogBinding.apply {
+            textInputLayoutAddress.error = viewModel.isValidField(
+                textInputEditTextAddress.text.toString(),
+                ValidateOperation.EMPTY
+            )
+            textInputLayoutBirthdate.error = viewModel.isValidField(
+                textInputEditTextBirthdate.text.toString(),
+                ValidateOperation.BIRTHDAY
+            )
+            textInputLayoutCareer.error = viewModel.isValidField(
+                textInputEditTextCareer.text.toString(),
+                ValidateOperation.EMPTY
+            )
+            textInputLayoutEmail.error = viewModel.isValidField(
+                textInputEditTextEmail.text.toString(),
+                ValidateOperation.EMAIL
+            )
+            textInputLayoutUsername.error = viewModel.isValidField(
+                textInputEditTextUsername.text.toString(),
+                ValidateOperation.EMPTY
+            )
+            textInputLayoutPhone.error = viewModel.isValidField(
+                textInputEditTextPhone.text.toString(),
+                ValidateOperation.PHONE_NUMBER
+            )
+        }
     }
+
 
     private var previousClickTimestamp = SystemClock.uptimeMillis()
 

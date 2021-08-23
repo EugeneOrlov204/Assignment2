@@ -21,13 +21,13 @@ class MainFragmentViewModel @Inject constructor() : ViewModel() {
      */
     fun getPersonData() {
         if (userListLiveData.value == null) {
-            loadEvent.value = Results.INIT_RECYCLER_VIEW_ERROR//fixme
+            loadEvent.value = Results.INIT_RECYCLER_VIEW_ERROR
         } else {
             loadEvent.value = Results.LOADING
             val data = contactsDatabase.listOfContacts
             if (data.isNotEmpty()) {
                 loadEvent.value = Results.OK
-                userListLiveData.value = data//fixme
+                userListLiveData.value = data
             } else {
                 loadEvent.value = Results.INIT_RECYCLER_VIEW_ERROR
             }

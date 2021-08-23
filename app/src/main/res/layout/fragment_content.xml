@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayoutMainFragment"
+    android:name="com.shpp.eorlov.assignment2.fragment.MyFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:name="com.shpp.eorlov.assignment2.fragment.MyFragment"
     tools:context=".ui.mainfragment.MainFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -71,6 +71,17 @@
             app:layout_constraintStart_toEndOf="@id/textViewAddContacts" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/contentLoadingProgressBarRecyclerView"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
